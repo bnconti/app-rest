@@ -6,8 +6,8 @@
 
 1. Configuración inicial del proyecto (:heavy_check_mark:).
 2. Clases del proyecto con su respectivo mapeo JPA (:x:, falta de **Users** y **Playlist_Songs**).
-3. El endpoint para obtener canciones debe estar implementado (:heavy_check_mark:)
-4. Aplicar patrón DTO y hacer uso de ModelMapper (:x:, se puede hacer en **SongResource**)
+3. El endpoint para obtener canciones debe estar implementado (:heavy_check_mark:).
+4. Aplicar patrón DTO y hacer uso de ModelMapper (:x:, se puede hacer en **SongResource**).
 
 > **Estado:** (:x:)
 
@@ -35,7 +35,8 @@ clases del modelo.
 ### JPA Repositories (DAO)
 - Dentro del package ar.edu.unnoba.pdyc2021.mymusic.repository, para cada
 entidad del modelo, declarar el repository correspondiente.
-Service Layer
+
+### Service Layer
 - Definir en el package ar.edu.unnoba.pdyc2021.mymusic.service todos los
 servicios que contengan la lógica de negocios que permitan implementar cada
 una de las funcionalidades propuestas.
