@@ -2,22 +2,22 @@
 
 ## Etapas
 
-### Entrega 1
+### Entrega 1 (12/05)
 
-1. Configuración inicial del proyecto (:x:)
-2. Clases del proyecto con su respectivo mapeo JPA. (:x:)
-3. El endpoint para obtener canciones debe estar implementado (:x:)
-4. Aplicar patrón DTO y hacer uso de ModelMapper (:x:)
+1. Configuración inicial del proyecto (:heavy_check_mark:).
+2. Clases del proyecto con su respectivo mapeo JPA (:x:, falta de **Users** y **Playlist_Songs**).
+3. El endpoint para obtener canciones debe estar implementado (:heavy_check_mark:)
+4. Aplicar patrón DTO y hacer uso de ModelMapper (:x:, se puede hacer en **SongResource**)
 
 > **Estado:** (:x:)
 
-### Entrega 2
+### Entrega 2 (19/05)
 
 1. Autenticación y autorización con JWT (:x:).
 
 > **Estado:** (:x:)
 
-### Entrega 3
+### Entrega 3 (02/06)
 
 1. Validaciones y permisos (:x:).
 2. Queries JPA con parámetros (:x:).
