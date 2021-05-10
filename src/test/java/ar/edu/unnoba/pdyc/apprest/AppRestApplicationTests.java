@@ -1,4 +1,4 @@
-package ar.unnoba.edu.pdyc.apprest;
+package ar.edu.unnoba.pdyc.apprest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

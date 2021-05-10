@@ -1,4 +1,4 @@
-package ar.unnoba.edu.pdyc.apprest;
+package ar.edu.unnoba.pdyc.apprest;
 
 import org.glassfish.jersey.jaxb.internal.XmlJaxbElementProvider;
 import org.springframework.boot.builder.SpringApplicationBuilder;

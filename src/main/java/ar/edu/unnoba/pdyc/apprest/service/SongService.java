@@ -1,6 +1,6 @@
-package ar.unnoba.edu.pdyc.apprest.service;
+package ar.edu.unnoba.pdyc.apprest.service;
 
-import ar.unnoba.edu.pdyc.apprest.model.Song;
+import ar.edu.unnoba.pdyc.apprest.model.Song;
 
 import java.util.List;
 

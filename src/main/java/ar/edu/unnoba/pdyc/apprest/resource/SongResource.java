@@ -1,7 +1,7 @@
-package ar.unnoba.edu.pdyc.apprest.resource;
+package ar.edu.unnoba.pdyc.apprest.resource;
 
-import ar.unnoba.edu.pdyc.apprest.model.Song;
-import ar.unnoba.edu.pdyc.apprest.service.SongService;
+import ar.edu.unnoba.pdyc.apprest.model.Song;
+import ar.edu.unnoba.pdyc.apprest.service.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
