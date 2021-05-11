@@ -7,9 +7,9 @@
 1. Configuración inicial del proyecto (:heavy_check_mark:).
 2. Clases del proyecto con su respectivo mapeo JPA (:heavy_check_mark:).
 3. El endpoint para obtener canciones debe estar implementado (:heavy_check_mark:).
-4. Aplicar patrón DTO y hacer uso de ModelMapper (:x:, se puede hacer en **SongResource**).
+4. Aplicar patrón DTO y hacer uso de ModelMapper (:heavy_check_mark:).
 
-> **Estado:** (:x:)
+> **Estado:** (:heavy_check_mark:)
 
 ### Entrega 2 (19/05)
 
