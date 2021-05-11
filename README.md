@@ -5,7 +5,7 @@
 ### Entrega 1 (12/05)
 
 1. Configuración inicial del proyecto (:heavy_check_mark:).
-2. Clases del proyecto con su respectivo mapeo JPA (:x:, falta de **Users** y **Playlist_Songs**).
+2. Clases del proyecto con su respectivo mapeo JPA (:heavy_check_mark:).
 3. El endpoint para obtener canciones debe estar implementado (:heavy_check_mark:).
 4. Aplicar patrón DTO y hacer uso de ModelMapper (:x:, se puede hacer en **SongResource**).
 
