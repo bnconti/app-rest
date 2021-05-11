@@ -2,7 +2,7 @@
 
 ## Etapas
 
-### Entrega 1 (12/05)
+### Entrega 1 (11/05)
 
 1. Configuración inicial del proyecto (:heavy_check_mark:).
 2. Clases del proyecto con su respectivo mapeo JPA (:heavy_check_mark:).
@@ -11,13 +11,13 @@
 
 > **Estado:** (:heavy_check_mark:)
 
-### Entrega 2 (19/05)
+### Entrega 2 (25/05)
 
 1. Autenticación y autorización con JWT (:x:).
 
 > **Estado:** (:x:)
 
-### Entrega 3 (02/06)
+### Entrega 3 (01/06)
 
 1. Validaciones y permisos (:x:).
 2. Queries JPA con parámetros (:x:).
