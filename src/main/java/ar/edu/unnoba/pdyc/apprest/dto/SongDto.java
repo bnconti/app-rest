@@ -17,4 +17,6 @@ public class SongDto implements Serializable {
 
     public Genre getGenre() { return genre; }
     public void setGenre(Genre genre) { this.genre = genre; }
+
+    // TODO User DTO?
 }
