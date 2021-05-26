@@ -53,12 +53,12 @@ clases del modelo.
 - Dentro del package ar.edu.unnoba.pdyc2021.mymusic.repository, para cada
 entidad del modelo, declarar el repository correspondiente.
 
-### Service Layer
+### Service Layer (:x:)
 - Definir en el package ar.edu.unnoba.pdyc2021.mymusic.service todos los
 servicios que contengan la lógica de negocios que permitan implementar cada
 una de las funcionalidades propuestas.
 
-### Resources del API
+### Resources del API (:x:)
 - Definir en el package ar.edu.unnoba.pdyc2021.mymusic.resource todos los
 resources del API
 - Nombrar adecuadamente, siguiendo las convenciones, el URI para cada uno y
