@@ -13,7 +13,7 @@
 
 ### Entrega 2 (25/05)
 
-1. Autenticación y autorización con JWT (:x:).
+1. Autenticación y autorización con JWT (:heavy_check_mark:).
 
 #### Probar la autenticación
 Enviar una request de tipo POST a http://192.168.0.2:8081/login que incluya en
@@ -32,9 +32,7 @@ aP/ra codificar una contraseña con BCrypt:
 System.out.println(new BCryptPasswordEncoder().encode("123456"));
 ```
 
-
-
-> **Estado:** (:x:)
+> **Estado:** (:heavy_check_mark:)
 
 ### Entrega 3 (01/06)
 
