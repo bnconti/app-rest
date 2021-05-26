@@ -27,7 +27,7 @@ el cuerpo una estructura JSON definiendo email y password. Por ejemplo:
 
 (en el script SQL están cifradas la contraseña 3 para el usuario bruno y 1 para franco)
 
-aP/ra codificar una contraseña con BCrypt:
+Para codificar una contraseña con BCrypt:
 ```
 System.out.println(new BCryptPasswordEncoder().encode("123456"));
 ```
