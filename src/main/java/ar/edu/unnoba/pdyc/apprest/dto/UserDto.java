@@ -2,7 +2,8 @@ package ar.edu.unnoba.pdyc.apprest.dto;
 
 import java.io.Serializable;
 
-public class AuthRequestDto implements Serializable {
+/* utilizado para la autenticación de usuarios */
+public class UserDto implements Serializable {
     private String email;
     private String password;
 

@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository("playlistRepository")
-public interface PlaylistRepository extends JpaRepository<Playlist,Long> {
+public interface PlaylistRepository extends JpaRepository<Playlist, Long> {
     List<Playlist> findByUser(User user);
+
     Playlist findByUserAndName(User user, String name);
 }

@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -18,31 +17,39 @@ import java.util.Arrays;
 import org.springframework.http.HttpMethod;
 
 @EnableWebSecurity
-public class Configuration extends WebSecurityConfigurerAdapter {
-    private UserService userService;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private final UserService userService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Configuration(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public SecurityConfig(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userService = userService;
+        /* almacenar las contraseñas encriptadas con BCrypt */
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
+
+    /* Overrides de WebSecurityConfigurerAdapter */
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        /* configurar filtros de seguridad */
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/songs").permitAll()
                 .antMatchers("/**").fullyAuthenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
-                // this disables session creation on Spring Security
+                /* no crear sesiones en Spring Security */
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        /* crear el gestor de autenticación,
+         * gestionando usuarios con userService usando BCrypt */
         auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

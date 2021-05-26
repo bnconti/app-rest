@@ -1,6 +1,6 @@
 package ar.edu.unnoba.pdyc.apprest.security;
 
-import ar.edu.unnoba.pdyc.apprest.dto.AuthRequestDto;
+import ar.edu.unnoba.pdyc.apprest.dto.UserDto;
 import ar.edu.unnoba.pdyc.apprest.model.User;
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,35 +19,25 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
-import static ar.edu.unnoba.pdyc.apprest.security.Constants.EXPIRATION_TIME;
-import static ar.edu.unnoba.pdyc.apprest.security.Constants.HEADER_STRING;
-import static ar.edu.unnoba.pdyc.apprest.security.Constants.SECRET;
-import static ar.edu.unnoba.pdyc.apprest.security.Constants.TOKEN_PREFIX;
+import static ar.edu.unnoba.pdyc.apprest.security.SecurityConstants.*;
 
-/**
- * Created by jpgm on 11/05/21.
- */
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
     @Override
+    /* procesar autenticaciones */
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
         try {
-            AuthRequestDto auth = new ObjectMapper()
-                    .readValue(request.getInputStream(), AuthRequestDto.class);
+            UserDto auth = new ObjectMapper()
+                    .readValue(request.getInputStream(), UserDto.class);
 
-          //  System.out.println(new BCryptPasswordEncoder().encode(auth.getPassword()));
-
-            return authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            auth.getEmail(),
-                            auth.getPassword(),
-                            new ArrayList<>())
+            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    auth.getEmail(), auth.getPassword(), new ArrayList<>())
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -55,13 +45,17 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
+    /* autenticación exitosa */
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authResult) throws IOException, ServletException {
+                                            Authentication authResult) {
         String token = JWT.create()
+                /* poner email en el payload del token */
                 .withSubject(((User) authResult.getPrincipal()).getEmail())
+                /* expira en EXPIRATION_TIME */
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                /* firmar con HMAC512 usando la semilla SECRET */
                 .sign(HMAC512(SECRET.getBytes()));
         response.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
     }

@@ -36,6 +36,7 @@ public class User implements Serializable, UserDetails {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
+    @Override
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
@@ -52,23 +53,19 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public boolean equals(Object obj) {
-
         if (obj == null) {
             return false;
         } else if (!(obj instanceof User)) {
             return false;
-        } else if (((User) obj).id.equals(this.id)) {
-            return true;
-        } else {
-            return false;
-        }
+        } else return ((User) obj).id.equals(this.id);
     }
 
 
     /* Overrides de UserDetails */
-    /* TODO */
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        /* sólo rol de usuario normal */
         return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
     }
 

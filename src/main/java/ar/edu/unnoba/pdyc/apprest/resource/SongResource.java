@@ -26,7 +26,7 @@ public class SongResource {
         List<SongDto> dtos = new ArrayList<>();
         ModelMapper modelMapper = new ModelMapper();
 
-        for (Song song: songs) {
+        for (Song song : songs) {
             dtos.add(modelMapper.map(song, SongDto.class));
         }
         return Response.ok(dtos).build();

@@ -15,6 +15,25 @@
 
 1. Autenticación y autorización con JWT (:x:).
 
+#### Probar la autenticación
+Enviar una request de tipo POST a http://192.168.0.2:8081/login que incluya en
+el cuerpo una estructura JSON definiendo email y password. Por ejemplo:
+```
+{
+    "email":"franco@yopmail.com",
+    "password":"1"
+}
+```
+
+(en el script SQL están cifradas la contraseña 3 para el usuario bruno y 1 para franco)
+
+aP/ra codificar una contraseña con BCrypt:
+```
+System.out.println(new BCryptPasswordEncoder().encode("123456"));
+```
+
+
+
 > **Estado:** (:x:)
 
 ### Entrega 3 (01/06)
@@ -27,12 +46,12 @@
 
 ## Guía de implementación
 
-### Modelo de Clases y mapeo JPA
+### Modelo de Clases y mapeo JPA (:heavy_check_mark:)
 - Dentro del package ar.edu.unnoba.pdyc2021.mymusic.model crear todas las
 clases del modelo.
 - Realizar adecuadamente el mapeo entidad-relación con JPA.
 
-### JPA Repositories (DAO)
+### JPA Repositories (DAO) (:heavy_check_mark:)
 - Dentro del package ar.edu.unnoba.pdyc2021.mymusic.repository, para cada
 entidad del modelo, declarar el repository correspondiente.
 
@@ -47,12 +66,12 @@ resources del API
 - Nombrar adecuadamente, siguiendo las convenciones, el URI para cada uno y
 sus distintos métodos.
 
-### DTO
-- Definir en el package ar.edu.unnoba.pdyc2021.mymusic.dto para todos los DTO
+### DTO (:heavy_check_mark:)
+- Definir en el package ar.edu.unnoba.pdyc2021.mymusic.dto todos los DTO
 necesarios para intercambio de información.
 
-### Authentication and Authorization
-- Definir en el package ar.edu.unnoba.pdyc2021.mymusic.security para todas las
+### Authentication and Authorization (:heavy_check_mark:)
+- Definir en el package ar.edu.unnoba.pdyc2021.mymusic.security todas las
 clases necesarias para la implementación de la autenticación y autorización
 - Se deberá implementar el estándar JWT y debe estar integrado con Spring
 Security.

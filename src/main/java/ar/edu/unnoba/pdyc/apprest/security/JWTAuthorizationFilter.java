@@ -15,15 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static ar.edu.unnoba.pdyc.apprest.security.Constants.HEADER_STRING;
-import static ar.edu.unnoba.pdyc.apprest.security.Constants.SECRET;
-import static ar.edu.unnoba.pdyc.apprest.security.Constants.TOKEN_PREFIX;
+import static ar.edu.unnoba.pdyc.apprest.security.SecurityConstants.*;
 
-/**
- * Created by jpgm on 11/05/21.
- */
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
-
     public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
     }
@@ -35,6 +29,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         String header = request.getHeader(HEADER_STRING);
 
         if (header == null || !header.startsWith(TOKEN_PREFIX)) {
+            /* no tiene encabezado o no es de JWT */
             chain.doFilter(request, response);
             return;
         }
@@ -51,18 +46,15 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(HEADER_STRING);
-        if (token != null) {
-            // parse the token.
-            String userEmail = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
-                    .build()
-                    .verify(token.replace(TOKEN_PREFIX, ""))
-                    .getSubject();
+        if (token == null) return null;
 
-            if (userEmail != null) {
-                return new UsernamePasswordAuthenticationToken(userEmail, null,new ArrayList<>());
-            }
-            return null;
-        }
-        return null;
+        String userEmail = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
+                .build()
+                .verify(token.replace(TOKEN_PREFIX, ""))
+                .getSubject();
+
+        if (userEmail == null) return null;
+
+        return new UsernamePasswordAuthenticationToken(userEmail, null, new ArrayList<>());
     }
 }
