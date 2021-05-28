@@ -1,6 +1,7 @@
 package ar.edu.unnoba.pdyc.apprest.resource;
 
 import ar.edu.unnoba.pdyc.apprest.dto.SongDto;
+import ar.edu.unnoba.pdyc.apprest.model.Genre;
 import ar.edu.unnoba.pdyc.apprest.model.Song;
 import ar.edu.unnoba.pdyc.apprest.service.SongService;
 import org.modelmapper.ModelMapper;

@@ -13,7 +13,7 @@ public enum Genre {
     private final String descripcion;
 
     Genre(String descripcion) {
-        this.descripcion= descripcion;
+        this.descripcion = descripcion;
     }
 
     @Override

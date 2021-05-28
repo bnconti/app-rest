@@ -21,6 +21,11 @@ public class UserServiceImp implements UserService {
     @Override
     /* Username = email */
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return findByEmail(email);
+        User user = findByEmail(email);
+        if (user != null) {
+            return user;
+        } else {
+            throw new UsernameNotFoundException("No se encontró el usuario " + email);
+        }
     }
 }

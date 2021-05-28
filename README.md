@@ -34,8 +34,7 @@ género. (:heavy_check_mark:)
 
     * Pero con el filtro ese no se pueden recuperar *todas* las canciones...
 Poner otro método sin los QueryParams no funciona. (:x:)
-```GET http://localhost:8080/music/songs?author="Yerba Brava"&genre=Cumbia```
-Convertir String a Genre, o buscarle la vuelta. (:x:)
+```GET http://localhost:8080/music/songs?author=Divididos&genre=ROCK```
 
 * Consultar las playlists creadas. (:x:)
 ``` GET http://localhost:8080/music/playlists/```
@@ -123,12 +122,13 @@ Para codificar una contraseña con BCrypt:
 System.out.println(new BCryptPasswordEncoder().encode("123456"));
 ```
 
-Esta petición retornará un token si la autenticación fue exitosa.
+Esta petición retornará un token llamado Autorization si la autenticación fue
+exitosa.
 Para permitir acceder a los endpoints que requieran autenticación, se deberá
-incluir ese token en la cabezera de la HTTP, con nombre "Authorization".
+incluir ese token en la cabezera de la HTTP.
 
-Por ejemplo, usando ``curl``:
+Por ejemplo, usando ``cURL``:
 ```
-curl -v -d '{"email":"franco@yopmail.com","password":"1"}' localhost:8080/music/auth
-curl -v -H 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmcmFuY29AeW9wbWFpbC5jb20iLCJleHAiOjE2MjMwOTYzMDJ9.pTBjnBGmZFEisCVGsiJuChNV50A_LiydU86qGtqrUxzl2TCf4js47CbCCn6qGoDc8XkTJsjdYWBqyCYMhveyDA' localhost:8080/music/playlists
+curl localhost:8080/music/auth -s -D - -d '{"email":"franco@yopmail.com","password":"1"}' |grep Authorization > /tmp/token
+curl localhost:8080/music/playlists -v -H @/tmp/token
 ```
