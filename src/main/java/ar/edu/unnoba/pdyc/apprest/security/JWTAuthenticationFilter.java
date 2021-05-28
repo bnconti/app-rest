@@ -1,5 +1,6 @@
 package ar.edu.unnoba.pdyc.apprest.security;
 
+import ar.edu.unnoba.pdyc.apprest.AppRestApplication;
 import ar.edu.unnoba.pdyc.apprest.dto.UserDto;
 import ar.edu.unnoba.pdyc.apprest.model.User;
 import com.auth0.jwt.JWT;
@@ -11,7 +12,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -26,6 +26,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
+        /* ruta del login */
+        setFilterProcessesUrl(AppRestApplication.APP_PATH + "/auth");
+
     }
 
     @Override

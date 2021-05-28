@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import javax.ws.rs.ApplicationPath;
 
 @Component
-@ApplicationPath("/music")
+@ApplicationPath(AppRestApplication.APP_PATH)
 public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
         register(PlaylistResource.class);

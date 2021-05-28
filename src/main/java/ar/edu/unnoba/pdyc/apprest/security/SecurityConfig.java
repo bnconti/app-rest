@@ -1,5 +1,6 @@
 package ar.edu.unnoba.pdyc.apprest.security;
 
+import ar.edu.unnoba.pdyc.apprest.AppRestApplication;
 import ar.edu.unnoba.pdyc.apprest.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -33,15 +34,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         /* configurar filtros de seguridad */
-        /* solo el listado de canciones es público */
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/music/songs").permitAll()
+                /* endpoints públicos */
+                .antMatchers(HttpMethod.GET, AppRestApplication.APP_PATH + "/songs").permitAll()
+                .antMatchers(HttpMethod.GET, AppRestApplication.APP_PATH + "/playlists").permitAll()
                 .antMatchers("/**").fullyAuthenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 /* no crear sesiones en Spring Security */
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                ;
     }
 
     @Override
