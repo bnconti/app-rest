@@ -16,7 +16,7 @@
 1. Autenticación y autorización con JWT (:heavy_check_mark:).
 
 #### Probar la autenticación
-Enviar una request de tipo POST a http://192.168.0.2:8081/login que incluya en
+Enviar una request de tipo POST a http://localhost:8080/music/login que incluya en
 el cuerpo una estructura JSON definiendo email y password. Por ejemplo:
 ```
 {
@@ -39,6 +39,30 @@ System.out.println(new BCryptPasswordEncoder().encode("123456"));
 1. Validaciones y permisos (:x:).
 2. Queries JPA con parámetros (:x:).
 3. Todas las funcionalidades requeridas por el enunciado implementadas (:x:).
+
+#### Revisar y completar
+* Convertir String a Genre
+Acá se rompe por ejemplo:
+```http://localhost:8080/music/songs?author="Yerba Brava"&genre=Cumbia```
+
+* JWT, validaciones y permisos.
+** Retornar token que deberá ser incluido en el header de los endpoints que requieran autenticación.
+** Tendría que ser /auth, no /login
+
+* Varios
+** GET http://localhost:8080/music/playlists/: Tendría que ser público
+** GET http://localhost:8080/music/playlists/{id}: Retornar detalle
+** Y los demás aspectos de la API
+
+* QueryParams:
+Permitir combinaciones de parámetros (sería agregar los otros métodos nomás)
+
+* ABM de playlists
+
+* Queries JPA. Hace falta?
+
+* Si hay tiempo poner una página de error mejor
+
 
 > **Estado:** (:x:)
 

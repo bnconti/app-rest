@@ -33,8 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         /* configurar filtros de seguridad */
+        /* solo el listado de canciones es público */
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/songs").permitAll()
+                .antMatchers(HttpMethod.GET, "/music/songs").permitAll()
                 .antMatchers("/**").fullyAuthenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))

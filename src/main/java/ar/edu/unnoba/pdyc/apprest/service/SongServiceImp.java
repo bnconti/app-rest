@@ -16,4 +16,9 @@ public class SongServiceImp implements SongService {
     public List<Song> getSongs() {
         return songRepository.findAll();
     }
+
+    @Override
+    public List<Song> getSongs(String author, String genre) {
+        return songRepository.findByAuthorAndGenre(author, genre);
+    }
 }
