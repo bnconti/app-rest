@@ -20,15 +20,53 @@ public class SongServiceImp implements SongService {
     }
 
     @Override
-    public List<Song> getSongs(String author, Genre genre) {
-        return songRepository.findByAuthorAndGenre(author, genre);
+    public List<Song> getSongsByAuthor(String author) {
+        if (author == null) {
+            return getSongs();
+        } else {
+            return songRepository.findByAuthor(author);
+        }
     }
 
     @Override
-    public List<Song> getSongs(String author, String strGenre) {
+    public List<Song> getSongsByGenre(Genre genre) {
+        if (genre == null) {
+            return getSongs();
+        } else {
+            return songRepository.findByGenre(genre);
+        }
+    }
+    @Override
+    public List<Song> getSongsByGenre(String strGenre) {
+        if (strGenre == null) {
+            return getSongs();
+        }
         try {
             Genre genre = Genre.valueOf(strGenre.toUpperCase());
-            return getSongs(author, genre);
+            return getSongsByGenre(genre);
+        } catch (IllegalArgumentException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Song> getSongsByAuthorAndGenre(String author, Genre genre) {
+        if (author == null) {
+            return getSongsByGenre(genre);
+        } else if (genre == null) {
+            return getSongsByAuthor(author);
+        } else {
+            return songRepository.findByAuthorAndGenre(author, genre);
+        }
+    }
+    @Override
+    public List<Song> getSongsByAuthorAndGenre(String author, String strGenre) {
+        if (strGenre == null) {
+            return getSongsByAuthor(author);
+        }
+        try {
+            Genre genre = Genre.valueOf(strGenre.toUpperCase());
+            return getSongsByAuthorAndGenre(author, genre);
         } catch (IllegalArgumentException e) {
             return new ArrayList<>();
         }

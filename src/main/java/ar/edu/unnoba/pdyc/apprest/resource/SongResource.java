@@ -28,7 +28,7 @@ public class SongResource {
     public Response getSongs(@QueryParam("author") String author, @QueryParam("genre") String genre) {
         ModelMapper modelMapper = new ModelMapper();
         Type listType = new TypeToken<List<SongDto>>(){}.getType();
-        List<Song> songs = songService.getSongs(author, genre);
+        List<Song> songs = songService.getSongsByAuthorAndGenre(author, genre);
         List<SongDto> dtos = modelMapper.map(songs, listType);
         return Response.ok(dtos).build();
     }

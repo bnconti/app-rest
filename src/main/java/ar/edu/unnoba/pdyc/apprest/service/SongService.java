@@ -7,7 +7,12 @@ import java.util.List;
 
 public interface SongService {
     List<Song> getSongs();
-    List<Song> getSongs(String author, Genre genre);
 
-    List<Song> getSongs(String author, String genre);
+    List<Song> getSongsByAuthor(String author);
+
+    List<Song> getSongsByGenre(Genre genre);
+    List<Song> getSongsByGenre(String strGenre);
+
+    List<Song> getSongsByAuthorAndGenre(String author, Genre genre);
+    List<Song> getSongsByAuthorAndGenre(String author, String strGenre);
 }
