@@ -26,9 +26,6 @@
 * Autenticación mediante email y password. (:heavy_check_mark:)
 ```POST http://localhost:8080/music/auth```
 
-* Se podría evitar InternalAuthenticationServiceException cuando el usuario
-no existe... (:x:)
-
 * Consultar las canciones disponibles, pudiendo ser filtradas por autor y
 género. (:heavy_check_mark:)
 
