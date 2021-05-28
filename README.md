@@ -21,16 +21,13 @@
 
 1. Validaciones y permisos. (:x:)
 2. Queries JPA con parámetros. (:x:)
-3. Todas las funcionalidades requeridas por el enunciado implementadas.
+3. Todas las funcionalidades requeridas por el enunciado implementadas:
 
 * Autenticación mediante email y password. (:heavy_check_mark:)
 ```POST http://localhost:8080/music/auth```
 
 * Consultar las canciones disponibles, pudiendo ser filtradas por autor y
 género. (:heavy_check_mark:)
-
-    * Pero con el filtro ese no se pueden recuperar *todas* las canciones...
-Poner otro método sin los QueryParams no funciona. (:x:)
 ```GET http://localhost:8080/music/songs?author=Divididos&genre=ROCK```
 
 * Consultar las playlists creadas. (:x:)
