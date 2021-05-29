@@ -11,4 +11,8 @@ public interface PlaylistService {
 
     Playlist getPlaylistById(Long id);
     Playlist getPlaylistByUserAndName(User user, String name);
+
+    void putPlaylist(Playlist playlist);
+
+    Boolean deletePlaylist(Long id);
 }

@@ -46,6 +46,8 @@ género. (:heavy_check_mark:)
 
     ```PUT http://localhost:8080/music/playlists```
 
+    A REVISAR
+
 * Modificación y eliminación de playlists.
     Requiere autenticación, y sólo puede realizarlo el usuario que la creó.
 
@@ -62,6 +64,7 @@ género. (:heavy_check_mark:)
 
     * Borrar. (:x:)
     ```DELETE http://localhost:8080/music/playlists/{id}```
+    A REVISAR. Y falta autenticación.
 
 
 > **Estado:** (:x:)
@@ -77,7 +80,7 @@ clases del modelo.
 - Dentro del package ar.edu.unnoba.pdyc2021.mymusic.repository, para cada
 entidad del modelo, declarar el repository correspondiente.
 
-### Service Layer (:x:)
+### Service Layer (:heavy_check_mark:)
 - Definir en el package ar.edu.unnoba.pdyc2021.mymusic.service todos los
 servicios que contengan la lógica de negocios que permitan implementar cada
 una de las funcionalidades propuestas.
@@ -127,4 +130,11 @@ Por ejemplo, usando ``cURL``:
 ```
 curl localhost:8080/music/auth -s -D - -d '{"email":"franco@yopmail.com","password":"1"}' |grep Authorization > /tmp/token
 curl localhost:8080/music/playlists -v -H @/tmp/token
+```
+
+### Probar ABM de listas de reproducción
+Por ejemplo, para crear una nueva lista y eliminarla usando cURL:
+```
+curl localhost:8080/music/playlists -v -H @/tmp/token -X PUT -d '{"id":3,"name":"Lista de rock","user":{"id":2,"email":"franco@yopmail.com"}}' -H "Content-Type: application/json"
+curl localhost:8080/music/playlists/3 -v -H @/tmp/token -X DELETE
 ```

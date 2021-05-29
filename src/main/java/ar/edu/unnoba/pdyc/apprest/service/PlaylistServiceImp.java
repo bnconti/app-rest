@@ -33,4 +33,18 @@ public class PlaylistServiceImp implements PlaylistService {
         return playlistRepository.findByUserAndName(user, name);
     }
 
+    @Override
+    public void putPlaylist(Playlist playlist) {
+        playlistRepository.save(playlist);
+    }
+
+    @Override
+    public Boolean deletePlaylist(Long id) {
+        Optional<Playlist> playlist = playlistRepository.findById(id);
+        if (playlist.isEmpty()) {
+            return false;
+        }
+        playlistRepository.delete(playlist.get());
+        return true;
+    }
 }
