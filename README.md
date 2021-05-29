@@ -6,7 +6,8 @@
 
 1. Configuración inicial del proyecto. (:heavy_check_mark:)
 2. Clases del proyecto con su respectivo mapeo JPA. (:heavy_check_mark:)
-3. El endpoint para obtener canciones debe estar implementado. (:heavy_check_mark:)
+3. El endpoint para obtener canciones debe estar implementado. 
+(:heavy_check_mark:)
 4. Aplicar patrón DTO y hacer uso de ModelMapper. (:heavy_check_mark:)
 
 > **Estado:** (:heavy_check_mark:)
@@ -21,51 +22,7 @@
 
 1. Validaciones y permisos. (:x:)
 2. Queries JPA con parámetros. (:x:)
-3. Todas las funcionalidades requeridas por el enunciado implementadas:
-
-* Autenticación mediante email y password. (:heavy_check_mark:)
-
-    ```POST http://localhost:8080/music/auth```
-
-* Consultar las canciones disponibles, pudiendo ser filtradas por autor y
-género. (:heavy_check_mark:)
-
-    ```GET http://localhost:8080/music/songs?author=Divididos&genre=ROCK```
-
-* Consultar las playlists creadas. (:heavy_check_mark:)
-
-    ``` GET http://localhost:8080/music/playlists```
-
-* Consultar los datos y las canciones de una playlist. (:heavy_check_mark:)
-
-    ```GET http://localhost:8080/music/playlists/{id}```
-
-* Crear playlists. (:x:)
-
-    Requiere autenticación, y los datos de la lista en el body.
-
-    ```PUT http://localhost:8080/music/playlists```
-
-    A REVISAR
-
-* Modificación y eliminación de playlists.
-    Requiere autenticación, y sólo puede realizarlo el usuario que la creó.
-
-    * Renombrar. (:x:)
-    En el body se envía el nombre de la lista.
-    ```POST http://localhost:8080/music/playlists/{id}```
-
-    * Agregar canciones. (:x:)
-    En el body se envía el id de la canción a agregar.
-    ```POST http://localhost:8080/music/playlists/{id}/songs/```
-
-    * Quitar canciones. (:x:)
-    ```DELETE http://localhost:8080/music/playlists/{id}/songs/{song_id}```
-
-    * Borrar. (:x:)
-    ```DELETE http://localhost:8080/music/playlists/{id}```
-    A REVISAR. Y falta autenticación.
-
+3. Todas las funcionalidades requeridas por el enunciado implementadas. (:x:)
 
 > **Estado:** (:x:)
 
@@ -101,40 +58,100 @@ clases necesarias para la implementación de la autenticación y autorización
 - Se deberá implementar el estándar JWT y debe estar integrado con Spring
 Security.
 
-## Guía de uso
+## Guía de uso de la API REST
 
-### Probar la autenticación
-Enviar una request de tipo POST a http://localhost:8080/music/login que incluya
-en el cuerpo una estructura JSON definiendo email y password. Por ejemplo:
-```
-{
-    "email":"franco@yopmail.com",
-    "password":"1"
-}
-```
+1. Primero se debe inicializar PostgreSQL
+2. La primera vez, descomentar la línea
+``spring.jpa.hibernate.ddl-auto = create`` de
+``src/main/resources/application.properties`` para crear el esquema de la base
+de datos y poner datos de prueba.
+3. Inicializar el proyecto.
 
-(en el script SQL están cifradas la contraseña 3 para el usuario bruno y 1 para
-franco)
+Se asume que el servidor se encuentra en ``localhost`` en el puerto ``8080``.
+
+### Obtener canciones
+
+Para obtener todas las canciones, enviar una petición ``GET`` a
+``http://localhost:8080/music/songs``
+
+Para obtener las canciones filtradas por autor y/o género, se pueden incluir
+los parámetros ``author`` y ``genre``.
+Por ejemplo:
+```http://localhost:8080/music/songs?author=Divididos&genre=ROCK```
+
+
+### Obtener listas de reproducción
+
+Para mostrar un resumen de todas las listas, enviar una petición ``GET`` a
+``http://localhost:8080/music/playlists``
+
+Para mostrar un detalle de una lista que incluye las canciones que contiene,
+enviarla a ``http://localhost:8080/music/playlists/{id}``, reemplazando
+``{id}`` por el id de la lista a consultar.
+
+
+### Autenticación
+
+En los datos de prueba se dejó cifrada la contraseña ``3`` para el usuario
+``bruno@yahoo.com``, y ``1`` para
+``franco@yopmail.com``.
 
 Para codificar una contraseña con BCrypt:
 ```
 System.out.println(new BCryptPasswordEncoder().encode("123456"));
 ```
 
-Esta petición retornará un token llamado Autorization si la autenticación fue
-exitosa.
-Para permitir acceder a los endpoints que requieran autenticación, se deberá
-incluir ese token en la cabezera de la HTTP.
+Para autenticarse, enviar una petición de tipo ``POST`` a
+``http://localhost:8080/music/login`` que incluya en el cuerpo una estructura
+JSON definiendo email y password.
+Esta petición retornará un token llamado ``Autorization`` si la autenticación
+fue exitosa.
+Para acceder a los endpoints que requieran autenticación, se deberá incluir ese
+token en la cabezera de la petición.
 
-Por ejemplo, usando ``cURL``:
+Por ejemplo, usando ``cURL``, este comando guarda el token en ``/tmp/token``
+para incluirlo en peticiones posteriores:
 ```
-curl localhost:8080/music/auth -s -D - -d '{"email":"franco@yopmail.com","password":"1"}' |grep Authorization > /tmp/token
-curl localhost:8080/music/playlists -v -H @/tmp/token
+curl localhost:8080/music/auth -s -D - -d \
+    '{"email":"franco@yopmail.com","password":"1"}' | \
+    grep Authorization > /tmp/token
 ```
 
-### Probar ABM de listas de reproducción
-Por ejemplo, para crear una nueva lista y eliminarla usando cURL:
+
+### ABM de listas de reproducción
+
+Todas estas operaciones requieren estar autenticado (se debe enviar en la
+cabecera de la petición el token generado en la autenticación).
+
+Las operaciones de baja y modificación sólo podrán ser realizadas por el
+usuario dueño de la lista.
+
+Para crear una lista nueva, enviar una petición ``PUT`` a
+``http://localhost:8080/music/playlists`` con los datos de la lista en el body.
+REVISAR (:x:)
+Por ejemplo:
 ```
-curl localhost:8080/music/playlists -v -H @/tmp/token -X PUT -d '{"id":3,"name":"Lista de rock","user":{"id":2,"email":"franco@yopmail.com"}}' -H "Content-Type: application/json"
+curl localhost:8080/music/playlists -v -H @/tmp/token \
+    -H "Content-Type: application/json" -X PUT -d \
+    '{"id":3,"name":"Lista de rock","user":{"id":2,"email":"franco@yopmail.com"}}'
+```
+
+Para renombrar una lista, enviar una petición ``POST`` a
+``http://localhost:8080/music/playlists/{id}``, incluyendo en el cuerpo el
+nombre de la lista. (:x:)
+
+Para agregar una canción a una lista, enviar una petición ``POST`` a
+``http://localhost:8080/music/playlists/{id}/songs/``, incluyendo en el cuerpo
+el id de la canción a agregar. (:x:)
+
+Para quitar una canción de una lista, enviar una petición ``DELETE`` a
+``http://localhost:8080/music/playlists/{id}/songs/{song_id}`` (:x:)
+
+Para eliminar una lista, enviar una petición ``DELETE`` a
+``http://localhost:8080/music/playlists/{id}``
+A REVISAR. Y falta autenticación. (:x:)
+
+Por ejemplo:
+```
 curl localhost:8080/music/playlists/3 -v -H @/tmp/token -X DELETE
 ```
