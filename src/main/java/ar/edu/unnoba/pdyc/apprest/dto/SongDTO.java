@@ -4,10 +4,18 @@ import ar.edu.unnoba.pdyc.apprest.model.Genre;
 
 import java.io.Serializable;
 
-public class SongDto implements Serializable {
+public class SongDTO implements Serializable {
+    private Long id;
     private String name;
     private String author;
     private Genre genre;
+
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

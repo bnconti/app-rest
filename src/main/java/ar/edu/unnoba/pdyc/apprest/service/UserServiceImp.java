@@ -13,7 +13,7 @@ public class UserServiceImp implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public User findByEmail(String email) {
+    public User getByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
@@ -21,7 +21,7 @@ public class UserServiceImp implements UserService {
     @Override
     /* Username = email */
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = findByEmail(email);
+        User user = getByEmail(email);
         if (user != null) {
             return user;
         } else {

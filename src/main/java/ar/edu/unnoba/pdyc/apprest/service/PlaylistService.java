@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface PlaylistService {
     List<Playlist> getPlaylists();
+
+    Playlist getPlaylistById(Long id);
 }

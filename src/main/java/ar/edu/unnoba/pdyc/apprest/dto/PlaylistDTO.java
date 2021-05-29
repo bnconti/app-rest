@@ -4,9 +4,17 @@ import ar.edu.unnoba.pdyc.apprest.model.User;
 
 import java.io.Serializable;
 
-public class PlaylistDto implements Serializable {
+public class PlaylistDTO implements Serializable {
+    private Long id;
     private String name;
     private User user;
+
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -15,8 +23,8 @@ public class PlaylistDto implements Serializable {
         this.name = name;
     }
 
-    public User getUser() {
-        return user;
+    public String getUser() {
+        return user.toString();
     }
     public void setUser(User user) {
         this.user = user;
