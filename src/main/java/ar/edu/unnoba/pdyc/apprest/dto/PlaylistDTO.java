@@ -29,11 +29,4 @@ public class PlaylistDTO implements Serializable {
     public void setUser(UserDTO user) {
         this.user = user;
     }
-
-    public List<SongDTO> getSongs() {
-        return songs;
-    }
-    public void setSongs(List<SongDTO> songs) {
-        this.songs = songs;
-    }
 }

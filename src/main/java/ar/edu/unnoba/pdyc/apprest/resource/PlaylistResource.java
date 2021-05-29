@@ -1,8 +1,7 @@
 package ar.edu.unnoba.pdyc.apprest.resource;
 
-import ar.edu.unnoba.pdyc.apprest.dto.PlaylistDTO;
+import ar.edu.unnoba.pdyc.apprest.dto.PlaylistWithSongsDTO;
 import ar.edu.unnoba.pdyc.apprest.model.Playlist;
-import ar.edu.unnoba.pdyc.apprest.model.Song;
 import ar.edu.unnoba.pdyc.apprest.service.PlaylistService;
 import ar.edu.unnoba.pdyc.apprest.service.SongService;
 import org.modelmapper.*;
@@ -32,7 +31,7 @@ public class PlaylistResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         } else {
             ModelMapper modelMapper = new ModelMapper();
-            PlaylistDTO dto = modelMapper.map(playlist, PlaylistDTO.class);
+            PlaylistWithSongsDTO dto = modelMapper.map(playlist, PlaylistWithSongsDTO.class);
             return Response.ok(dto).build();
         }
     }
