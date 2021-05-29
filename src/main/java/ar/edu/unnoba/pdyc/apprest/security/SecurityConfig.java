@@ -37,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().authorizeRequests()
                 /* endpoints públicos */
                 .antMatchers(HttpMethod.GET, AppRestApplication.APP_PATH + "/songs").permitAll()
+                .antMatchers(HttpMethod.GET, AppRestApplication.APP_PATH + "/playlists").permitAll()
                 .antMatchers(HttpMethod.GET, AppRestApplication.APP_PATH + "/playlists/*").permitAll()
                 .antMatchers("/**").fullyAuthenticated()
                 .and()

@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 import java.lang.reflect.Type;
 import java.util.List;
 
-@Path("/playlists/")
+@Path("/playlists")
 public class PlaylistsResource {
     @Autowired
     private PlaylistService playlistsService;

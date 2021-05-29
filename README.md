@@ -34,7 +34,7 @@ género. (:heavy_check_mark:)
 
 * Consultar las playlists creadas. (:heavy_check_mark:)
 
-    ``` GET http://localhost:8080/music/playlists/```
+    ``` GET http://localhost:8080/music/playlists```
 
 * Consultar los datos y las canciones de una playlist. (:x:)
 
@@ -44,12 +44,12 @@ género. (:heavy_check_mark:)
 
 * Crear playlists. (:x:)
 
-Requiere autenticación, y los datos de la lista en el body.
+    Requiere autenticación, y los datos de la lista en el body.
 
-    ```PUT http://localhost:8080/music/playlists/```
+    ```PUT http://localhost:8080/music/playlists```
 
-* Modificación y eliminación de playlists
-Requiere autenticación, y sólo puede realizarlo el usuario que la creó.
+* Modificación y eliminación de playlists.
+    Requiere autenticación, y sólo puede realizarlo el usuario que la creó.
 
     * Renombrar. (:x:)
     En el body se envía el nombre de la lista.
@@ -128,5 +128,5 @@ incluir ese token en la cabezera de la HTTP.
 Por ejemplo, usando ``cURL``:
 ```
 curl localhost:8080/music/auth -s -D - -d '{"email":"franco@yopmail.com","password":"1"}' |grep Authorization > /tmp/token
-curl localhost:8080/music/playlists/ -v -H @/tmp/token
+curl localhost:8080/music/playlists -v -H @/tmp/token
 ```
