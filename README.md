@@ -36,11 +36,9 @@ género. (:heavy_check_mark:)
 
     ``` GET http://localhost:8080/music/playlists```
 
-* Consultar los datos y las canciones de una playlist. (:x:)
+* Consultar los datos y las canciones de una playlist. (:heavy_check_mark:)
 
     ```GET http://localhost:8080/music/playlists/{id}```
-
-    Faltan las canciones.
 
 * Crear playlists. (:x:)
 

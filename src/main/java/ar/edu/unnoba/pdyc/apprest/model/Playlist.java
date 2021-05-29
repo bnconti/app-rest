@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "playlists")
+@Table(name = "playlists",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"name", "user_id"}))
 public class Playlist implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +19,8 @@ public class Playlist implements Serializable {
     @ManyToOne(targetEntity = User.class, optional = false)
     private User user;
 
-    @ManyToMany(targetEntity = Song.class)
+    // Pongo EAGER para que funcione la lista de canciones en el recurso playlist
+    @ManyToMany(targetEntity = Song.class, fetch = FetchType.EAGER)
     @JoinTable(
             name = "playlists_songs",
             joinColumns = @JoinColumn(name = "playlist_id", referencedColumnName = "id", nullable = false),

@@ -1,13 +1,13 @@
 package ar.edu.unnoba.pdyc.apprest.dto;
 
-import ar.edu.unnoba.pdyc.apprest.model.User;
-
 import java.io.Serializable;
+import java.util.List;
 
 public class PlaylistDTO implements Serializable {
     private Long id;
     private String name;
-    private User user;
+    private UserDTO user;
+    private List<SongDTO> songs;
 
     public Long getId() {
         return id;
@@ -23,10 +23,17 @@ public class PlaylistDTO implements Serializable {
         this.name = name;
     }
 
-    public String getUser() {
-        return user.toString();
+    public UserDTO getUser() {
+        return user;
     }
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         this.user = user;
+    }
+
+    public List<SongDTO> getSongs() {
+        return songs;
+    }
+    public void setSongs(List<SongDTO> songs) {
+        this.songs = songs;
     }
 }

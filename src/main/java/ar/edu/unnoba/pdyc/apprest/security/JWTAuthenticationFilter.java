@@ -1,7 +1,7 @@
 package ar.edu.unnoba.pdyc.apprest.security;
 
 import ar.edu.unnoba.pdyc.apprest.AppRestApplication;
-import ar.edu.unnoba.pdyc.apprest.dto.UserDTO;
+import ar.edu.unnoba.pdyc.apprest.dto.AuthRequestDTO;
 import ar.edu.unnoba.pdyc.apprest.model.User;
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,8 +36,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
         try {
-            UserDTO auth = new ObjectMapper()
-                    .readValue(request.getInputStream(), UserDTO.class);
+            AuthRequestDTO auth = new ObjectMapper()
+                    .readValue(request.getInputStream(), AuthRequestDTO.class);
 
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     auth.getEmail(), auth.getPassword(), new ArrayList<>())

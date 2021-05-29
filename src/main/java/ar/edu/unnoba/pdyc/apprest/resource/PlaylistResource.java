@@ -2,8 +2,10 @@ package ar.edu.unnoba.pdyc.apprest.resource;
 
 import ar.edu.unnoba.pdyc.apprest.dto.PlaylistDTO;
 import ar.edu.unnoba.pdyc.apprest.model.Playlist;
+import ar.edu.unnoba.pdyc.apprest.model.Song;
 import ar.edu.unnoba.pdyc.apprest.service.PlaylistService;
-import org.modelmapper.ModelMapper;
+import ar.edu.unnoba.pdyc.apprest.service.SongService;
+import org.modelmapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.GET;
@@ -12,11 +14,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("/playlists/{id}")
 public class PlaylistResource {
     @Autowired
     private PlaylistService playlistService;
+    @Autowired
+    private SongService songsService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

@@ -2,9 +2,12 @@ package ar.edu.unnoba.pdyc.apprest.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "songs", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "author"}))
+@Table(name = "songs",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"name", "author"}))
 public class Song implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +20,9 @@ public class Song implements Serializable {
 
     @Enumerated(EnumType.ORDINAL)
     private Genre genre;
+
+    @ManyToMany(targetEntity = Playlist.class, mappedBy = "songs")
+    private List<Playlist> playlists = new ArrayList<>();
 
 
     public Long getId() {
@@ -45,5 +51,12 @@ public class Song implements Serializable {
     }
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    public List<Playlist> getPlaylists() {
+        return playlists;
+    }
+    public void setPlaylists(List<Playlist> playlists) {
+        this.playlists = playlists;
     }
 }

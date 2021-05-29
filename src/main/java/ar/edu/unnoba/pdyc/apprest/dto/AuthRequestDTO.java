@@ -2,9 +2,11 @@ package ar.edu.unnoba.pdyc.apprest.dto;
 
 import java.io.Serializable;
 
-public class UserDTO implements Serializable {
+/* utilizado para la autenticación de usuarios */
+public class AuthRequestDTO implements Serializable {
     private Long id;
     private String email;
+    private String password;
 
     public Long getId() {
         return id;
@@ -18,5 +20,12 @@ public class UserDTO implements Serializable {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

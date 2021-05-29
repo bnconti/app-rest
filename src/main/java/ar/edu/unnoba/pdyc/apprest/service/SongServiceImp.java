@@ -1,6 +1,7 @@
 package ar.edu.unnoba.pdyc.apprest.service;
 
 import ar.edu.unnoba.pdyc.apprest.model.Genre;
+import ar.edu.unnoba.pdyc.apprest.model.Playlist;
 import ar.edu.unnoba.pdyc.apprest.model.Song;
 import ar.edu.unnoba.pdyc.apprest.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,5 +71,20 @@ public class SongServiceImp implements SongService {
         } catch (IllegalArgumentException e) {
             return new ArrayList<>();
         }
+    }
+
+    @Override
+    public List<Song> getSongsByName(String name) {
+        return songRepository.findByName(name);
+    }
+
+    @Override
+    public List<Song> getSongsByAuthorAndName(String author, String name) {
+        return songRepository.findByAuthorAndName(author, name);
+    }
+
+    @Override
+    public List<Song> getSongsByPlaylist(Playlist name) {
+        return songRepository.findByPlaylists(name);
     }
 }
