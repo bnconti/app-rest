@@ -107,39 +107,40 @@ public class PlaylistsResource {
 
         Playlist playlist = playlistService.getPlaylistById(id);
 
-        if (playlist != null) {
+        if (playlist == null) {
+            // no se encontró la playlist
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
 
-            String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-            String ownerEmail = playlist.getUser().getEmail();
+        String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String ownerEmail = playlist.getUser().getEmail();
 
-            if (authUserEmail.equals(ownerEmail)) {
-                Song song = songService.getSongById(dto.getSongId());
-                if (song != null) {
-                    for (Song s : playlist.getSongs()) {
-                        if (s.getId().equals(dto.getSongId())) {
-                            // la canción ya está en la lista
-                            return Response.status(Response.Status.CONFLICT).build();
-                        }
-                    }
-                    playlist.getSongs().add(song);
-                    try {
-                        playlistService.update(playlist);
-                        return Response.ok().build();
-                    } catch (Exception e) {
-                        // otro tipo de error inesperado
-                        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-                    }
-                } else {
-                    // no se encontró la canción
-                    return Response.status(Response.Status.NOT_FOUND).build();
-                }
-            } else {
-                // no coinciden los emails
-                return Response.status(Response.Status.FORBIDDEN).build();
+        if (!authUserEmail.equals(ownerEmail)) {
+            // no coinciden los emails
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        Song song = songService.getSongById(dto.getSongId());
+        if (song == null) {
+            // no se encontró la canción
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        for (Song s : playlist.getSongs()) {
+            if (s.getId().equals(dto.getSongId())) {
+                // la canción ya está en la lista
+                return Response.status(Response.Status.CONFLICT).build();
             }
         }
-        // no se encontró la playlist
-        return Response.status(Response.Status.NOT_FOUND).build();
+
+        playlist.getSongs().add(song);
+        try {
+            playlistService.update(playlist);
+            return Response.ok().build();
+        } catch (Exception e) {
+            // otro tipo de error inesperado
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PUT
