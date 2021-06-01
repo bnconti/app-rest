@@ -59,4 +59,15 @@ public class Song implements Serializable {
     public void setPlaylists(List<Playlist> playlists) {
         this.playlists = playlists;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        } else if (!(obj instanceof Song)) {
+            return false;
+        } else {
+            return ((Song) obj).id.equals(this.id);
+        }
+    }
 }

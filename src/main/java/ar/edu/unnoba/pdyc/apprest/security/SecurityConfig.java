@@ -34,13 +34,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         /* configurar filtros de seguridad */
-        http.cors().and().csrf().disable().authorizeRequests()
+        http.cors()
+            .and()
+                .csrf().disable().authorizeRequests()
                 /* endpoints públicos */
                 .antMatchers(HttpMethod.GET, AppRestApplication.APP_PATH + "/songs").permitAll()
                 .antMatchers(HttpMethod.GET, AppRestApplication.APP_PATH + "/playlists").permitAll()
                 .antMatchers(HttpMethod.GET, AppRestApplication.APP_PATH + "/playlists/*").permitAll()
                 .antMatchers("/**").fullyAuthenticated()
-                .and()
+            .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 /* no crear sesiones en Spring Security */

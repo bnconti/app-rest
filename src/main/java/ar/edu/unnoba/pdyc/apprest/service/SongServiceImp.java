@@ -21,6 +21,11 @@ public class SongServiceImp implements SongService {
     }
 
     @Override
+    public Song getSongById(Long id) {
+        return songRepository.findSongById(id);
+    }
+
+    @Override
     public List<Song> getSongsByAuthor(String author) {
         if (author == null) {
             return getSongs();

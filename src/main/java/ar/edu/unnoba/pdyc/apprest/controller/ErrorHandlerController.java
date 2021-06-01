@@ -23,7 +23,7 @@ public class ErrorHandlerController implements ErrorController {
                 description = "Recurso no encontrado";
                 break;
             case 405:
-                description = "Método no permtido";
+                description = "Método no permitido";
                 break;
             case 500:
                 // Error interno

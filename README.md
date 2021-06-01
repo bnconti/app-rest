@@ -20,11 +20,11 @@
 
 ### Entrega 3 (01/06)
 
-1. Validaciones y permisos. (:x:)
-2. Queries JPA con parámetros. (:x:)
-3. Todas las funcionalidades requeridas por el enunciado implementadas. (:x:)
+1. Validaciones y permisos. (:heavy_check_mark:)
+2. Queries JPA con parámetros. (:heavy_check_mark:)
+3. Todas las funcionalidades requeridas por el enunciado implementadas. (:heavy_check_mark:)
 
-> **Estado:** (:x:)
+> **Estado:** (:heavy_check_mark:)
 
 ## Guía de implementación
 
@@ -42,7 +42,7 @@ entidad del modelo, declarar el repository correspondiente.
 servicios que contengan la lógica de negocios que permitan implementar cada
 una de las funcionalidades propuestas.
 
-### Resources del API (:x:)
+### Resources del API (:heavy_check_mark:)
 - Definir en el package ar.edu.unnoba.pdyc2021.mymusic.resource todos los
 resources del API
 - Nombrar adecuadamente, siguiendo las convenciones, el URI para cada uno y
@@ -130,12 +130,12 @@ curl localhost:8080/music/auth -s -D - -d \
 Todas estas operaciones requieren estar autenticado (se debe enviar en la
 cabecera de la petición el token generado en la autenticación).
 
-Las operaciones de baja y modificación sólo podrán ser realizadas por el
+Además, las operaciones de baja y modificación sólo podrán ser realizadas por el
 usuario dueño de la lista.
 
-Para crear una lista nueva, enviar una petición ``PUT`` a
+Para **crear una lista nueva**, enviar una petición ``POST`` a
 ``http://localhost:8080/music/playlists`` con los datos de la lista en el body.
-REVISAR (:x:)
+
 Por ejemplo:
 ```
 curl localhost:8080/music/playlists -v -H @/tmp/token \
@@ -143,20 +143,19 @@ curl localhost:8080/music/playlists -v -H @/tmp/token \
     '{"id":3,"name":"Lista de rock","user":{"id":2,"email":"franco@yopmail.com"}}'
 ```
 
-Para renombrar una lista, enviar una petición ``POST`` a
+Para **renombrar una lista**, enviar una petición ``POST`` a
 ``http://localhost:8080/music/playlists/{id}``, incluyendo en el cuerpo el
-nombre de la lista. (:x:)
+nombre de la lista.
 
-Para agregar una canción a una lista, enviar una petición ``POST`` a
+Para **agregar una canción a una lista**, enviar una petición ``PUT`` a
 ``http://localhost:8080/music/playlists/{id}/songs/``, incluyendo en el cuerpo
-el id de la canción a agregar. (:x:)
+el id de la canción a agregar.
 
-Para quitar una canción de una lista, enviar una petición ``DELETE`` a
-``http://localhost:8080/music/playlists/{id}/songs/{song_id}`` (:x:)
+Para **quitar una canción de una lista**, enviar una petición ``PUT`` a
+``http://localhost:8080/music/playlists/{id}/songs/{song_id}``
 
-Para eliminar una lista, enviar una petición ``DELETE`` a
+Para **eliminar una lista**, enviar una petición ``DELETE`` a
 ``http://localhost:8080/music/playlists/{id}``
-A REVISAR. Y falta autenticación. (:x:)
 
 Por ejemplo:
 ```

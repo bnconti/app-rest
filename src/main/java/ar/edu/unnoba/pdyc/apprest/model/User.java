@@ -28,7 +28,6 @@ public class User implements Serializable, UserDetails {
     @JoinColumn(name = "user_id")
     private Set<Playlist> playlists = new LinkedHashSet<>();
 
-
     /* getters y setters */
     public Long getId() {
         return id;
@@ -58,7 +57,6 @@ public class User implements Serializable, UserDetails {
     public void setPlaylists(Set<Playlist> playlists) {
         this.playlists = playlists;
     }
-
 
     @Override
     public String toString() {
