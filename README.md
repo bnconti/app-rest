@@ -61,10 +61,17 @@ Security.
 ## Guía de uso de la API REST
 
 1. Primero se debe inicializar PostgreSQL
-2. La primera vez, descomentar la línea
-``spring.jpa.hibernate.ddl-auto = create`` de
+
+2. Por única vez se debe inicializar la base de datos. El proyecto está
+configurado para utilizar la base de datos PostgreSQL configurada en
+``localhost`` en el puerto ``5432``. Se utiliza el usuario ``postgres`` con
+contraseña ``postgres``.
+
+Se debe crear la base de datos music_rest y
+descomentar la línea ``spring.jpa.hibernate.ddl-auto = create`` de
 ``src/main/resources/application.properties`` para crear el esquema de la base
 de datos y poner datos de prueba.
+
 3. Inicializar el proyecto.
 
 Se asume que el servidor se encuentra en ``localhost`` en el puerto ``8080``.
