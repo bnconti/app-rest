@@ -84,20 +84,22 @@ public class PlaylistsResource {
 
         Playlist oldPlaylist = playlistService.getPlaylistById(id);
 
-        if (oldPlaylist != null) {
-            String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-            if (authUserEmail.equals(oldPlaylist.getUser().getEmail())) {
-                try {
-                    oldPlaylist.setName(dto.getName());
-                    playlistService.update(oldPlaylist);
-                    return Response.ok().build();
-                } catch (Exception e) {
-                    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-                }
-            }
+        if (oldPlaylist == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        if (!authUserEmail.equals(oldPlaylist.getUser().getEmail())) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-        return Response.status(Response.Status.NOT_FOUND).build();
+
+        try {
+            oldPlaylist.setName(dto.getName());
+            playlistService.update(oldPlaylist);
+            return Response.ok().build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PUT
@@ -146,37 +148,36 @@ public class PlaylistsResource {
     @PUT
     @Path("/{id}/songs/{song_id}")
     public Response removeSongFromPlaylist(@PathParam("id") Long id, @PathParam("song_id") Long songId) {
-        String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         Playlist playlist = playlistService.getPlaylistById(id);
 
-        // TODO: cómo hacer esto sin que sea un laberinto?
-        if (playlist != null) {
-            String ownerEmail = playlist.getUser().getEmail();
-            if (ownerEmail.equals(authUserEmail)) {
-                Song songToRemove = songService.getSongById(songId);
-                if (songToRemove != null) {
-                    if (playlist.getSongs().contains(songToRemove)) {
-                        try {
-                            playlist.getSongs().remove(songToRemove);
-                            playlistService.update(playlist);
-                            return Response.ok().build();
-                        } catch (Exception e) {
-                            // otro tipo de error inesperado
-                            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-                        }
-                    } else {
-                        // la canción no está en la playlist
-                        return Response.status(Response.Status.NOT_FOUND).build();
-                    }
-                }
-                // la canción no existe
-                return Response.status(Response.Status.NOT_FOUND).build();
-            }
-            // no coinciden los emails
+        if (playlist == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String ownerEmail = playlist.getUser().getEmail();
+
+        if (!ownerEmail.equals(authUserEmail)) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-        // no se encontró la playlist
-        return Response.status(Response.Status.NOT_FOUND).build();
+
+        Song songToRemove = songService.getSongById(songId);
+        if (songToRemove == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        if (!playlist.getSongs().contains(songToRemove)) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        try {
+            playlist.getSongs().remove(songToRemove);
+            playlistService.update(playlist);
+            return Response.ok().build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+
     }
 
     @DELETE
@@ -184,23 +185,21 @@ public class PlaylistsResource {
     public Response deletePlaylist(@PathParam("id") Long id) {
         Playlist playlist = playlistService.getPlaylistById(id);
 
-        if (playlist != null) {
-            String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-
-            String ownerUserEmail = playlist.getUser().getEmail();
-
-            if (authUserEmail.equals(ownerUserEmail)) {
-                if (playlistService.delete(id)) {
-                    return Response.ok().build();
-                } else {
-                    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-                }
-            } else {
-                // el usuario no es el creador de la playlist
-                return Response.status(Response.Status.FORBIDDEN).build();
-            }
+        if (playlist == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
-        // no se encontró la playlist
-        return Response.status(Response.Status.NOT_FOUND).build();
+
+        String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String ownerUserEmail = playlist.getUser().getEmail();
+
+        if (!authUserEmail.equals(ownerUserEmail)) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        if (!playlistService.delete(id)) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        return Response.ok().build();
     }
 }
