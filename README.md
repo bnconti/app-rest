@@ -139,7 +139,7 @@ Para **crear una lista nueva**, enviar una petición ``POST`` a
 Por ejemplo:
 ```
 curl localhost:8080/music/playlists -v -H @/tmp/token \
-    -H "Content-Type: application/json" -X PUT -d \
+    -H "Content-Type: application/json" -X POST -d \
     '{"id":3,"name":"Lista de rock","user":{"id":2,"email":"franco@yopmail.com"}}'
 ```
 
