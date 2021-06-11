@@ -26,6 +26,13 @@
 
 > **Estado:** (:heavy_check_mark:)
 
+### Entrega 4 (22/06)
+
+* Modificar endpoints de songs y playlists para que funcionen de forma asincrónica. (**REVISAR**)
+  * Utilizar @Suspended y AsyncResponse de JAX-RS.
+  * Utilizar CompletableFuture.
+  * Implementar comportamiento asoncrónico en los endpoints.
+
 ## Guía de implementación
 
 ### Modelo de Clases y mapeo JPA (:heavy_check_mark:)

@@ -5,23 +5,26 @@ import ar.edu.unnoba.pdyc.apprest.model.Playlist;
 import ar.edu.unnoba.pdyc.apprest.model.Song;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public interface SongService {
-    List<Song> getSongs();
+    CompletableFuture<List<Song>> getSongs();
 
-    List<Song> getSongsByAuthor(String author);
+    CompletableFuture<List<Song>> getSongsByAuthor(String author);
 
-    List<Song> getSongsByGenre(Genre genre);
-    List<Song> getSongsByGenre(String strGenre);
+    CompletableFuture<List<Song>> getSongsByGenre(Genre genre);
 
-    Song getSongById(Long id);
+    CompletableFuture<List<Song>> getSongsByGenre(String strGenre);
 
-    List<Song> getSongsByAuthorAndGenre(String author, Genre genre);
-    List<Song> getSongsByAuthorAndGenre(String author, String strGenre);
+    CompletableFuture<Song> getSongById(Long id);
 
-    List<Song> getSongsByName(String name);
+    CompletableFuture<List<Song>> getSongsByAuthorAndGenre(String author, Genre genre);
 
-    List<Song> getSongsByAuthorAndName(String author, String name);
+    CompletableFuture<List<Song>> getSongsByAuthorAndGenre(String author, String strGenre);
 
-    List<Song> getSongsByPlaylist(Playlist name);
+    CompletableFuture<List<Song>> getSongsByName(String name);
+
+    CompletableFuture<List<Song>> getSongsByAuthorAndName(String author, String name);
+
+    CompletableFuture<List<Song>> getSongsByPlaylist(Playlist name);
 }

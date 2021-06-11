@@ -16,12 +16,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.ws.rs.*;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
+// TODO: Revisar si está bien, y qué tendría que ir dentro de las funciones llamadas por thenAccept
 @Path("/playlists")
 public class PlaylistsResource {
     @Autowired
@@ -32,86 +35,115 @@ public class PlaylistsResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPlaylists() {
-        ModelMapper modelMapper = new ModelMapper();
-        Type listType = new TypeToken<List<PlaylistDTO>>() {
-        }.getType();
-        List<Playlist> playlists = playlistService.getPlaylists();
-        List<PlaylistDTO> dtos = modelMapper.map(playlists, listType);
-        return Response.ok(dtos).build();
+    public void getPlaylists(@Suspended AsyncResponse response) {
+        playlistService.getPlaylists().thenAccept((playlists) -> {
+            ModelMapper modelMapper = new ModelMapper();
+            Type listType = new TypeToken<List<PlaylistDTO>>() {
+            }.getType();
+            List<PlaylistDTO> dtos = modelMapper.map(playlists, listType);
+            response.resume(Response.ok(dtos).build());
+        });
     }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPlaylists(@PathParam("id") Long id) {
-        Playlist playlist = playlistService.getPlaylistById(id);
-        if (playlist != null) {
-            ModelMapper modelMapper = new ModelMapper();
-            PlaylistWithSongsDTO dto = modelMapper.map(playlist, PlaylistWithSongsDTO.class);
-            return Response.ok(dto).build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+    public void getPlaylist(@Suspended AsyncResponse response, @PathParam("id") Long id) {
+        playlistService.getPlaylistById(id).thenAccept((playlist) -> {
+            if (playlist != null) {
+                ModelMapper modelMapper = new ModelMapper();
+                PlaylistWithSongsDTO dto = modelMapper.map(playlist, PlaylistWithSongsDTO.class);
+                response.resume(Response.ok(dto).build());
+            } else {
+                response.resume(Response.status(Response.Status.NOT_FOUND).build());
+            }
+        });
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createPlaylist(PlaylistDTO dto) {
+    public void createPlaylist(@Suspended AsyncResponse response, PlaylistDTO dto) {
         if (dto == null) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            // TODO: está bien poner resume acá?
+            response.resume(Response.status(Response.Status.BAD_REQUEST).build());
+            return;
         }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            String ownerEmail = authentication.getPrincipal().toString();
-            ModelMapper modelMapper = new ModelMapper();
-            Playlist p = modelMapper.map(dto, Playlist.class);
-            playlistService.create(p, ownerEmail);
-            return Response.ok().build();
+        if ((authentication instanceof AnonymousAuthenticationToken)) {
+            response.resume(Response.status(Response.Status.FORBIDDEN).build());
+            return;
         }
-        return Response.status(Response.Status.FORBIDDEN).build();
+
+        String ownerEmail = authentication.getPrincipal().toString();
+        ModelMapper modelMapper = new ModelMapper();
+        Playlist p = modelMapper.map(dto, Playlist.class);
+        playlistService.create(p, ownerEmail).thenAccept((playlist) -> {
+            response.resume(Response.ok().build());
+        });
     }
 
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updatePlaylistName(@PathParam("id") Long id, PlaylistUpdateDTO dto) {
+    public void updatePlaylistName(@Suspended AsyncResponse response, @PathParam("id") Long id, PlaylistUpdateDTO dto) {
         if (dto == null) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            response.resume(Response.status(Response.Status.BAD_REQUEST).build());
+            return;
         }
 
-        Playlist oldPlaylist = playlistService.getPlaylistById(id);
+        Playlist oldPlaylist;
+        try {
+            // TODO: Revisar. Seguro que está mal lo del get() y tendría que estar todo
+            // dentro de thenAccept
+            oldPlaylist = playlistService.getPlaylistById(id).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
+            return;
+        }
 
         if (oldPlaylist == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            response.resume(Response.status(Response.Status.NOT_FOUND).build());
+            return;
         }
         String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 
         if (!authUserEmail.equals(oldPlaylist.getUser().getEmail())) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            response.resume(Response.status(Response.Status.FORBIDDEN).build());
+            return;
         }
 
         try {
-            oldPlaylist.setName(dto.getName());
-            playlistService.update(oldPlaylist);
-            return Response.ok().build();
+            playlistService.update(oldPlaylist).thenAccept((playlist) -> {
+                oldPlaylist.setName(dto.getName());
+                response.resume(Response.ok().build());
+            });
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
         }
     }
 
     @PUT
     @Path("/{id}/songs")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addSongToPlaylist(@PathParam("id") Long id, PlaylistAddSongDTO dto) {
+    public void addSongToPlaylist(@Suspended AsyncResponse response, @PathParam("id") Long id, PlaylistAddSongDTO dto) {
 
-        Playlist playlist = playlistService.getPlaylistById(id);
+        Playlist playlist;
+        // TODO: Revisar
+        try {
+            playlist = playlistService.getPlaylistById(id).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
+            return;
+        }
 
         if (playlist == null) {
             // no se encontró la playlist
-            return Response.status(Response.Status.NOT_FOUND).build();
+            response.resume(Response.status(Response.Status.NOT_FOUND).build());
+            return;
         }
 
         String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
@@ -119,87 +151,133 @@ public class PlaylistsResource {
 
         if (!authUserEmail.equals(ownerEmail)) {
             // no coinciden los emails
-            return Response.status(Response.Status.FORBIDDEN).build();
+            response.resume(Response.status(Response.Status.FORBIDDEN).build());
+            return;
         }
 
-        Song song = songService.getSongById(dto.getSongId());
+        Song song;
+        try {
+            song = songService.getSongById(dto.getSongId()).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
+            return;
+        }
         if (song == null) {
             // no se encontró la canción
-            return Response.status(Response.Status.NOT_FOUND).build();
+            response.resume(Response.status(Response.Status.NOT_FOUND).build());
+            return;
         }
 
         for (Song s : playlist.getSongs()) {
             if (s.getId().equals(dto.getSongId())) {
                 // la canción ya está en la lista
-                return Response.status(Response.Status.CONFLICT).build();
+                response.resume(Response.status(Response.Status.CONFLICT).build());
+                return;
             }
         }
 
         playlist.getSongs().add(song);
         try {
             playlistService.update(playlist);
-            return Response.ok().build();
+            response.resume(Response.ok().build());
         } catch (Exception e) {
             // otro tipo de error inesperado
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
         }
     }
 
     @PUT
     @Path("/{id}/songs/{song_id}")
-    public Response removeSongFromPlaylist(@PathParam("id") Long id, @PathParam("song_id") Long songId) {
-        Playlist playlist = playlistService.getPlaylistById(id);
+    public void removeSongFromPlaylist(@Suspended AsyncResponse response, @PathParam("id") Long id,
+            @PathParam("song_id") Long songId) {
+        Playlist playlist;
+        try {
+            playlist = playlistService.getPlaylistById(id).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
+            return;
+        }
 
         if (playlist == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            response.resume(Response.status(Response.Status.NOT_FOUND).build());
+            return;
         }
 
         String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         String ownerEmail = playlist.getUser().getEmail();
 
         if (!ownerEmail.equals(authUserEmail)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            response.resume(Response.status(Response.Status.FORBIDDEN).build());
+            return;
         }
 
-        Song songToRemove = songService.getSongById(songId);
+        Song songToRemove;
+        try {
+            songToRemove = songService.getSongById(songId).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
+            return;
+        }
         if (songToRemove == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            response.resume(Response.status(Response.Status.NOT_FOUND).build());
+            return;
         }
 
         if (!playlist.getSongs().contains(songToRemove)) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            response.resume(Response.status(Response.Status.NOT_FOUND).build());
+            return;
         }
 
         try {
             playlist.getSongs().remove(songToRemove);
             playlistService.update(playlist);
-            return Response.ok().build();
+            response.resume(Response.ok().build());
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
         }
 
     }
 
     @DELETE
     @Path("/{id}")
-    public Response deletePlaylist(@PathParam("id") Long id) {
-        Playlist playlist = playlistService.getPlaylistById(id);
+    public void deletePlaylist(@Suspended AsyncResponse response, @PathParam("id") Long id) {
+        Playlist playlist;
+        try {
+            playlist = playlistService.getPlaylistById(id).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
+            return;
+        }
 
         if (playlist == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            response.resume(Response.status(Response.Status.NOT_FOUND).build());
+            return;
         }
 
         String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         String ownerUserEmail = playlist.getUser().getEmail();
 
         if (!authUserEmail.equals(ownerUserEmail)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            response.resume(Response.status(Response.Status.FORBIDDEN).build());
+            return;
         }
 
-        if (!playlistService.delete(id)) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        boolean deleted = false;
+        try {
+            deleted = playlistService.delete(id).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
         }
 
-        return Response.ok().build();
+        if (deleted) {
+            response.resume(Response.ok().build());
+        } else {
+            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
+        }
     }
 }

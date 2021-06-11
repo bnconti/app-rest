@@ -4,17 +4,19 @@ import ar.edu.unnoba.pdyc.apprest.model.Playlist;
 import ar.edu.unnoba.pdyc.apprest.model.User;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public interface PlaylistService {
     Boolean exists(Long id);
     
-    List<Playlist> getPlaylists();
-    List<Playlist> getPlaylistsByUser(User user);
+    CompletableFuture<List<Playlist>> getPlaylists();
+    CompletableFuture<List<Playlist>> getPlaylistsByUser(User user);
 
-    Playlist getPlaylistById(Long id);
-    Playlist getPlaylistByUserAndName(User user, String name);
+    CompletableFuture<Playlist> getPlaylistById(Long id);
+    CompletableFuture<Playlist> getPlaylistByUserAndName(User user, String name);
 
-    void create(Playlist playlist, String userEmail);
-    void update(Playlist updatedPlaylist);
-    Boolean delete(Long id);
+    // TODO: hace falta CompletableFuture en estos métodos?
+    CompletableFuture<Playlist> create(Playlist playlist, String userEmail);
+    CompletableFuture<Playlist> update(Playlist updatedPlaylist);
+    CompletableFuture<Boolean> delete(Long id);
 }

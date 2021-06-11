@@ -3,13 +3,14 @@ package ar.edu.unnoba.pdyc.apprest.service;
 import ar.edu.unnoba.pdyc.apprest.model.Playlist;
 import ar.edu.unnoba.pdyc.apprest.model.User;
 import ar.edu.unnoba.pdyc.apprest.repository.PlaylistRepository;
-import ar.edu.unnoba.pdyc.apprest.repository.SongRepository;
 import ar.edu.unnoba.pdyc.apprest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class PlaylistServiceImp implements PlaylistService {
@@ -24,44 +25,60 @@ public class PlaylistServiceImp implements PlaylistService {
     }
 
     @Override
-    public void create(Playlist newPlaylist, String ownerEmail) {
+    @Async("taskExecutor")
+    public CompletableFuture<List<Playlist>> getPlaylists() {
+        List<Playlist> playlists = playlistRepository.findAll();
+        return CompletableFuture.completedFuture(playlists);
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Playlist> getPlaylistById(Long id) {
+        Optional<Playlist> optplaylist = playlistRepository.findById(id);
+        Playlist playlist = (optplaylist.isEmpty() ? null : optplaylist.get());
+        return CompletableFuture.completedFuture(playlist);
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<List<Playlist>> getPlaylistsByUser(User user) {
+        List<Playlist> playlists = playlistRepository.findByUser(user);
+        return CompletableFuture.completedFuture(playlists);
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Playlist> getPlaylistByUserAndName(User user, String name) {
+        Playlist playlist = playlistRepository.findByUserAndName(user, name);
+        return CompletableFuture.completedFuture(playlist);
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Playlist> create(Playlist newPlaylist, String ownerEmail) {
         newPlaylist.setUser(userRepository.findByEmail(ownerEmail));
-        playlistRepository.save(newPlaylist);
+        Playlist playlist = playlistRepository.save(newPlaylist);
+        return CompletableFuture.completedFuture(playlist);
     }
 
     @Override
-    public void update(Playlist updatedPlaylist) {
-        playlistRepository.save(updatedPlaylist);
+    @Async("taskExecutor")
+    public CompletableFuture<Playlist> update(Playlist updatedPlaylist) {
+        Playlist playlist = playlistRepository.save(updatedPlaylist);
+        return CompletableFuture.completedFuture(playlist);
     }
 
     @Override
-    public Boolean delete(Long id) {
+    @Async("taskExecutor")
+    public CompletableFuture<Boolean> delete(Long id) {
         Optional<Playlist> playlist = playlistRepository.findById(id);
+        boolean deleted;
         if (playlist.isEmpty()) {
-            return false;
+            deleted = false;
+        } else {
+            playlistRepository.delete(playlist.get());
+            deleted = true;
         }
-        playlistRepository.delete(playlist.get());
-        return true;
-    }
-
-    @Override
-    public List<Playlist> getPlaylists() {
-        return playlistRepository.findAll();
-    }
-
-    @Override
-    public Playlist getPlaylistById(Long id) {
-        Optional<Playlist> playlist = playlistRepository.findById(id);
-        return (playlist.isEmpty() ? null : playlist.get());
-    }
-
-    @Override
-    public List<Playlist> getPlaylistsByUser(User user) {
-        return playlistRepository.findByUser(user);
-    }
-
-    @Override
-    public Playlist getPlaylistByUserAndName(User user, String name) {
-        return playlistRepository.findByUserAndName(user, name);
+        return CompletableFuture.completedFuture(deleted);
     }
 }

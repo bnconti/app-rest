@@ -1,7 +1,6 @@
 package ar.edu.unnoba.pdyc.apprest.resource;
 
 import ar.edu.unnoba.pdyc.apprest.dto.SongDTO;
-import ar.edu.unnoba.pdyc.apprest.model.Song;
 import ar.edu.unnoba.pdyc.apprest.service.SongService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -11,6 +10,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.lang.reflect.Type;
@@ -23,11 +24,14 @@ public class SongsResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSongs(@QueryParam("author") String author, @QueryParam("genre") String genre) {
-        ModelMapper modelMapper = new ModelMapper();
-        Type listType = new TypeToken<List<SongDTO>>(){}.getType();
-        List<Song> songs = songsService.getSongsByAuthorAndGenre(author, genre);
-        List<SongDTO> dtos = modelMapper.map(songs, listType);
-        return Response.ok(dtos).build();
+    public void getSongs(@Suspended AsyncResponse response, @QueryParam("author") String author,
+            @QueryParam("genre") String genre) {
+        songsService.getSongsByAuthorAndGenre(author, genre).thenAccept((songs) -> {
+            ModelMapper modelMapper = new ModelMapper();
+            Type listType = new TypeToken<List<SongDTO>>() {
+            }.getType();
+            List<SongDTO> dtos = modelMapper.map(songs, listType);
+            response.resume(Response.ok(dtos).build());
+        });
     }
 }

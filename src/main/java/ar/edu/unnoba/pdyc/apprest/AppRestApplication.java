@@ -1,11 +1,16 @@
 package ar.edu.unnoba.pdyc.apprest;
 
+import java.util.concurrent.Executor;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
+@EnableAsync
 public class AppRestApplication {
 
     public static final String APP_PATH = "/music";
@@ -17,5 +22,17 @@ public class AppRestApplication {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    // Configuración del pool para los métodos asincrónicos
+    @Bean("taskExecutor")
+    public Executor getAsyncExecutor() {
+        final ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(100);
+        executor.setMaxPoolSize(1000);
+        executor.setQueueCapacity(100);
+        executor.setThreadNamePrefix("executor-");
+        executor.initialize();
+        return executor;
     }
 }
