@@ -22,9 +22,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
-// TODO: Revisar si está bien, y qué tendría que ir dentro de las funciones llamadas por thenAccept
+// FIXME: No se obtiene respuesta si ocurre una excepción de SQL por ejemplo
 @Path("/playlists")
 public class PlaylistsResource {
     @Autowired
@@ -64,7 +63,6 @@ public class PlaylistsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public void createPlaylist(@Suspended AsyncResponse response, PlaylistDTO dto) {
         if (dto == null) {
-            // TODO: está bien poner resume acá?
             response.resume(Response.status(Response.Status.BAD_REQUEST).build());
             return;
         }
@@ -93,36 +91,27 @@ public class PlaylistsResource {
             return;
         }
 
-        Playlist oldPlaylist;
-        try {
-            // TODO: Revisar. Seguro que está mal lo del get() y tendría que estar todo
-            // dentro de thenAccept
-            oldPlaylist = playlistService.getPlaylistById(id).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
-            return;
-        }
+        playlistService.getPlaylistById(id).thenAccept((oldPlaylist) -> {
+            if (oldPlaylist == null) {
+                response.resume(Response.status(Response.Status.NOT_FOUND).build());
+                return;
+            }
+            String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 
-        if (oldPlaylist == null) {
-            response.resume(Response.status(Response.Status.NOT_FOUND).build());
-            return;
-        }
-        String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+            if (!authUserEmail.equals(oldPlaylist.getUser().getEmail())) {
+                response.resume(Response.status(Response.Status.FORBIDDEN).build());
+                return;
+            }
 
-        if (!authUserEmail.equals(oldPlaylist.getUser().getEmail())) {
-            response.resume(Response.status(Response.Status.FORBIDDEN).build());
-            return;
-        }
-
-        try {
             playlistService.update(oldPlaylist).thenAccept((playlist) -> {
-                oldPlaylist.setName(dto.getName());
-                response.resume(Response.ok().build());
+                try {
+                    oldPlaylist.setName(dto.getName());
+                    response.resume(Response.ok().build());
+                } catch (Exception e) {
+                    response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
+                }
             });
-        } catch (Exception e) {
-            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
-        }
+        });
     }
 
     @PUT
@@ -130,154 +119,114 @@ public class PlaylistsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public void addSongToPlaylist(@Suspended AsyncResponse response, @PathParam("id") Long id, PlaylistAddSongDTO dto) {
 
-        Playlist playlist;
-        // TODO: Revisar
-        try {
-            playlist = playlistService.getPlaylistById(id).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
-            return;
-        }
-
-        if (playlist == null) {
-            // no se encontró la playlist
-            response.resume(Response.status(Response.Status.NOT_FOUND).build());
-            return;
-        }
-
-        String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        String ownerEmail = playlist.getUser().getEmail();
-
-        if (!authUserEmail.equals(ownerEmail)) {
-            // no coinciden los emails
-            response.resume(Response.status(Response.Status.FORBIDDEN).build());
-            return;
-        }
-
-        Song song;
-        try {
-            song = songService.getSongById(dto.getSongId()).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
-            return;
-        }
-        if (song == null) {
-            // no se encontró la canción
-            response.resume(Response.status(Response.Status.NOT_FOUND).build());
-            return;
-        }
-
-        for (Song s : playlist.getSongs()) {
-            if (s.getId().equals(dto.getSongId())) {
-                // la canción ya está en la lista
-                response.resume(Response.status(Response.Status.CONFLICT).build());
+        playlistService.getPlaylistById(id).thenAccept((playlist) -> {
+            if (playlist == null) {
+                // no se encontró la playlist
+                response.resume(Response.status(Response.Status.NOT_FOUND).build());
                 return;
             }
-        }
 
-        playlist.getSongs().add(song);
-        try {
-            playlistService.update(playlist);
-            response.resume(Response.ok().build());
-        } catch (Exception e) {
-            // otro tipo de error inesperado
-            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
-        }
+            String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+            String ownerEmail = playlist.getUser().getEmail();
+
+            if (!authUserEmail.equals(ownerEmail)) {
+                // no coinciden los emails
+                response.resume(Response.status(Response.Status.FORBIDDEN).build());
+                return;
+            }
+
+            songService.getSongById(dto.getSongId()).thenAccept((song) -> {
+                if (song == null) {
+                    // no se encontró la canción
+                    response.resume(Response.status(Response.Status.NOT_FOUND).build());
+                    return;
+                }
+
+                for (Song s : playlist.getSongs()) {
+                    if (s.getId().equals(dto.getSongId())) {
+                        // la canción ya está en la lista
+                        response.resume(Response.status(Response.Status.CONFLICT).build());
+                        return;
+                    }
+                }
+
+                playlist.getSongs().add(song);
+                try {
+                    playlistService.update(playlist);
+                    response.resume(Response.ok().build());
+                } catch (Exception e) {
+                    // otro tipo de error inesperado
+                    response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
+                }
+            });
+        });
     }
 
     @PUT
     @Path("/{id}/songs/{song_id}")
     public void removeSongFromPlaylist(@Suspended AsyncResponse response, @PathParam("id") Long id,
             @PathParam("song_id") Long songId) {
-        Playlist playlist;
-        try {
-            playlist = playlistService.getPlaylistById(id).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
-            return;
-        }
 
-        if (playlist == null) {
-            response.resume(Response.status(Response.Status.NOT_FOUND).build());
-            return;
-        }
+        playlistService.getPlaylistById(id).thenAccept((playlist) -> {
+            if (playlist == null) {
+                response.resume(Response.status(Response.Status.NOT_FOUND).build());
+                return;
+            }
 
-        String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        String ownerEmail = playlist.getUser().getEmail();
+            String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+            String ownerEmail = playlist.getUser().getEmail();
 
-        if (!ownerEmail.equals(authUserEmail)) {
-            response.resume(Response.status(Response.Status.FORBIDDEN).build());
-            return;
-        }
+            if (!ownerEmail.equals(authUserEmail)) {
+                response.resume(Response.status(Response.Status.FORBIDDEN).build());
+                return;
+            }
 
-        Song songToRemove;
-        try {
-            songToRemove = songService.getSongById(songId).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
-            return;
-        }
-        if (songToRemove == null) {
-            response.resume(Response.status(Response.Status.NOT_FOUND).build());
-            return;
-        }
+            songService.getSongById(songId).thenAccept((songToRemove) -> {
+                if (songToRemove == null) {
+                    response.resume(Response.status(Response.Status.NOT_FOUND).build());
+                    return;
+                }
 
-        if (!playlist.getSongs().contains(songToRemove)) {
-            response.resume(Response.status(Response.Status.NOT_FOUND).build());
-            return;
-        }
+                if (!playlist.getSongs().contains(songToRemove)) {
+                    response.resume(Response.status(Response.Status.NOT_FOUND).build());
+                    return;
+                }
 
-        try {
-            playlist.getSongs().remove(songToRemove);
-            playlistService.update(playlist);
-            response.resume(Response.ok().build());
-        } catch (Exception e) {
-            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
-        }
-
+                try {
+                    playlist.getSongs().remove(songToRemove);
+                    playlistService.update(playlist);
+                    response.resume(Response.ok().build());
+                } catch (Exception e) {
+                    response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
+                }
+            });
+        });
     }
 
     @DELETE
     @Path("/{id}")
     public void deletePlaylist(@Suspended AsyncResponse response, @PathParam("id") Long id) {
-        Playlist playlist;
-        try {
-            playlist = playlistService.getPlaylistById(id).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
-            return;
-        }
+        playlistService.getPlaylistById(id).thenAccept((playlist) -> {
+            if (playlist == null) {
+                response.resume(Response.status(Response.Status.NOT_FOUND).build());
+                return;
+            }
 
-        if (playlist == null) {
-            response.resume(Response.status(Response.Status.NOT_FOUND).build());
-            return;
-        }
+            String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+            String ownerUserEmail = playlist.getUser().getEmail();
 
-        String authUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        String ownerUserEmail = playlist.getUser().getEmail();
+            if (!authUserEmail.equals(ownerUserEmail)) {
+                response.resume(Response.status(Response.Status.FORBIDDEN).build());
+                return;
+            }
 
-        if (!authUserEmail.equals(ownerUserEmail)) {
-            response.resume(Response.status(Response.Status.FORBIDDEN).build());
-            return;
-        }
-
-        boolean deleted = false;
-        try {
-            deleted = playlistService.delete(id).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
-        }
-
-        if (deleted) {
-            response.resume(Response.ok().build());
-        } else {
-            response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
-        }
+            playlistService.delete(id).thenAccept((deleted) -> {
+                if (deleted) {
+                    response.resume(Response.ok().build());
+                } else {
+                    response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
+                }
+            });
+        });
     }
 }

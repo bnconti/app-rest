@@ -15,7 +15,6 @@ public interface PlaylistService {
     CompletableFuture<Playlist> getPlaylistById(Long id);
     CompletableFuture<Playlist> getPlaylistByUserAndName(User user, String name);
 
-    // TODO: hace falta CompletableFuture en estos métodos?
     CompletableFuture<Playlist> create(Playlist playlist, String userEmail);
     CompletableFuture<Playlist> update(Playlist updatedPlaylist);
     CompletableFuture<Boolean> delete(Long id);

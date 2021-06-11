@@ -9,6 +9,8 @@ import java.util.List;
 @Table(name = "playlists",
         uniqueConstraints = @UniqueConstraint(columnNames = {"name", "user_id"}))
 public class Playlist implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
