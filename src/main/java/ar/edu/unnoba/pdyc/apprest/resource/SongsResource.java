@@ -26,7 +26,7 @@ public class SongsResource {
     @Produces(MediaType.APPLICATION_JSON)
     public void getSongs(@Suspended AsyncResponse response, @QueryParam("author") String author,
             @QueryParam("genre") String genre) {
-        songsService.getSongsByAuthorAndGenre(author, genre).thenAccept((songs) -> {
+        songsService.getSongsByAuthorAndGenreAsync(author, genre).thenAccept((songs) -> {
             ModelMapper modelMapper = new ModelMapper();
             Type listType = new TypeToken<List<SongDTO>>() {
             }.getType();

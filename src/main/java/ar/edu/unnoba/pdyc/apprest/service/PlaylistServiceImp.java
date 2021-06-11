@@ -19,66 +19,103 @@ public class PlaylistServiceImp implements PlaylistService {
     @Autowired
     private UserRepository userRepository;
 
+    /*** variantes sincrónicas ***/
+    
     @Override
     public Boolean exists(Long id) {
         return playlistRepository.existsById(id);
     }
 
     @Override
-    @Async("taskExecutor")
-    public CompletableFuture<List<Playlist>> getPlaylists() {
-        List<Playlist> playlists = playlistRepository.findAll();
-        return CompletableFuture.completedFuture(playlists);
+    public List<Playlist> getPlaylists() {
+        return playlistRepository.findAll();
     }
 
     @Override
-    @Async("taskExecutor")
-    public CompletableFuture<Playlist> getPlaylistById(Long id) {
+    public Playlist getPlaylistById(Long id) {
         Optional<Playlist> optplaylist = playlistRepository.findById(id);
-        Playlist playlist = (optplaylist.isEmpty() ? null : optplaylist.get());
-        return CompletableFuture.completedFuture(playlist);
+        return (optplaylist.isEmpty() ? null : optplaylist.get());
     }
 
     @Override
-    @Async("taskExecutor")
-    public CompletableFuture<List<Playlist>> getPlaylistsByUser(User user) {
-        List<Playlist> playlists = playlistRepository.findByUser(user);
-        return CompletableFuture.completedFuture(playlists);
+    public List<Playlist> getPlaylistsByUser(User user) {
+        return playlistRepository.findByUser(user);
     }
 
     @Override
-    @Async("taskExecutor")
-    public CompletableFuture<Playlist> getPlaylistByUserAndName(User user, String name) {
-        Playlist playlist = playlistRepository.findByUserAndName(user, name);
-        return CompletableFuture.completedFuture(playlist);
+    public Playlist getPlaylistByUserAndName(User user, String name) {
+        return playlistRepository.findByUserAndName(user, name);
     }
-
+    
     @Override
-    @Async("taskExecutor")
-    public CompletableFuture<Playlist> create(Playlist newPlaylist, String ownerEmail) {
+    public Playlist create(Playlist newPlaylist, String ownerEmail) {
         newPlaylist.setUser(userRepository.findByEmail(ownerEmail));
-        Playlist playlist = playlistRepository.save(newPlaylist);
-        return CompletableFuture.completedFuture(playlist);
+        return playlistRepository.save(newPlaylist);
     }
 
     @Override
-    @Async("taskExecutor")
-    public CompletableFuture<Playlist> update(Playlist updatedPlaylist) {
-        Playlist playlist = playlistRepository.save(updatedPlaylist);
-        return CompletableFuture.completedFuture(playlist);
+    public Playlist update(Playlist updatedPlaylist) {
+        return playlistRepository.save(updatedPlaylist);
     }
 
     @Override
-    @Async("taskExecutor")
-    public CompletableFuture<Boolean> delete(Long id) {
-        Optional<Playlist> playlist = playlistRepository.findById(id);
-        boolean deleted;
-        if (playlist.isEmpty()) {
-            deleted = false;
-        } else {
-            playlistRepository.delete(playlist.get());
-            deleted = true;
+    public Boolean delete(Long id) {
+        Optional<Playlist> optplaylist = playlistRepository.findById(id);
+        if (optplaylist.isEmpty()) {
+            return false;
         }
-        return CompletableFuture.completedFuture(deleted);
+        playlistRepository.delete(optplaylist.get());
+        return true;
+    }
+
+    
+    /*** variantes asincrónicas - llaman a las funciones sincrónicas definidas arriba ***/
+    
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Boolean> existsAsync(Long id) {
+        return CompletableFuture.completedFuture(exists(id));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<List<Playlist>> getPlaylistsAsync() {
+        return CompletableFuture.completedFuture(getPlaylists());
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Playlist> getPlaylistByIdAsync(Long id) {
+        return CompletableFuture.completedFuture(getPlaylistById(id));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<List<Playlist>> getPlaylistsByUserAsync(User user) {
+        return CompletableFuture.completedFuture(getPlaylistsByUser(user));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Playlist> getPlaylistByUserAndNameAsync(User user, String name) {
+        return CompletableFuture.completedFuture(getPlaylistByUserAndName(user, name));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Playlist> createAsync(Playlist newPlaylist, String ownerEmail) {
+        return CompletableFuture.completedFuture(create(newPlaylist, ownerEmail));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Playlist> updateAsync(Playlist updatedPlaylist) {
+        return CompletableFuture.completedFuture(update(updatedPlaylist));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Boolean> deleteAsync(Long id) {
+        return CompletableFuture.completedFuture(delete(id));
     }
 }

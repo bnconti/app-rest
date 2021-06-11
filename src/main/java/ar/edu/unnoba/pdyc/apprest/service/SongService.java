@@ -8,23 +8,44 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface SongService {
-    CompletableFuture<List<Song>> getSongs();
+    /* variantes sincrónicas */
+    
+    List<Song> getSongs();
 
-    CompletableFuture<List<Song>> getSongsByAuthor(String author);
+    List<Song> getSongsByAuthor(String author);
 
-    CompletableFuture<List<Song>> getSongsByGenre(Genre genre);
+    List<Song> getSongsByGenre(Genre genre);
+    List<Song> getSongsByGenre(String strGenre);
 
-    CompletableFuture<List<Song>> getSongsByGenre(String strGenre);
+    Song getSongById(Long id);
 
-    CompletableFuture<Song> getSongById(Long id);
+    List<Song> getSongsByAuthorAndGenre(String author, Genre genre);
+    List<Song> getSongsByAuthorAndGenre(String author, String strGenre);
 
-    CompletableFuture<List<Song>> getSongsByAuthorAndGenre(String author, Genre genre);
+    List<Song> getSongsByName(String name);
 
-    CompletableFuture<List<Song>> getSongsByAuthorAndGenre(String author, String strGenre);
+    List<Song> getSongsByAuthorAndName(String author, String name);
 
-    CompletableFuture<List<Song>> getSongsByName(String name);
+    List<Song> getSongsByPlaylist(Playlist name);
+    
+    
+    /* variantes asincrónicas */
+    
+    CompletableFuture<List<Song>> getSongsAsync();
 
-    CompletableFuture<List<Song>> getSongsByAuthorAndName(String author, String name);
+    CompletableFuture<List<Song>> getSongsByAuthorAsync(String author);
 
-    CompletableFuture<List<Song>> getSongsByPlaylist(Playlist name);
+    CompletableFuture<List<Song>> getSongsByGenreAsync(Genre genre);
+    CompletableFuture<List<Song>> getSongsByGenreAsync(String strGenre);
+
+    CompletableFuture<Song> getSongByIdAsync(Long id);
+
+    CompletableFuture<List<Song>> getSongsByAuthorAndGenreAsync(String author, Genre genre);
+    CompletableFuture<List<Song>> getSongsByAuthorAndGenreAsync(String author, String strGenre);
+
+    CompletableFuture<List<Song>> getSongsByNameAsync(String name);
+
+    CompletableFuture<List<Song>> getSongsByAuthorAndNameAsync(String author, String name);
+
+    CompletableFuture<List<Song>> getSongsByPlaylistAsync(Playlist name);
 }

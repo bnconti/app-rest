@@ -17,42 +17,37 @@ public class SongServiceImp implements SongService {
     @Autowired
     private SongRepository songRepository;
 
+    /*** variantes sincrónicas ***/
+    
     @Override
-    @Async("taskExecutor")
-    public CompletableFuture<List<Song>> getSongs() {
-        List<Song> songs = songRepository.findAll();
-        return CompletableFuture.completedFuture(songs);
+    public List<Song> getSongs() {
+        return songRepository.findAll();
     }
 
     @Override
-    @Async("taskExecutor")
-    public CompletableFuture<Song> getSongById(Long id) {
-        Song song = songRepository.findSongById(id);
-        return CompletableFuture.completedFuture(song);
+    public Song getSongById(Long id) {
+        return songRepository.findSongById(id);
     }
 
     @Override
-    @Async("taskExecutor")
-    public CompletableFuture<List<Song>> getSongsByAuthor(String author) {
+    public List<Song> getSongsByAuthor(String author) {
         if (author == null) {
             return getSongs();
+        } else {
+            return songRepository.findByAuthor(author);
         }
-        List<Song> songs = songRepository.findByAuthor(author);
-        return CompletableFuture.completedFuture(songs);
     }
 
     @Override
-    @Async("taskExecutor")
-    public CompletableFuture<List<Song>> getSongsByGenre(Genre genre) {
+    public List<Song> getSongsByGenre(Genre genre) {
         if (genre == null) {
             return getSongs();
+        } else {
+            return songRepository.findByGenre(genre);
         }
-        return CompletableFuture.completedFuture(songRepository.findByGenre(genre));
     }
-
     @Override
-    @Async("taskExecutor")
-    public CompletableFuture<List<Song>> getSongsByGenre(String strGenre) {
+    public List<Song> getSongsByGenre(String strGenre) {
         if (strGenre == null) {
             return getSongs();
         }
@@ -60,27 +55,22 @@ public class SongServiceImp implements SongService {
             Genre genre = Genre.valueOf(strGenre.toUpperCase());
             return getSongsByGenre(genre);
         } catch (IllegalArgumentException e) {
-            return CompletableFuture.completedFuture(new ArrayList<>());
+            return new ArrayList<>();
         }
     }
 
     @Override
-    @Async("taskExecutor")
-    public CompletableFuture<List<Song>> getSongsByAuthorAndGenre(String author, Genre genre) {
+    public List<Song> getSongsByAuthorAndGenre(String author, Genre genre) {
         if (author == null) {
             return getSongsByGenre(genre);
-        }
-        if (genre == null) {
+        } else if (genre == null) {
             return getSongsByAuthor(author);
         } else {
-            List<Song> songs = songRepository.findByAuthorAndGenre(author, genre);
-            return CompletableFuture.completedFuture(songs);
+            return songRepository.findByAuthorAndGenre(author, genre);
         }
     }
-
     @Override
-    @Async("taskExecutor")
-    public CompletableFuture<List<Song>> getSongsByAuthorAndGenre(String author, String strGenre) {
+    public List<Song> getSongsByAuthorAndGenre(String author, String strGenre) {
         if (strGenre == null) {
             return getSongsByAuthor(author);
         }
@@ -88,25 +78,85 @@ public class SongServiceImp implements SongService {
             Genre genre = Genre.valueOf(strGenre.toUpperCase());
             return getSongsByAuthorAndGenre(author, genre);
         } catch (IllegalArgumentException e) {
-            return CompletableFuture.completedFuture(new ArrayList<>());
+            return new ArrayList<>();
         }
     }
 
     @Override
+    public List<Song> getSongsByName(String name) {
+        return songRepository.findByName(name);
+    }
+
+    @Override
+    public List<Song> getSongsByAuthorAndName(String author, String name) {
+        return songRepository.findByAuthorAndName(author, name);
+    }
+
+    @Override
+    public List<Song> getSongsByPlaylist(Playlist name) {
+        return songRepository.findByPlaylists(name);
+    }
+    
+    
+    /*** variantes asincrónicas - llaman a las funciones sincrónicas definidas arriba ***/
+
+    @Override
     @Async("taskExecutor")
-    public CompletableFuture<List<Song>> getSongsByName(String name) {
-        return CompletableFuture.completedFuture(songRepository.findByName(name));
+    public CompletableFuture<List<Song>> getSongsAsync() {
+        return CompletableFuture.completedFuture(getSongs());
     }
 
     @Override
     @Async("taskExecutor")
-    public CompletableFuture<List<Song>> getSongsByAuthorAndName(String author, String name) {
-        return CompletableFuture.completedFuture(songRepository.findByAuthorAndName(author, name));
+    public CompletableFuture<Song> getSongByIdAsync(Long id) {
+        return CompletableFuture.completedFuture(getSongById(id));
     }
 
     @Override
     @Async("taskExecutor")
-    public CompletableFuture<List<Song>> getSongsByPlaylist(Playlist name) {
-        return CompletableFuture.completedFuture(songRepository.findByPlaylists(name));
+    public CompletableFuture<List<Song>> getSongsByAuthorAsync(String author) {
+        return CompletableFuture.completedFuture(getSongsByAuthor(author));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<List<Song>> getSongsByGenreAsync(Genre genre) {
+        return CompletableFuture.completedFuture(getSongsByGenre(genre));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<List<Song>> getSongsByGenreAsync(String strGenre) {
+        return CompletableFuture.completedFuture(getSongsByGenre(strGenre));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<List<Song>> getSongsByAuthorAndGenreAsync(String author, Genre genre) {
+        return CompletableFuture.completedFuture(getSongsByAuthorAndGenre(author, genre));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<List<Song>> getSongsByAuthorAndGenreAsync(String author, String strGenre) {
+        return CompletableFuture.completedFuture(getSongsByAuthorAndGenre(author, strGenre));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<List<Song>> getSongsByNameAsync(String name) {
+        return CompletableFuture.completedFuture(getSongsByName(name));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<List<Song>> getSongsByAuthorAndNameAsync(String author, String name) {
+        return CompletableFuture.completedFuture(getSongsByAuthorAndName(author, name));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<List<Song>> getSongsByPlaylistAsync(Playlist name) {
+        return CompletableFuture.completedFuture(getSongsByPlaylist(name));
     }
 }

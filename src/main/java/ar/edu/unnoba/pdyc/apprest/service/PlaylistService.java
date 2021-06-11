@@ -7,15 +7,32 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface PlaylistService {
+    /* variantes sincrónicas */
+
     Boolean exists(Long id);
-    
-    CompletableFuture<List<Playlist>> getPlaylists();
-    CompletableFuture<List<Playlist>> getPlaylistsByUser(User user);
 
-    CompletableFuture<Playlist> getPlaylistById(Long id);
-    CompletableFuture<Playlist> getPlaylistByUserAndName(User user, String name);
+    List<Playlist> getPlaylists();
+    List<Playlist> getPlaylistsByUser(User user);
 
-    CompletableFuture<Playlist> create(Playlist playlist, String userEmail);
-    CompletableFuture<Playlist> update(Playlist updatedPlaylist);
-    CompletableFuture<Boolean> delete(Long id);
+    Playlist getPlaylistById(Long id);
+    Playlist getPlaylistByUserAndName(User user, String name);
+
+    Playlist create(Playlist playlist, String userEmail);
+    Playlist update(Playlist updatedPlaylist);
+    Boolean delete(Long id);
+
+   
+    /* variantes asincrónicas */
+
+    CompletableFuture<Boolean> existsAsync(Long id);
+
+    CompletableFuture<List<Playlist>> getPlaylistsAsync();
+    CompletableFuture<List<Playlist>> getPlaylistsByUserAsync(User user);
+
+    CompletableFuture<Playlist> getPlaylistByIdAsync(Long id);
+    CompletableFuture<Playlist> getPlaylistByUserAndNameAsync(User user, String name);
+
+    CompletableFuture<Playlist> createAsync(Playlist playlist, String userEmail);
+    CompletableFuture<Playlist> updateAsync(Playlist updatedPlaylist);
+    CompletableFuture<Boolean> deleteAsync(Long id);
 }
