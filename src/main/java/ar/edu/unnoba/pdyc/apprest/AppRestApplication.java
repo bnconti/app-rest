@@ -28,9 +28,9 @@ public class AppRestApplication {
     @Bean("taskExecutor")
     public Executor getAsyncExecutor() {
         final ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(100);
-        executor.setMaxPoolSize(1000);
-        executor.setQueueCapacity(100);
+        executor.setCorePoolSize(10);
+        executor.setMaxPoolSize(30);
+        executor.setQueueCapacity(10);
         executor.setThreadNamePrefix("executor-");
         executor.initialize();
         return executor;

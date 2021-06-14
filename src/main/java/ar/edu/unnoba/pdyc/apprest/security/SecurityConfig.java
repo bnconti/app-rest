@@ -1,8 +1,9 @@
 package ar.edu.unnoba.pdyc.apprest.security;
 
-import ar.edu.unnoba.pdyc.apprest.AppRestApplication;
-import ar.edu.unnoba.pdyc.apprest.service.UserService;
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,9 +14,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-
-import org.springframework.http.HttpMethod;
+import ar.edu.unnoba.pdyc.apprest.AppRestApplication;
+import ar.edu.unnoba.pdyc.apprest.service.UserService;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -41,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, AppRestApplication.APP_PATH + "/songs").permitAll()
                 .antMatchers(HttpMethod.GET, AppRestApplication.APP_PATH + "/playlists").permitAll()
                 .antMatchers(HttpMethod.GET, AppRestApplication.APP_PATH + "/playlists/*").permitAll()
+                .antMatchers(HttpMethod.GET, AppRestApplication.APP_PATH + "/playlists/*/*").permitAll()
                 .antMatchers("/**").fullyAuthenticated()
             .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))

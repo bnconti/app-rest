@@ -1,16 +1,17 @@
 package ar.edu.unnoba.pdyc.apprest.service;
 
-import ar.edu.unnoba.pdyc.apprest.model.Genre;
-import ar.edu.unnoba.pdyc.apprest.model.Playlist;
-import ar.edu.unnoba.pdyc.apprest.model.Song;
-import ar.edu.unnoba.pdyc.apprest.repository.SongRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import ar.edu.unnoba.pdyc.apprest.model.Genre;
+import ar.edu.unnoba.pdyc.apprest.model.Playlist;
+import ar.edu.unnoba.pdyc.apprest.model.Song;
+import ar.edu.unnoba.pdyc.apprest.repository.SongRepository;
 
 @Service
 public class SongServiceImp implements SongService {
@@ -18,7 +19,7 @@ public class SongServiceImp implements SongService {
     private SongRepository songRepository;
 
     /*** variantes sincrónicas ***/
-    
+
     @Override
     public List<Song> getSongs() {
         return songRepository.findAll();
@@ -96,8 +97,8 @@ public class SongServiceImp implements SongService {
     public List<Song> getSongsByPlaylist(Playlist name) {
         return songRepository.findByPlaylists(name);
     }
-    
-    
+
+
     /*** variantes asincrónicas - llaman a las funciones sincrónicas definidas arriba ***/
 
     @Override

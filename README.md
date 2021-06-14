@@ -28,14 +28,18 @@
 
 ### Entrega 4 (22/06)
 
-* Modificar endpoints de songs y playlists para que funcionen de forma asincrónica. (**REVISAR**)
+* Modificar endpoints de songs y playlists para que funcionen de forma asincrónica. (:heavy_check_mark:)
   * Utilizar @Suspended y AsyncResponse de JAX-RS.
   * Utilizar CompletableFuture.
   * Implementar comportamiento asoncrónico en los endpoints.
 
+> **Estado:** (:heavy_check_mark:)
+
 ### Entrega 5
 
-* Frontend utilizando AngularJS (:x:)
+* Frontend utilizando AngularJS
+
+> **Estado:** (:x:)
 
 ## Guía de implementación
 
@@ -87,6 +91,9 @@ de datos y poner datos de prueba.
 
 Se asume que el servidor se encuentra en ``localhost`` en el puerto ``8080``.
 
+Mostramos los ejemplos usando ``cURL`` en un sistema tipo Unix, pero pueden
+reproducirse usando otros programas, como ``Postman``.
+
 ### Obtener canciones
 
 Para obtener todas las canciones, enviar una petición ``GET`` a
@@ -94,8 +101,11 @@ Para obtener todas las canciones, enviar una petición ``GET`` a
 
 Para obtener las canciones filtradas por autor y/o género, se pueden incluir
 los parámetros ``author`` y ``genre``.
+
 Por ejemplo:
-```http://localhost:8080/music/songs?author=Divididos&genre=ROCK```
+```
+curl http://localhost:8080/music/songs?author=Divididos&genre=ROCK
+```
 
 
 ### Obtener listas de reproducción
@@ -127,8 +137,8 @@ fue exitosa.
 Para acceder a los endpoints que requieran autenticación, se deberá incluir ese
 token en la cabezera de la petición.
 
-Por ejemplo, usando ``cURL``, este comando guarda el token en ``/tmp/token``
-para incluirlo en peticiones posteriores:
+Este comando guarda el token en ``/tmp/token`` para incluirlo en peticiones
+posteriores:
 ```
 curl localhost:8080/music/auth -s -D - -d \
     '{"email":"franco@yopmail.com","password":"1"}' | \
@@ -145,30 +155,43 @@ Además, las operaciones de baja y modificación sólo podrán ser realizadas po
 usuario dueño de la lista.
 
 Para **crear una lista nueva**, enviar una petición ``POST`` a
-``http://localhost:8080/music/playlists`` con los datos de la lista en el body.
-
-Por ejemplo:
+``http://localhost:8080/music/playlists`` con los datos de la lista en el
+cuerpo.
+Ejemplo:
 ```
 curl localhost:8080/music/playlists -v -H @/tmp/token \
     -H "Content-Type: application/json" -d \
-    '{"id":3,"name":"Lista de rock","user":{"id":2,"email":"franco@yopmail.com"}}'
+    '{"name":"Lista de rock","user":{"id":2,"email":"franco@yopmail.com"}}'
 ```
 
-Para **renombrar una lista**, enviar una petición ``POST`` a
+Para **renombrar una lista**, enviar una petición ``PUT`` a
 ``http://localhost:8080/music/playlists/{id}``, incluyendo en el cuerpo el
 nombre de la lista.
+Ejemplo:
+```
+curl localhost:8080/music/playlists/3 -v -X PUT -H @/tmp/token \
+    -H "Content-Type: application/json" -d '{"name":"Compilado"}'
+```
 
 Para **agregar una canción a una lista**, enviar una petición ``PUT`` a
-``http://localhost:8080/music/playlists/{id}/songs/``, incluyendo en el cuerpo
+``http://localhost:8080/music/playlists/{id}/songs``, incluyendo en el cuerpo
 el id de la canción a agregar.
+Por ejemplo, para agregar la canción 1 a la lista 3:
+```
+curl localhost:8080/music/playlists/3/songs -v -X PUT -H @/tmp/token \
+    -H "Content-Type: application/json" -d '{"songId":1}'
+```
 
-Para **quitar una canción de una lista**, enviar una petición ``PUT`` a
-``http://localhost:8080/music/playlists/{id}/songs/{song_id}``
+Para **quitar una canción de una lista**, enviar una petición ``DELETE`` a
+``http://localhost:8080/music/playlists/{id}/songs/{song_id}``.
+Por ejemplo, para quitar la canción 1 de la lista 3:
+```
+curl localhost:8080/music/playlists/3/songs/1 -v -X DELETE -H @/tmp/token
+```
 
 Para **eliminar una lista**, enviar una petición ``DELETE`` a
-``http://localhost:8080/music/playlists/{id}``
-
-Por ejemplo:
+``http://localhost:8080/music/playlists/{id}``.
+Ejemplo:
 ```
 curl localhost:8080/music/playlists/3 -v -H @/tmp/token -X DELETE
 ```

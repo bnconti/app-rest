@@ -1,10 +1,12 @@
 package ar.edu.unnoba.pdyc.apprest.dto;
 
-import ar.edu.unnoba.pdyc.apprest.model.Genre;
-
 import java.io.Serializable;
 
+import ar.edu.unnoba.pdyc.apprest.model.Genre;
+
 public class SongDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Long id;
     private String name;
     private String author;

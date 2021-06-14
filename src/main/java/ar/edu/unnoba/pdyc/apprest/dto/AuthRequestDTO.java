@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 /* utilizado para la autenticación de usuarios */
 public class AuthRequestDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Long id;
     private String email;
     private String password;

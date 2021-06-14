@@ -1,15 +1,15 @@
 package ar.edu.unnoba.pdyc.apprest.service;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 import ar.edu.unnoba.pdyc.apprest.model.Genre;
 import ar.edu.unnoba.pdyc.apprest.model.Playlist;
 import ar.edu.unnoba.pdyc.apprest.model.Song;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
 public interface SongService {
     /* variantes sincrónicas */
-    
+
     List<Song> getSongs();
 
     List<Song> getSongsByAuthor(String author);
@@ -27,10 +27,10 @@ public interface SongService {
     List<Song> getSongsByAuthorAndName(String author, String name);
 
     List<Song> getSongsByPlaylist(Playlist name);
-    
-    
+
+
     /* variantes asincrónicas */
-    
+
     CompletableFuture<List<Song>> getSongsAsync();
 
     CompletableFuture<List<Song>> getSongsByAuthorAsync(String author);

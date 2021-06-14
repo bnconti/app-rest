@@ -1,10 +1,10 @@
 package ar.edu.unnoba.pdyc.apprest.service;
 
-import ar.edu.unnoba.pdyc.apprest.model.Playlist;
-import ar.edu.unnoba.pdyc.apprest.model.User;
-
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+import ar.edu.unnoba.pdyc.apprest.model.Playlist;
+import ar.edu.unnoba.pdyc.apprest.model.User;
 
 public interface PlaylistService {
     /* variantes sincrónicas */
@@ -21,7 +21,7 @@ public interface PlaylistService {
     Playlist update(Playlist updatedPlaylist);
     Boolean delete(Long id);
 
-   
+
     /* variantes asincrónicas */
 
     CompletableFuture<Boolean> existsAsync(Long id);

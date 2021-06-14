@@ -1,16 +1,17 @@
 package ar.edu.unnoba.pdyc.apprest.service;
 
-import ar.edu.unnoba.pdyc.apprest.model.Playlist;
-import ar.edu.unnoba.pdyc.apprest.model.User;
-import ar.edu.unnoba.pdyc.apprest.repository.PlaylistRepository;
-import ar.edu.unnoba.pdyc.apprest.repository.UserRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
+import ar.edu.unnoba.pdyc.apprest.model.Playlist;
+import ar.edu.unnoba.pdyc.apprest.model.User;
+import ar.edu.unnoba.pdyc.apprest.repository.PlaylistRepository;
+import ar.edu.unnoba.pdyc.apprest.repository.UserRepository;
 
 @Service
 public class PlaylistServiceImp implements PlaylistService {
@@ -20,7 +21,7 @@ public class PlaylistServiceImp implements PlaylistService {
     private UserRepository userRepository;
 
     /*** variantes sincrónicas ***/
-    
+
     @Override
     public Boolean exists(Long id) {
         return playlistRepository.existsById(id);
@@ -46,7 +47,7 @@ public class PlaylistServiceImp implements PlaylistService {
     public Playlist getPlaylistByUserAndName(User user, String name) {
         return playlistRepository.findByUserAndName(user, name);
     }
-    
+
     @Override
     public Playlist create(Playlist newPlaylist, String ownerEmail) {
         newPlaylist.setUser(userRepository.findByEmail(ownerEmail));
@@ -68,9 +69,9 @@ public class PlaylistServiceImp implements PlaylistService {
         return true;
     }
 
-    
+
     /*** variantes asincrónicas - llaman a las funciones sincrónicas definidas arriba ***/
-    
+
     @Override
     @Async("taskExecutor")
     public CompletableFuture<Boolean> existsAsync(Long id) {
