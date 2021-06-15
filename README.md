@@ -22,22 +22,28 @@
 
 1. Validaciones y permisos. (:heavy_check_mark:)
 2. Queries JPA con parámetros. (:heavy_check_mark:)
-3. Todas las funcionalidades requeridas por el enunciado implementadas. (:heavy_check_mark:)
+3. Todas las funcionalidades requeridas por el enunciado implementadas.
+(:heavy_check_mark:)
 
 > **Estado:** (:heavy_check_mark:)
 
 ### Entrega 4 (22/06)
 
-* Modificar endpoints de songs y playlists para que funcionen de forma asincrónica. (:heavy_check_mark:)
+* Modificar endpoints de songs y playlists para que funcionen de forma
+asincrónica. (:heavy_check_mark:)
   * Utilizar @Suspended y AsyncResponse de JAX-RS.
   * Utilizar CompletableFuture.
   * Implementar comportamiento asoncrónico en los endpoints.
 
 > **Estado:** (:heavy_check_mark:)
 
-### Entrega 5
+### Entrega 5 (15/07)
 
-* Frontend utilizando AngularJS
+* Frontend (Single Page Application) utilizando AngularJS.
+  * Pedir email y contraseña.
+    * Si es correcto, mostrar tabla con el listado de playlists.
+    * Si no, mostrar mensaje de error.
+  * Permitir cerrar sesión.
 
 > **Estado:** (:x:)
 
