@@ -201,3 +201,16 @@ Ejemplo:
 ```
 curl localhost:8080/music/playlists/3 -v -H @/tmp/token -X DELETE
 ```
+
+## Guía de uso del front-end
+
+1. Instalar [Node.js](https://nodejs.org/).
+2. Instalar Angular CLI: `npm install -g @angular/cli`
+3. Desde la carpeta `front-end`, ejecutar el comando `ng serve -o` para inicializar el servidor y abrir la aplicación.
+4. 
+
+### Cosas extra para hacer:
+
+- Remember me en la página de login
+- Registro de nuevo usuario (botón sign up)
+

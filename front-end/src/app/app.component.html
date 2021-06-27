@@ -1,0 +1,11 @@
+<div *ngIf="loggedIn; then showHome else showLogin"></div>
+
+<ng-template #showHome>
+  <app-home></app-home>
+</ng-template>
+
+<ng-template #showLogin>
+  <app-login></app-login>
+</ng-template>
+
+<router-outlet></router-outlet>

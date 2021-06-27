@@ -1,0 +1,51 @@
+<section class="hero is-primary is-fullheight is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+          <p class="title">
+            MyMusic
+          </p>
+          <form [formGroup]="loginForm" (ngSubmit)="processLoginForm()" action="" class="box">
+            <div class="field">
+              <label class="label">Email</label>
+              <div class="control has-icons-left">
+                <input formControlName="email" type="email" placeholder="e.g. torto@gmail.com" class="input" required>
+                <span class="icon is-small is-left">
+                  <fa-icon [icon]="faEnvelope"></fa-icon>
+                </span>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Password</label>
+              <div class="control has-icons-left">
+                <input formControlName="password" type="password" placeholder="*******" class="input" required>
+                <span class="icon is-small is-left">
+                  <fa-icon [icon]="faLock"></fa-icon>
+                </span>
+              </div>
+            </div>
+            <div class="field">
+              <label class="checkbox">
+                <input type="checkbox">
+                Remember me
+              </label>
+            </div>
+            <button type="submit" class="button is-success">
+              Login
+            </button>
+          </form>
+
+          <div class="box">
+            <div class="field">
+              <label class="label">Don't have an account?</label>
+              <button class="button is-link">
+                Sign up
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
