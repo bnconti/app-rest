@@ -205,7 +205,7 @@ curl localhost:8080/music/playlists/3 -v -H @/tmp/token -X DELETE
 ## Guía de uso del front-end
 
 1. Instalar [Node.js](https://nodejs.org/), que también incluye [npm](https://www.npmjs.com/).
-2. Con npm. instalar Angular CLI: `npm install -g @angular/cli`
+2. Con npm, instalar Angular CLI: `npm install -g @angular/cli` (la -g es para poder invocar a la CLI globalmente).
 3. En la carpeta `front-end`, ejecutar el comando `npm i` para instalar todas las dependencias necesarias del front-end.
 4. Luego, ejecutar el comando `ng serve -o` (-o es de --open) para inicializar el servidor y abrir la aplicación (por ahora, la dirección es http://localhost:4200/).
 
