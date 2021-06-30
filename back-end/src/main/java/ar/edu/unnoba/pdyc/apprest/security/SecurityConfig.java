@@ -17,8 +17,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ar.edu.unnoba.pdyc.apprest.AppRestApplication;
 import ar.edu.unnoba.pdyc.apprest.service.UserService;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userService;
@@ -68,6 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        configuration.addExposedHeader("Authorization");
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
