@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent {
-  title = 'front-end';
-  // TODO: loggedIn es un stub, implementar
-  loggedIn: boolean = false;
+  title = "MyMusic"
+
+  constructor() {}
 }

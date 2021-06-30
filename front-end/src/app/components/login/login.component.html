@@ -6,23 +6,31 @@
           <p class="title">
             MyMusic
           </p>
-          <form [formGroup]="loginForm" (ngSubmit)="processLoginForm()" action="" class="box">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="box">
             <div class="field">
               <label class="label">Email</label>
               <div class="control has-icons-left">
-                <input formControlName="email" type="email" placeholder="e.g. torto@gmail.com" class="input" required>
+                <input formControlName="email" type="email" placeholder="e.g. torto@gmail.com" class="input" required
+                [ngClass]="{ 'is-danger': submitted && f.email.errors }">
                 <span class="icon is-small is-left">
                   <fa-icon [icon]="faEnvelope"></fa-icon>
                 </span>
+                <div *ngIf="submitted && f.email.errors" class="help is-danger">
+                  <p>Email is required</p>
+                </div>
               </div>
             </div>
             <div class="field">
               <label class="label">Password</label>
               <div class="control has-icons-left">
-                <input formControlName="password" type="password" placeholder="*******" class="input" required>
+                <input formControlName="password" type="password" placeholder="*******" class="input" required
+                [ngClass]="{ 'is-danger': submitted && f.password.errors }">
                 <span class="icon is-small is-left">
                   <fa-icon [icon]="faLock"></fa-icon>
                 </span>
+                <div *ngIf="submitted && f.password.errors" class="help is-danger">
+                  <p>Password is required</p>
+                </div>
               </div>
             </div>
             <div class="field">
@@ -31,7 +39,7 @@
                 Remember me
               </label>
             </div>
-            <button type="submit" class="button is-success">
+            <button [disabled]="loading" class="button is-success">
               Login
             </button>
           </form>
