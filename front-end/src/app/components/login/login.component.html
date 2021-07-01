@@ -42,6 +42,9 @@
             <button [disabled]="loading" class="button is-success">
               Login
             </button>
+            <div *ngIf="loginError" class="help is-danger">
+              {{ loginErrorMsj }}
+            </div>
           </form>
 
           <div class="box">

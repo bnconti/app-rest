@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/services/authentication.service';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
@@ -23,23 +23,14 @@ export class LoginComponent implements OnInit {
   // Por ej. deshabilitar el botón de login si ya se está procesando una solicitud.
   loading = false;
   submitted = false;
-  error = false;
-
-  errorMsj = '';
+  loginError = false;
+  loginErrorMsj = '';
 
   constructor(
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService
   ) {
-    // Redirigir a Home si ya está logueado
-    /*
-    if (this.authenticationService.currentUser) {
-      this.router.navigate(['/']);
-    }
-    */
-
     this.loginForm = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.required]
@@ -47,7 +38,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (localStorage.getItem("JWT")) {
+    if (localStorage.getItem("currentUser")) {
       // Si ya está logueado lo mando para Home
       this.router.navigate(['/home']);
     }
@@ -73,12 +64,11 @@ export class LoginComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: () => {
-          // const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
           this.router.navigate(['/home']);
         },
         error: () => {
-          this.error = true;
-          this.errorMsj = "Invalid username or password.";
+          this.loginError = true;
+          this.loginErrorMsj = "Invalid username or password, please try again.";
           this.loading = false;
         }
       })
