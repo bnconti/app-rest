@@ -7,10 +7,16 @@
     <tr>
       <th>Nombre de la lista</th>
       <th>Usuario</th>
+      <th>Canciones</th>
     </tr>
     <tr *ngFor="let playlist of playlists">
       <td>{{playlist.name}}</td>
       <td>{{playlist.user.email}}</td>
+      <td>
+        <p *ngFor="let song of playlist.songs">
+          {{song.name}} - {{song.author}} - {{song.genre}}
+        </p>
+      </td>
     </tr>
   </table>
 </div>

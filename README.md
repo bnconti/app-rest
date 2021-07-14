@@ -93,7 +93,11 @@ descomentar la línea ``spring.jpa.hibernate.ddl-auto = create`` de
 ``src/main/resources/application.properties`` para crear el esquema de la base
 de datos y poner datos de prueba.
 
-3. Inicializar el proyecto.
+3. Ejecutar el proyecto.
+
+Esto puede hacerse desde el IDE, o por la línea de comandos, ejecutando el
+siguiente comando desde la carpeta back-end:
+```mvnw exec:java -Dexec.mainClass='ar.edu.unnoba.pdyc.apprest.AppRestApplication'```
 
 Se asume que el servidor se encuentra en ``localhost`` en el puerto ``8080``.
 
@@ -204,13 +208,24 @@ curl localhost:8080/music/playlists/3 -v -H @/tmp/token -X DELETE
 
 ## Guía de uso del front-end
 
-1. Instalar [Node.js](https://nodejs.org/), que también incluye [npm](https://www.npmjs.com/).
-2. Con npm, instalar Angular CLI: `npm install -g @angular/cli` (la -g es para poder invocar a la CLI globalmente).
-3. En la carpeta `front-end`, ejecutar el comando `npm i` para instalar todas las dependencias necesarias del front-end.
-4. Luego, ejecutar el comando `ng serve -o` (-o es de --open) para inicializar el servidor y abrir la aplicación (por ahora, la dirección es http://localhost:4200/).
+1. Instalar [Node.js](https://nodejs.org/), que también incluye
+[npm](https://www.npmjs.com/).
+2. Con npm, instalar Angular CLI: `npm install -g @angular/cli` (la -g es para
+poder invocar a la CLI globalmente).
+3. En la carpeta `front-end`, ejecutar el comando `npm i` para instalar todas
+las dependencias necesarias del front-end.
+4. Luego, ejecutar el comando `ng serve -o` (-o es de --open) para inicializar
+el servidor y abrir la aplicación (por ahora, la dirección es
+`http://localhost:4200/`).
+Si no se instaló Angular con la opción `-g`, el comando a ejecutar es
+`node_modules/@angular/cli/bin/ng serve -o`.
 
 ### Cosas extra para hacer:
 
-- Remember me en la página de login
-- Registro de nuevo usuario (botón sign up)
-
+- Login:
+  - Remember me.
+  - Registro de nuevo usuario (botón sign up).
+  - Cerrar sesión cuando se cierra la ventana, o reducir el tiempo de
+    expiración del token.
+- Corregir o eliminar menú hamburguesa.
+- Implementar toda la funcionalidad del back-end en el front-end.
