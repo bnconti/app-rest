@@ -23,15 +23,7 @@ export class PlaylistsComponent implements OnInit {
   getPlaylists() {
     this.playlistsService.getPlaylists()
       .subscribe((data: Playlist[]) => {
-	/*
-	for (playlist of data) {
-	  newPlaylist: Playlist;
-	  newPlaylist.name = playlist.name;
-	  newPlaylist.email = playlist.user.email;
-	  this.playlists.push(newPlaylist);
-	}
-	*/
-       this.playlists = data;
+        this.playlists = data;
       });
   }
 

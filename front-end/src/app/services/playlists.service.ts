@@ -23,15 +23,4 @@ export class PlaylistsService {
 	return res;
       }));
   }
-
-  /*
-  getPlaylists(): Playlist[] {
-    const url = `${environment.API_URL}/playlists`
-
-    return this.http.get<Playlist[]>(url)
-      .pipe(map(res => {
-	return res;
-      }));
-  }
-  */
 }
