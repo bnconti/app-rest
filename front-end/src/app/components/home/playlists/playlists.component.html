@@ -1,0 +1,16 @@
+<app-header></app-header>
+
+<div class="section">
+  <h1 class="title">Lista de playlists</h1>
+
+  <table class="playlists">
+    <tr>
+      <th>Nombre de la lista</th>
+      <th>Usuario</th>
+    </tr>
+    <tr *ngFor="let playlist of playlists">
+      <td>{{playlist.name}}</td>
+      <td>{{playlist.user.email}}</td>
+    </tr>
+  </table>
+</div>

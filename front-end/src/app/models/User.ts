@@ -1,4 +1,3 @@
-
 /**
  * Modelo del usuario.
  */

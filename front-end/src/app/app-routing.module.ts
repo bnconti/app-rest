@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent } from "@app/components/home/home.component";
+import { PlaylistsComponent } from "@app/components/home/playlists/playlists.component";
 import { LoginComponent } from "@app/components/login/login.component";
 import { AuthGuard } from "@app/helpers/auth.guard";
 
@@ -19,6 +20,7 @@ import { AuthGuard } from "@app/helpers/auth.guard";
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'home/playlists', component: PlaylistsComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
 
   // si se recibe cualquier otra ruta, redirigimos a Home

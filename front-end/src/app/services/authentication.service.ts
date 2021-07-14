@@ -8,7 +8,7 @@ import { User } from '@app/models/User';
 
 /**
  * El servicio de autenticación es utilizado para iniciar o cerrar sesión.
- * *
+ *
  * El método login() envía las credenciales del usuario a la API mediante un request de tipo post.
  * Si el login tiene éxito, se almacena localmente el usuario con su JWT.
  *
