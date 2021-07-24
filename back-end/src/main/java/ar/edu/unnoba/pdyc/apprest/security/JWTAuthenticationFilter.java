@@ -28,7 +28,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.authenticationManager = authenticationManager;
         /* ruta del login */
         setFilterProcessesUrl(AppRestApplication.APP_PATH + "/auth");
-
     }
 
     @Override

@@ -45,7 +45,7 @@ asincrónica. (:heavy_check_mark:)
     * Si no, mostrar mensaje de error.
   * Permitir cerrar sesión.
 
-> **Estado:** (:x:)
+> **Estado:** (:heavy_check_mark:)
 
 ## Guía de implementación
 
