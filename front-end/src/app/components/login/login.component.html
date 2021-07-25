@@ -43,14 +43,14 @@
               Login
             </button>
             <div *ngIf="loginError" class="help is-danger">
-              {{ loginErrorMsj }}
+              {{ loginErrorMsg }}
             </div>
           </form>
 
           <div class="box">
             <div class="field">
               <label class="label">Don't have an account?</label>
-              <button class="button is-link">
+              <button class="button is-link" (click)="goToSignup()">
                 Sign up
               </button>
             </div>

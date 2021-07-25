@@ -9,10 +9,12 @@ import { FooterComponent } from './components/footer/footer.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { PlaylistsComponent } from './components/home/playlists/playlists.component';
+import { SignupComponent } from './components/signup/signup.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
+import { WelcomeComponent } from './components/welcome/welcome.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
     FooterComponent,
     LoginComponent,
     HomeComponent,
-    PlaylistsComponent
+    PlaylistsComponent,
+    SignupComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,

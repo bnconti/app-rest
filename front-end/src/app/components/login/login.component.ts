@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/services/authentication.service';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
-import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -19,12 +18,12 @@ export class LoginComponent implements OnInit {
   faEnvelope = faEnvelope;
   faLock = faLock;
 
-  // Variables para modificar dinámicamente la página según lo que se está haciendo 
+  // Variables para modificar dinámicamente la página según lo que se está haciendo
   // Por ej. deshabilitar el botón de login si ya se está procesando una solicitud.
   loading = false;
   submitted = false;
   loginError = false;
-  loginErrorMsj = '';
+  loginErrorMsg = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -59,19 +58,22 @@ export class LoginComponent implements OnInit {
 
     const email = this.loginForm.controls['email'].value;
     const password = this.loginForm.controls['password'].value;
-    
+
     this.authenticationService.login(email, password)
-      .pipe(first())
       .subscribe({
         next: () => {
           this.router.navigate(['/home']);
         },
         error: () => {
           this.loginError = true;
-          this.loginErrorMsj = "Invalid username or password, please try again.";
+          this.loginErrorMsg = "Invalid username or password, please try again.";
           this.loading = false;
         }
       })
+  }
+
+  goToSignup() {
+    this.router.navigate(['/signup']);
   }
 
 }

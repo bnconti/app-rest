@@ -1,0 +1,88 @@
+<section class="hero is-primary is-fullheight is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+          <p class="title">
+            MyMusic
+          </p>
+
+          <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="box">
+
+            <div class="field">
+              <label class="label">Email</label>
+              <div class="control has-icons-left">
+                <input formControlName="email" type="email" placeholder="e.g. usuario@gmail.com" class="input" required
+                       [ngClass]="{ 'is-danger': f.email.touched && f.email.errors }">
+                <span class="icon is-small is-left">
+                  <fa-icon [icon]="faEnvelope"></fa-icon>
+                </span>
+                <div *ngIf="f.email.touched" class="help is-danger">
+                  <div *ngIf="f.email.hasError('required')">An email is required</div>
+                  <div *ngIf="f.email.hasError('pattern')">The field doesn't contain a valid email</div>
+                  <!-- This email is already in use -->
+                </div>
+              </div>
+            </div>
+
+            <div formGroupName="passwords">
+
+              <div class="field">
+                <label class="label">Password</label>
+                <div class="control has-icons-left">
+                  <input formControlName="password" type="password" placeholder="*******" class="input" required
+                         [ngClass]="{ 'is-danger': pass!.touched && pass!.errors! }">
+                  <span class="icon is-small is-left">
+                    <fa-icon [icon]="faLock"></fa-icon>
+                  </span>
+                  <div *ngIf="pass!.touched" class="help is-danger">
+                    <div *ngIf="pass!.hasError('required')">A password is required</div>
+                    <div *ngIf="pass!.hasError('minlength')">The password must be at least 6 chars. long</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Password confirmation</label>
+                <div class="control has-icons-left">
+                  <input formControlName="passwordConfirmation" type="password" placeholder="*******" class="input" required
+                         [ngClass]="{ 'is-danger': confPass!.touched && confPass!.errors! }">
+                  <span class="icon is-small is-left">
+                    <fa-icon [icon]="faLock"></fa-icon>
+                  </span>
+                  <div *ngIf="confPass!.touched" class="help is-danger">
+                    <div *ngIf="confPass!.hasError('required')">A password is required</div>
+                    <div *ngIf="confPass!.hasError('invalidConfirmation')">The passwords must match</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <hr>
+
+            <div class="field is-grouped">
+              <div *ngIf="signupError" class="help is-danger">
+                {{ signupErrorMsg }}
+              </div>
+
+              <div class="control">
+                <button [disabled]="loading" class="button is-success is-light" (click)="goToLogin()">
+                  Go back
+                </button>
+              </div>
+
+              <div class="control">
+                <button [disabled]="loading" class="button is-success">
+                  Signup
+                </button>
+              </div>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

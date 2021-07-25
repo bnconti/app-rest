@@ -12,7 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/users")
+@Path("/signup")
 public class UserResourceSync {
     @Autowired
     private UserService userService;
