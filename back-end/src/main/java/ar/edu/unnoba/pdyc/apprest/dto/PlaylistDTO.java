@@ -6,9 +6,17 @@ import java.util.List;
 public class PlaylistDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private Long id;
     private String name;
     private UserDTO user;
     private List<SongDTO> songs;
+
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

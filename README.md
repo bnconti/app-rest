@@ -97,7 +97,7 @@ de datos y poner datos de prueba.
 
 Esto puede hacerse desde el IDE, o por la línea de comandos, ejecutando el
 siguiente comando desde la carpeta back-end:
-```mvnw exec:java -Dexec.mainClass='ar.edu.unnoba.pdyc.apprest.AppRestApplication'```
+```mvnw test```
 
 Se asume que el servidor se encuentra en ``localhost`` en el puerto ``8080``.
 
@@ -215,17 +215,31 @@ poder invocar a la CLI globalmente).
 3. En la carpeta `front-end`, ejecutar el comando `npm i` para instalar todas
 las dependencias necesarias del front-end.
 4. Luego, ejecutar el comando `ng serve -o` (-o es de --open) para inicializar
-el servidor y abrir la aplicación (por ahora, la dirección es
+el servidor y abrir la aplicación (por ahora, la URL es
 `http://localhost:4200/`).
-Si no se instaló Angular con la opción `-g`, el comando a ejecutar es
-`node_modules/@angular/cli/bin/ng serve -o`.
+Si no se instaló Angular con la opción -g, el comando a ejecutar es
+`node_modules/.bin/ng serve -o`.
 
-### Cosas extra para hacer:
+### Cosas que faltan hacer o terminar:
 
 - Login:
   - Remember me.
   - Registro de nuevo usuario (botón sign up).
   - Cerrar sesión cuando se cierra la ventana, o reducir el tiempo de
     expiración del token.
+- Mejorar la lista de playlists.
+  - Quizás convenga que, en lugar de mostrar todas las canciones de todas las
+    listas, muestre sólo la cantidad de canciones, y permita pinchar el nombre
+    para ver el detalle y permitir el ABM en otra página.
+    O que se puedan ver las canciones, pero desplegando algo, no todo junto...
+  - Opción (u otra página) para ver sólo las listas creadas por el usuario
+    actual ?
+  - Si es sencillo, opciones para filtrar, ordenar y paginar (capaz que usando
+    Angular Material UI?).
+- Implementar toda la funcionalidad del back-end en el front-end:
+  - Crear, renombrar y eliminar playlists.
+  - Agregar y quitar canciones de una playlist.
+  - Lista de todas las canciones?
+    (igual hay que hacerlo para agregarlas a una playlist)
 - Corregir o eliminar menú hamburguesa.
-- Implementar toda la funcionalidad del back-end en el front-end.
+

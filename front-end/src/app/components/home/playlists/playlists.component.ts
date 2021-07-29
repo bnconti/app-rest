@@ -27,4 +27,7 @@ export class PlaylistsComponent implements OnInit {
       });
   }
 
+  delete() {
+    alert("Para eliminar una lista, utilice el comando DELETE en la base de datos X>)");
+  }
 }

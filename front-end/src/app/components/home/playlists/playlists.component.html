@@ -8,15 +8,22 @@
       <th>Nombre de la lista</th>
       <th>Usuario</th>
       <th>Canciones</th>
+      <!--
+      <th></th>
+      -->
     </tr>
     <tr *ngFor="let playlist of playlists">
-      <td>{{playlist.name}}</td>
+      <td><a href="/home/playlists/{{playlist.id}}">{{playlist.name}}</a></td>
       <td>{{playlist.user.email}}</td>
+      <td>{{playlist.songs.length}}</td>
+      <!--
       <td>
         <p *ngFor="let song of playlist.songs">
           {{song.name}} - {{song.author}} - {{song.genre}}
         </p>
       </td>
+      <td><button (click)="delete()">Eliminar</button></td>
+      -->
     </tr>
   </table>
 </div>
