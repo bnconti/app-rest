@@ -39,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable().authorizeRequests()
                 /* endpoints públicos */
                 .antMatchers(HttpMethod.POST, AppRestApplication.APP_PATH + "/signup").permitAll()
+                .antMatchers(HttpMethod.GET, AppRestApplication.APP_PATH + "/signup{\\?email=.*}").permitAll()
                 .antMatchers(HttpMethod.GET, AppRestApplication.APP_PATH + "/songs").permitAll()
                 .antMatchers(HttpMethod.GET, AppRestApplication.APP_PATH + "/playlists").permitAll()
                 .antMatchers(HttpMethod.GET, AppRestApplication.APP_PATH + "/playlists/*").permitAll()

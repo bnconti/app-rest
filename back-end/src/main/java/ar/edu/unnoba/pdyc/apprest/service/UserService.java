@@ -7,4 +7,5 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public interface UserService extends UserDetailsService {
     User create(User user) throws UnavailableEmailException;
     User getByEmail(String email);
+    Boolean existsByEmail(String email);
 }

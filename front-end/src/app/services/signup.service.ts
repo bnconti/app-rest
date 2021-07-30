@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "@environments/environment";
-import {first, map} from "rxjs/operators";
-import {User} from "@app/models/User";
+import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +16,15 @@ export class SignupService {
     const nuevoUsuario = { email, password };
 
     return this.http.post<any>(url, nuevoUsuario, { observe: 'response' })
+      .pipe(map(res => {
+        return res;
+      }));
+  }
+
+  emailExists(email: string): Observable<HttpResponse<any>> {
+    const url = `${environment.API_URL}/signup?email=${email}`;
+
+    return this.http.get<any>(url)
       .pipe(map(res => {
         return res;
       }));

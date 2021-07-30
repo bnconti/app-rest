@@ -1,11 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
-  AbstractControl,
-  FormArray,
   FormBuilder,
   FormGroup,
-  ValidationErrors,
-  ValidatorFn,
   Validators
 } from "@angular/forms";
 
@@ -19,7 +15,7 @@ import { SignupService } from "@services/signup.service";
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.sass']
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent {
 
   emailRegExp = new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$');
 
@@ -44,9 +40,11 @@ export class SignupComponent implements OnInit {
         password: [null, [Validators.required, Validators.minLength(6)]],
         passwordConfirmation: [null, [Validators.required]]
       }, {
-        validators: this.checkPasswords('password', 'passwordConfirmation')
+        validators: this.checkIfPasswordsMatch('password', 'passwordConfirmation'),
       })
-    }, {});
+    }, {
+      validators: this.checkIfEmailIsAvailable('email')
+    });
   }
 
   get f() { return this.signupForm.controls; }
@@ -59,11 +57,8 @@ export class SignupComponent implements OnInit {
     // return this.signupForm.get('passwords')['controls'];
   }
 
-  get confPass() {
+  get passConf() {
     return this.f.passwords.get('passwordConfirmation');
-  }
-
-  ngOnInit(): void {
   }
 
   onSubmit(): void {
@@ -89,20 +84,38 @@ export class SignupComponent implements OnInit {
       })
   }
 
-  checkPasswords(controlName: string, matchingControlName: string) {
+  checkIfEmailIsAvailable(emailControlName: string) {
     return (formGroup: FormGroup) => {
-      const control = formGroup.controls[controlName];
-      const matchingControl = formGroup.controls[matchingControlName];
+      const email = formGroup.controls[emailControlName].value;
+
+      this.signupService.emailExists(email)
+        .subscribe({
+          next: (res) => {
+            console.log(res);
+            if (res) {
+              this.f.email.setErrors({ unavailable : true})
+            } else {
+              this.f.email.setErrors(null)
+            }
+          }
+        })
+    }
+  }
+
+  checkIfPasswordsMatch(passControlName: string, passConfControlName: string) {
+    return (formGroup: FormGroup) => {
+      const passControl = formGroup.controls[passControlName];
+      const passConfControl = formGroup.controls[passConfControlName];
 
       // Si ya tiene otro error, muestro sólo ese
-      if (matchingControl.errors && !matchingControl.errors.confirmedValidator) {
+      if (passConfControl.errors && !passConfControl.errors.confirmedValidator) {
         return;
       }
 
-      if (control.value !== matchingControl.value) {
-        matchingControl.setErrors({ invalidConfirmation: true });
+      if (passControl.value !== passConfControl.value) {
+        passConfControl.setErrors({ invalidConfirmation: true });
       } else {
-        matchingControl.setErrors(null);
+        passConfControl.setErrors(null);
       }
     }
   }

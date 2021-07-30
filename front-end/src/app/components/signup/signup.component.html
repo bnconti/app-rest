@@ -20,6 +20,7 @@
                 <div *ngIf="f.email.touched" class="help is-danger">
                   <div *ngIf="f.email.hasError('required')">An email is required</div>
                   <div *ngIf="f.email.hasError('pattern')">The field doesn't contain a valid email</div>
+                  <div *ngIf="f.email.hasError('unavailable')">That email address is already in use</div>
                   <!-- This email is already in use -->
                 </div>
               </div>
@@ -46,13 +47,13 @@
                 <label class="label">Password confirmation</label>
                 <div class="control has-icons-left">
                   <input formControlName="passwordConfirmation" type="password" placeholder="*******" class="input" required
-                         [ngClass]="{ 'is-danger': confPass!.touched && confPass!.errors! }">
+                         [ngClass]="{ 'is-danger': passConf!.touched && passConf!.errors! }">
                   <span class="icon is-small is-left">
                     <fa-icon [icon]="faLock"></fa-icon>
                   </span>
-                  <div *ngIf="confPass!.touched" class="help is-danger">
-                    <div *ngIf="confPass!.hasError('required')">A password is required</div>
-                    <div *ngIf="confPass!.hasError('invalidConfirmation')">The passwords must match</div>
+                  <div *ngIf="passConf!.touched" class="help is-danger">
+                    <div *ngIf="passConf!.hasError('required')">A password is required</div>
+                    <div *ngIf="passConf!.hasError('invalidConfirmation')">The passwords must match</div>
                   </div>
                 </div>
               </div>
@@ -73,7 +74,7 @@
               </div>
 
               <div class="control">
-                <button [disabled]="loading" class="button is-success">
+                <button [disabled]="loading" type="submit" class="button is-success">
                   Signup
                 </button>
               </div>
