@@ -91,7 +91,6 @@ export class SignupComponent {
       this.signupService.emailExists(email)
         .subscribe({
           next: (res) => {
-            console.log(res);
             if (res) {
               this.f.email.setErrors({ unavailable : true})
             } else {

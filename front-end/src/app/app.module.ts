@@ -14,7 +14,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
-import { WelcomeComponent } from './components/welcome/welcome.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +24,6 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
     HomeComponent,
     PlaylistsComponent,
     SignupComponent,
-    WelcomeComponent
   ],
   imports: [
     BrowserModule,
