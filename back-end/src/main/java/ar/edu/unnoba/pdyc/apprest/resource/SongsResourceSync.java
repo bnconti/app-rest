@@ -3,10 +3,9 @@ package ar.edu.unnoba.pdyc.apprest.resource;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -33,5 +32,13 @@ public class SongsResourceSync {
         }.getType();
         List<SongDTO> dtos = modelMapper.map(songs, listType);
         return Response.ok(dtos).build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void create(SongDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Song newSong = modelMapper.map(dto, Song.class);
+        songsService.create(newSong);
     }
 }

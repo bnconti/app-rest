@@ -3,15 +3,13 @@ package ar.edu.unnoba.pdyc.apprest.resource;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import ar.edu.unnoba.pdyc.apprest.model.Song;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +33,35 @@ public class SongsResourceAsync {
             List<SongDTO> dtos = modelMapper.map(songs, listType);
             response.resume(Response.ok(dtos).build());
         });
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void create(@Suspended AsyncResponse response, SongDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Song song = modelMapper.map(dto, Song.class);
+
+        songsService.createAsync(song).thenAccept((newSong) ->
+                response.resume(Response.ok(modelMapper.map(newSong, SongDTO.class)).build()));
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void update(@Suspended AsyncResponse response, SongDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Song song = modelMapper.map(dto, Song.class);
+
+        songsService.updateAsync(song).thenAccept((updatedSong) ->
+                response.resume(Response.ok(modelMapper.map(updatedSong, SongDTO.class)).build()));
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void delete(@Suspended AsyncResponse response, @PathParam("id") Long id) {
+        songsService.deleteAsync(id).thenAccept((status) ->
+                response.resume(Response.ok(status).build()));
     }
 }

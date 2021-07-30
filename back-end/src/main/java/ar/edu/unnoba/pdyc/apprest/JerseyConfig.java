@@ -17,6 +17,7 @@ public class JerseyConfig extends ResourceConfig {
         register(SongsResourceAsync.class);
         //register(PlaylistsResourceSync.class);
         register(PlaylistsResourceAsync.class);
+        register(SongsResourceAsync.class);
         register(UserResourceSync.class);
     }
 }

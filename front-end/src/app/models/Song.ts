@@ -3,6 +3,6 @@
  */
 export interface Song {
   name: string;
-  author: String;
-  genre: String;
+  author: string;
+  genre: string;
 }

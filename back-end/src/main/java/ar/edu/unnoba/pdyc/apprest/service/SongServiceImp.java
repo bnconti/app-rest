@@ -2,6 +2,7 @@ package ar.edu.unnoba.pdyc.apprest.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +99,27 @@ public class SongServiceImp implements SongService {
         return songRepository.findByPlaylists(name);
     }
 
+    @Override
+    public Song create(Song newSong) {
+        return songRepository.save(newSong);
+    }
+
+    @Override
+    public Song update(Song updatedSong) {
+        return songRepository.save(updatedSong);
+    }
+
+    @Override
+    public Boolean delete(Long id) {
+        Optional<Song> song = songRepository.findById(id);
+
+        if (song.isEmpty()) {
+            return false;
+        } else {
+            songRepository.delete(song.get());
+            return true;
+        }
+    }
 
     /*** variantes asincrónicas - llaman a las funciones sincrónicas definidas arriba ***/
 
@@ -159,5 +181,23 @@ public class SongServiceImp implements SongService {
     @Async("taskExecutor")
     public CompletableFuture<List<Song>> getSongsByPlaylistAsync(Playlist name) {
         return CompletableFuture.completedFuture(getSongsByPlaylist(name));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Song> createAsync(Song newSong) {
+        return CompletableFuture.completedFuture(create(newSong));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Song> updateAsync(Song updatedSong) {
+        return CompletableFuture.completedFuture(update(updatedSong));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Boolean> deleteAsync(Long id) {
+        return CompletableFuture.completedFuture(delete(id));
     }
 }
