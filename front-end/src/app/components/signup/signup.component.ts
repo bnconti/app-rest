@@ -5,8 +5,7 @@ import {
   Validators
 } from "@angular/forms";
 
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import { faLock } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import { Router } from "@angular/router";
 import { SignupService } from "@services/signup.service";
 

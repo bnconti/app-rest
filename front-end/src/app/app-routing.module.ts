@@ -6,6 +6,8 @@ import { PlaylistsComponent } from "@app/components/home/playlists/playlists.com
 import { LoginComponent } from "@app/components/login/login.component";
 import { SignupComponent } from "@app/components/signup/signup.component";
 import { AuthGuard } from "@app/helpers/auth.guard";
+import {SongsComponent} from "@app/components/songs/songs.component";
+import {AddSongComponent} from "@app/components/songs/add-song/add-song.component";
 
 /**
  * El enrutamiento de la aplicación se configura a partir del arreglo 'routes'. Cada ruta es mapeada
@@ -22,6 +24,8 @@ import { AuthGuard } from "@app/helpers/auth.guard";
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'home/playlists', component: PlaylistsComponent, canActivate: [AuthGuard] },
+  { path: 'home/songs', component: SongsComponent, canActivate: [AuthGuard] },
+  { path: 'home/songs/new', component: AddSongComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
 

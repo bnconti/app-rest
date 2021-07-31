@@ -14,6 +14,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
+import { AddSongComponent } from './components/songs/add-song/add-song.component';
+import { ModifySongComponent } from './components/songs/modify-song/modify-song.component';
+import { DeleteSongComponent } from './components/songs/delete-song/delete-song.component';
+import { SongsComponent } from './components/songs/songs.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +28,10 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
     HomeComponent,
     PlaylistsComponent,
     SignupComponent,
+    AddSongComponent,
+    ModifySongComponent,
+    DeleteSongComponent,
+    SongsComponent,
   ],
   imports: [
     BrowserModule,

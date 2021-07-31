@@ -224,7 +224,6 @@ Si no se instaló Angular con la opción -g, el comando a ejecutar es
 
 - Login:
   - Remember me.
-  - Registro de nuevo usuario (botón sign up).
   - Cerrar sesión cuando se cierra la ventana, o reducir el tiempo de
     expiración del token.
 - Mejorar la lista de playlists.
@@ -242,4 +241,6 @@ Si no se instaló Angular con la opción -g, el comando a ejecutar es
   - Lista de todas las canciones?
     (igual hay que hacerlo para agregarlas a una playlist)
 - Corregir o eliminar menú hamburguesa.
+- Canciones:
+  - Utilizar roles en el frontend para que los usuarios comunes no pueden hacer ABM?
 
