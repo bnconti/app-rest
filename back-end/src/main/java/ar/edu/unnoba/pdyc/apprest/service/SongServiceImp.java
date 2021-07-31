@@ -121,6 +121,11 @@ public class SongServiceImp implements SongService {
         }
     }
 
+    @Override
+    public Boolean existsByAuthorAndName(String author, String name) {
+        return songRepository.existsByAuthorAndName(author, name);
+    }
+
     /*** variantes asincrónicas - llaman a las funciones sincrónicas definidas arriba ***/
 
     @Override
@@ -199,5 +204,10 @@ public class SongServiceImp implements SongService {
     @Async("taskExecutor")
     public CompletableFuture<Boolean> deleteAsync(Long id) {
         return CompletableFuture.completedFuture(delete(id));
+    }
+
+    @Override
+    public CompletableFuture<Boolean> existsByAuthorAndNameAsync(String author, String name) {
+        return CompletableFuture.completedFuture(existsByAuthorAndName(author, name));
     }
 }

@@ -64,4 +64,17 @@ public class SongsResourceAsync {
         songsService.deleteAsync(id).thenAccept((status) ->
                 response.resume(Response.ok(status).build()));
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/find")
+    public Response existsByAuthorAndName(@QueryParam("author") String author, @QueryParam("name") String name) {
+        try {
+            Boolean exists = songsService.existsByAuthorAndName(author, name);
+            return Response.ok(exists).build();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

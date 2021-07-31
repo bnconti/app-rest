@@ -243,4 +243,4 @@ Si no se instaló Angular con la opción -g, el comando a ejecutar es
 - Corregir o eliminar menú hamburguesa.
 - Canciones:
   - Utilizar roles en el frontend para que los usuarios comunes no pueden hacer ABM?
-
+  - Autocompletado al agregar/modificar para autores?

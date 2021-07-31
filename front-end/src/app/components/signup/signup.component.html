@@ -13,11 +13,11 @@
               <label class="label">Email</label>
               <div class="control has-icons-left">
                 <input formControlName="email" type="email" placeholder="e.g. usuario@gmail.com" class="input" required
-                       [ngClass]="{ 'is-danger': f.email.touched && f.email.errors }">
+                       [ngClass]="{ 'is-danger': f.email.touched || submitted && f.email.errors }">
                 <span class="icon is-small is-left">
                   <fa-icon [icon]="faEnvelope"></fa-icon>
                 </span>
-                <div *ngIf="f.email.touched" class="help is-danger">
+                <div *ngIf="f.email.touched || submitted" class="help is-danger">
                   <div *ngIf="f.email.hasError('required')">An email is required</div>
                   <div *ngIf="f.email.hasError('pattern')">The field doesn't contain a valid email</div>
                   <div *ngIf="f.email.hasError('unavailable')">That email address is already in use</div>
@@ -35,7 +35,7 @@
                   <span class="icon is-small is-left">
                     <fa-icon [icon]="faLock"></fa-icon>
                   </span>
-                  <div *ngIf="pass!.touched" class="help is-danger">
+                  <div *ngIf="pass!.touched || submitted" class="help is-danger">
                     <div *ngIf="pass!.hasError('required')">A password is required</div>
                     <div *ngIf="pass!.hasError('minlength')">The password must be at least 6 chars. long</div>
                   </div>

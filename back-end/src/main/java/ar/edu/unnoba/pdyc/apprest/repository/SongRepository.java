@@ -12,6 +12,8 @@ import java.util.List;
 public interface SongRepository extends JpaRepository<Song, Long> {
     List<Song> findAll();
 
+    Boolean existsByAuthorAndName(String author, String name);
+
     Song findSongById(Long id);
 
     List<Song> findByAuthor(String author);

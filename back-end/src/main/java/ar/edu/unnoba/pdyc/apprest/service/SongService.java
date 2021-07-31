@@ -10,6 +10,8 @@ import ar.edu.unnoba.pdyc.apprest.model.Song;
 public interface SongService {
     /* variantes sincrónicas */
 
+    Boolean existsByAuthorAndName(String author, String name);
+
     List<Song> getSongs();
 
     List<Song> getSongsByAuthor(String author);
@@ -33,6 +35,8 @@ public interface SongService {
     Boolean delete(Long id);
 
     /* variantes asincrónicas */
+
+    CompletableFuture<Boolean> existsByAuthorAndNameAsync(String author, String name);
 
     CompletableFuture<List<Song>> getSongsAsync();
 
