@@ -13,7 +13,7 @@
               <label class="label">Email</label>
               <div class="control has-icons-left">
                 <input formControlName="email" type="email" placeholder="e.g. usuario@gmail.com" class="input" required
-                       [ngClass]="{ 'is-danger': f.email.touched || submitted && f.email.errors }">
+                       [ngClass]="{ 'is-danger': (f.email.touched || submitted) && f.email.errors }">
                 <span class="icon is-small is-left">
                   <fa-icon [icon]="faEnvelope"></fa-icon>
                 </span>
@@ -31,7 +31,7 @@
                 <label class="label">Password</label>
                 <div class="control has-icons-left">
                   <input formControlName="password" type="password" placeholder="*******" class="input" required
-                         [ngClass]="{ 'is-danger': pass!.touched && pass!.errors! }">
+                         [ngClass]="{ 'is-danger': (pass!.touched || submitted) && pass!.errors! }">
                   <span class="icon is-small is-left">
                     <fa-icon [icon]="faLock"></fa-icon>
                   </span>
@@ -46,7 +46,7 @@
                 <label class="label">Password confirmation</label>
                 <div class="control has-icons-left">
                   <input formControlName="passwordConfirmation" type="password" placeholder="*******" class="input" required
-                         [ngClass]="{ 'is-danger': passConf!.touched && passConf!.errors! }">
+                         [ngClass]="{ 'is-danger': (passConf!.touched || submitted) && passConf!.errors! }">
                   <span class="icon is-small is-left">
                     <fa-icon [icon]="faLock"></fa-icon>
                   </span>

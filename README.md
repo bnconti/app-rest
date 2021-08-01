@@ -244,3 +244,4 @@ Si no se instaló Angular con la opción -g, el comando a ejecutar es
 - Canciones:
   - Utilizar roles en el frontend para que los usuarios comunes no pueden hacer ABM?
   - Autocompletado al agregar/modificar para autores?
+- Que el footer quede estático abajo

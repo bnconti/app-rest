@@ -26,5 +26,7 @@ public interface SongRepository extends JpaRepository<Song, Long> {
 
     List<Song> findByAuthorAndName(String author, String name);
 
+    /*
     List<Song> findByPlaylists(Playlist playlist);
+    */
 }

@@ -23,9 +23,10 @@ public class Song implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     private Genre genre;
 
-    @ManyToMany(targetEntity = Playlist.class, mappedBy = "songs")
+    /*
+    @ManyToMany(targetEntity = Playlist.class, mappedBy = "songs", fetch = FetchType.EAGER)
     private List<Playlist> playlists = new ArrayList<>();
-
+     */
 
     public Long getId() {
         return id;
@@ -55,12 +56,14 @@ public class Song implements Serializable {
         this.genre = genre;
     }
 
+    /*
     public List<Playlist> getPlaylists() {
         return playlists;
     }
     public void setPlaylists(List<Playlist> playlists) {
         this.playlists = playlists;
     }
+    */
 
     @Override
     public boolean equals(Object obj) {

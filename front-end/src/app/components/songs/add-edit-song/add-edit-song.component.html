@@ -6,9 +6,10 @@
 
       <div class="column is-10-tablet is-10-desktop is-8-widescreen box notification is-info is-light">
 
-        <p class="title">Add new song</p>
+        <p *ngIf="isAddMode" class="title">Add new song</p>
+        <p *ngIf="!isAddMode" class="title">Modify song</p>
 
-        <form [formGroup]="newSongForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="songForm" (ngSubmit)="onSubmit()">
           <div class="field is-horizontal">
 
             <div class="field-label is-normal">
@@ -75,7 +76,8 @@
                   <button class="button" [disabled]="loading" type="submit">
                     <span class="icon-text">
                       <span class="icon"><fa-icon [icon]="faSave"></fa-icon></span>
-                      <span>Save</span>
+                      <span *ngIf="isAddMode">Save</span>
+                      <span *ngIf="!isAddMode">Update</span>
                     </span>
                   </button>
                 </div>
@@ -89,9 +91,9 @@
     </div>
 
     <div class="section">
-      <div *ngIf="submitted" class="notification is-light" [ngClass]="newSongError ? 'is-danger' : 'is-success'">
+      <div *ngIf="submitted" class="notification is-light" [ngClass]="err ? 'is-danger' : 'is-success'">
         <button class="delete"></button>
-        {{ newSongMsg }}
+        {{ msg }}
       </div>
     </div>
   </div>

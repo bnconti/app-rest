@@ -28,7 +28,9 @@ public interface SongService {
 
     List<Song> getSongsByAuthorAndName(String author, String name);
 
+    /*
     List<Song> getSongsByPlaylist(Playlist name);
+    */
 
     Song create(Song newSong);
     Song update(Song updatedSong);
@@ -54,7 +56,9 @@ public interface SongService {
 
     CompletableFuture<List<Song>> getSongsByAuthorAndNameAsync(String author, String name);
 
+    /*
     CompletableFuture<List<Song>> getSongsByPlaylistAsync(Playlist name);
+    */
 
     CompletableFuture<Song> createAsync(Song newSong);
     CompletableFuture<Song> updateAsync(Song updatedSong);

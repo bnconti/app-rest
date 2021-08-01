@@ -94,10 +94,12 @@ public class SongServiceImp implements SongService {
         return songRepository.findByAuthorAndName(author, name);
     }
 
+    /*
     @Override
     public List<Song> getSongsByPlaylist(Playlist name) {
         return songRepository.findByPlaylists(name);
     }
+    */
 
     @Override
     public Song create(Song newSong) {
@@ -182,11 +184,13 @@ public class SongServiceImp implements SongService {
         return CompletableFuture.completedFuture(getSongsByAuthorAndName(author, name));
     }
 
+    /*
     @Override
     @Async("taskExecutor")
     public CompletableFuture<List<Song>> getSongsByPlaylistAsync(Playlist name) {
         return CompletableFuture.completedFuture(getSongsByPlaylist(name));
     }
+    */
 
     @Override
     @Async("taskExecutor")

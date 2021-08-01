@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Song} from "@app/models/Song";
 import {environment} from "@environments/environment";
@@ -36,16 +36,31 @@ export class SongsService {
     ];
   }
 
-  songExists(author: string, name: string): Observable<boolean> {
-    const url = `${SongsService.url}/find?author=${author}&name=${name}`;
-    return this.http.get<any>(url)
+  getById(songId: string): Observable<Song> {
+    const url = `${SongsService.url}/find/${songId}`;
+    return this.http.get<Song>(url)
       .pipe(map(res => {
-          return res;
-        }));
+        return res;
+      }));
   }
 
-  addSong(newSong: Song): Observable<Song> {
+  existsByAuthorAndName(author: string, name: string): Observable<Boolean> {
+    const url = `${SongsService.url}/exists?author=${author}&name=${name}`;
+    return this.http.get<any>(url)
+      .pipe(map(res => {
+        return res;
+      }));
+  }
+
+  add(newSong: Song): Observable<Song> {
     return this.http.post<Song>(SongsService.url, newSong)
+      .pipe(map(res => {
+        return res;
+      }));
+  }
+
+  update(updatedSong: Song): Observable<Song> {
+    return this.http.put<Song>(SongsService.url, updatedSong)
       .pipe(map(res => {
         return res;
       }));

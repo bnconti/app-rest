@@ -25,7 +25,7 @@ public class SongsResourceAsync {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public void getSongs(@Suspended AsyncResponse response,
-            @QueryParam("author") String author, @QueryParam("genre") String genre) {
+                         @QueryParam("author") String author, @QueryParam("genre") String genre) {
         songsService.getSongsByAuthorAndGenreAsync(author, genre).thenAccept((songs) -> {
             ModelMapper modelMapper = new ModelMapper();
             Type listType = new TypeToken<List<SongDTO>>() {
@@ -67,14 +67,18 @@ public class SongsResourceAsync {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/find")
-    public Response existsByAuthorAndName(@QueryParam("author") String author, @QueryParam("name") String name) {
-        try {
-            Boolean exists = songsService.existsByAuthorAndName(author, name);
-            return Response.ok(exists).build();
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
+    @Path("/exists")
+    public void existsByAuthorAndName(@Suspended AsyncResponse response,
+                                      @QueryParam("author") String author, @QueryParam("name") String name) {
+        songsService.existsByAuthorAndNameAsync(author, name).
+                thenAccept((exists) -> response.resume(Response.ok(exists).build()));
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/find/{id}")
+    public void getById(@Suspended AsyncResponse response, @PathParam("id") Long id) {
+        songsService.getSongByIdAsync(id)
+                .thenAccept((song -> response.resume(Response.ok(song).build())));
     }
 }

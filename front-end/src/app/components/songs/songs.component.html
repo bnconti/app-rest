@@ -7,26 +7,32 @@
 
       <table class="table is-striped is-hoverable is-fullwidth notification is-info is-light">
         <thead>
-          <tr>
-            <th>Author</th>
-            <th>Title</th>
-            <th>Genre</th>
-            <th>Modify</th>
-            <th>Delete</th>
-          </tr>
+        <tr>
+          <th>Author</th>
+          <th>Title</th>
+          <th>Genre</th>
+          <th>Modify</th>
+          <th>Delete</th>
+        </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let song of songs">
-            <td>{{song.author}}</td>
-            <td>{{song.name}}</td>
-            <td>{{song.genre}}</td>
-            <td><a href="/home/song/{{song.id}}">
-              <span class="icon"><fa-icon [icon]="faPen"></fa-icon></span>
-            </a></td>
-            <td><a href="/home/song/{{song.id}}">
+        <tr *ngFor="let s of songs">
+          <td>{{s.author}}</td>
+          <td>{{s.name}}</td>
+          <td>{{s.genre}}</td>
+          <td>
+            <a href="/home/songs/{{s.id}}">
+              <span class="icon">
+                <fa-icon [icon]="faPen"></fa-icon>
+              </span>
+            </a>
+          </td>
+          <td>
+            <a href="/home/songs/{{s.id}}">
               <span class="icon"><fa-icon [icon]="faTrash"></fa-icon></span>
-            </a></td>
-          </tr>
+            </a>
+          </td>
+        </tr>
         </tbody>
       </table>
 

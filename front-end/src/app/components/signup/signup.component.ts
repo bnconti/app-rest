@@ -49,11 +49,7 @@ export class SignupComponent {
   get f() { return this.signupForm.controls; }
 
   get pass() {
-    // TODO: ver de acomodar para no tener que usar el ! en el HTML
     return this.f.passwords.get('password');
-    // return (this.signupForm.get('passwords') as FormArray).controls;
-    // @ts-ignore
-    // return this.signupForm.get('passwords')['controls'];
   }
 
   get passConf() {

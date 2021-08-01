@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {SongsService} from "@services/songs.service";
 import {Song} from "@app/models/Song";
 import {faPen, faTrash} from '@fortawesome/free-solid-svg-icons';
@@ -8,7 +8,7 @@ import {faPen, faTrash} from '@fortawesome/free-solid-svg-icons';
   templateUrl: './songs.component.html',
   styleUrls: ['./songs.component.sass']
 })
-export class SongsComponent implements OnInit {
+export class SongsComponent {
 
   songs: Song[] | undefined;
 
@@ -16,12 +16,9 @@ export class SongsComponent implements OnInit {
   faTrash = faTrash;
 
   constructor(
-    private songService: SongsService
+    private songService: SongsService,
   ) {
-  }
-
-  ngOnInit(): void {
-    this.getPlaylists()
+    this.getPlaylists();
   }
 
   getPlaylists() {
@@ -29,6 +26,10 @@ export class SongsComponent implements OnInit {
       .subscribe((data: Song[]) => {
         this.songs = data;
       });
+  }
+
+  deleteSong(songId: bigint) {
+    console.log(`Se va a borrar la canción con ID ${songId}`);
   }
 
 }
