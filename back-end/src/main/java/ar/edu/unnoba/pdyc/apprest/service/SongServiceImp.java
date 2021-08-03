@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import ar.edu.unnoba.pdyc.apprest.repository.PlaylistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ import ar.edu.unnoba.pdyc.apprest.repository.SongRepository;
 public class SongServiceImp implements SongService {
     @Autowired
     private SongRepository songRepository;
+
+    @Autowired
+    private PlaylistRepository playlistRepository;
 
     /*** variantes sincrónicas ***/
 
@@ -117,10 +121,16 @@ public class SongServiceImp implements SongService {
 
         if (song.isEmpty()) {
             return false;
-        } else {
-            songRepository.delete(song.get());
-            return true;
         }
+
+        boolean used = playlistRepository.existsBySongs(song.get());
+
+        if (used) {
+            return false;
+        }
+
+        songRepository.delete(song.get());
+        return true;
     }
 
     @Override

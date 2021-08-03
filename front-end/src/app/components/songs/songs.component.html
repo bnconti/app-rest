@@ -21,14 +21,14 @@
           <td>{{s.name}}</td>
           <td>{{s.genre}}</td>
           <td>
-            <a href="/home/songs/{{s.id}}">
+            <a (click)="goToEditSong(s.id!)">
               <span class="icon">
                 <fa-icon [icon]="faPen"></fa-icon>
               </span>
             </a>
           </td>
           <td>
-            <a href="/home/songs/{{s.id}}">
+            <a (click)="deleteSong(s)">
               <span class="icon"><fa-icon [icon]="faTrash"></fa-icon></span>
             </a>
           </td>
@@ -37,5 +37,13 @@
       </table>
 
     </div>
+
+    <div class="section">
+      <div *ngIf="showMsg" class="notification is-light" [ngClass]="err ? 'is-danger' : 'is-success'">
+        <button class="delete"></button>
+        {{ msg }}
+      </div>
+    </div>
+
   </div>
 </div>
