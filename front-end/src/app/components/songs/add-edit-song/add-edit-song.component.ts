@@ -7,6 +7,7 @@ import {Song} from "@app/models/Song";
 import {ActivatedRoute} from "@angular/router";
 import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
+import {NotificationService} from "@services/notification.service";
 
 @Component({
   selector: 'app-add-edit-song',
@@ -27,13 +28,12 @@ export class AddEditSongComponent {
 
   loading = false;
   submitted = false;
-  err = false;
-  msg = '';
 
   constructor(
     private songService: SongsService,
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private notification: NotificationService
   ) {
     this.songId = this.route.snapshot.params['id'];
     this.isAddMode = !this.songId;
@@ -91,8 +91,7 @@ export class AddEditSongComponent {
     this.submitted = true;
 
     if (this.songForm.invalid) {
-      this.err = true;
-      this.msg = "Please verify the form errors";
+      this.notification.error("Please verify the form errors");
       return;
     }
 
@@ -107,8 +106,7 @@ export class AddEditSongComponent {
         next: (exists) => {
           if (exists) {
             this.loading = false;
-            this.err = true;
-            this.msg = "There is already a song with that name and author";
+            this.notification.error("There is already a song with that name and author");
           } else {
             const song: Song = {id: this.songId, name: name, author: author, genre: genre};
             this.isAddMode ? this.createSong(song) : this.updateSong(song);
@@ -121,12 +119,10 @@ export class AddEditSongComponent {
     this.songService.add(newSong)
       .subscribe({
         next: () => {
-          this.err = false;
-          this.msg = "New song saved succesfully!";
+          this.notification.success("New song saved succesfully!");
         },
         error: () => {
-          this.err = true;
-          this.msg = "Something went wrong while creating the new song.";
+          this.notification.error("Something went wrong while creating the new song.");
         },
         complete: () => {
           this.loading = false;
@@ -138,12 +134,10 @@ export class AddEditSongComponent {
     this.songService.update(updatedSong)
       .subscribe({
         next: () => {
-          this.err = false;
-          this.msg = "Song updated succesfully!";
+          this.notification.success("Song updated succesfully!");
         },
         error: () => {
-          this.err = true;
-          this.msg = "Something went wrong while updating the new song.";
+          this.notification.error("Something went wrong while updating the new song.");
         },
         complete: () => {
           this.loading = false;

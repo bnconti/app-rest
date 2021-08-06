@@ -6,6 +6,7 @@ import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmationDialogComponent} from "@app/components/confirmation-dialog/confirmation-dialog.component";
 import {DialogData} from "@app/interfaces/DialogData";
+import {NotificationService} from "@services/notification.service";
 
 @Component({
   selector: 'app-songs',
@@ -19,14 +20,11 @@ export class SongsComponent {
   faPen = faPen;
   faTrash = faTrash;
 
-  err: boolean = false;
-  showMsg: boolean = false;
-  msg: String = '';
-
   constructor(
     private songService: SongsService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private notification: NotificationService
   ) {
     this.getPlaylists();
   }
@@ -63,21 +61,17 @@ export class SongsComponent {
   deleteSong(song: Song) {
     this.songService.delete(song.id!).subscribe({
       next: (deleted) => {
-        this.showMsg = true;
         if (deleted) {
           this.songs = this.songs!.filter((s: Song) => s.id != song.id)
-          this.err = false;
-          this.msg = `"${song.author} - ${song.name}" deleted successfully`;
+          this.notification.success(`"${song.author} - ${song.name}" deleted successfully`);
         } else {
-          this.err = true;
-          this.msg = `Can't delete "${song.author} - ${song.name}" because it's included in one or more playlists`;
+          this.notification.error(`Can't delete "${song.author} - ${song.name}" because it's included in one or more playlists`);
         }
       },
       error: (err) => {
         console.log(err);
-        this.err = true;
-        this.msg = `Something went wrong while deleting "${song.author} - ${song.name}"`;
-    }
+        this.notification.error(`Something went wrong while deleting "${song.author} - ${song.name}"`);
+      }
     })
   }
 

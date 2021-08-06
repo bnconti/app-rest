@@ -20,3 +20,21 @@ body
   background-color: indianred
   color: whitesmoke
   font-weight: bold
+
+.notification-basics
+  outline: 2px solid
+  color: black
+  text-align: center
+
+.success-notification
+  @extend .notification-basics
+  outline-color: darkgreen
+  background: darkseagreen
+
+.error-notification
+  @extend .notification-basics
+  outline-color: darkred
+  background: palevioletred
+
+.mat-simple-snackbar-action
+  color: black
