@@ -4,10 +4,10 @@
   <div class="container">
     <div class="columns is-centered">
 
-      <div class="column is-10-tablet is-10-desktop is-8-widescreen box notification is-info is-light">
+      <div class="column is-10-tablet is-10-desktop is-8-widescreen box notification">
 
-        <p *ngIf="isAddMode" class="title">Add new song</p>
-        <p *ngIf="!isAddMode" class="title">Modify song</p>
+        <h1 *ngIf="isAddMode" class="title">Add new song</h1>
+        <h1 *ngIf="!isAddMode" class="title">Modify song</h1>
 
         <form [formGroup]="songForm" (ngSubmit)="onSubmit()">
           <div class="field is-horizontal">
@@ -19,7 +19,7 @@
             <div class="field-body">
               <div class="field">
                 <div class="control">
-                  <input formControlName="name" class="input" type="text" placeholder="The song's name"
+                  <input formControlName="name" class="input" type="text" placeholder="The song's title"
                          [ngClass]="{ 'is-danger': (f.name.touched || submitted) && f.name.errors }">
                   <div *ngIf="f.name.touched || submitted " class="help is-danger">
                     <div *ngIf="f.name.hasError('required')">A name is required for the song</div>
@@ -80,7 +80,7 @@
             <div class="field-body">
               <div class="field">
                 <div class="control">
-                  <button class="button" [disabled]="loading" type="submit">
+                  <button class="button is-save" [disabled]="loading" type="submit">
                     <span class="icon-text">
                       <span class="icon"><fa-icon [icon]="faSave"></fa-icon></span>
                       <span *ngIf="isAddMode">Save</span>
