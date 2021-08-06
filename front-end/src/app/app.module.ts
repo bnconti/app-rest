@@ -17,6 +17,8 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
 import { AddEditSongComponent } from './components/songs/add-edit-song/add-edit-song.component';
 import { DeleteSongComponent } from './components/songs/delete-song/delete-song.component';
 import { SongsComponent } from './components/songs/songs.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 
 @NgModule({
   declarations: [
@@ -31,14 +33,16 @@ import { SongsComponent } from './components/songs/songs.component';
     DeleteSongComponent,
     SongsComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    FontAwesomeModule,
-    ReactiveFormsModule,
-    HttpClientModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        FontAwesomeModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        MatAutocompleteModule
+    ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}

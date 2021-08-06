@@ -31,6 +31,11 @@ public class SongServiceImp implements SongService {
     }
 
     @Override
+    public List<String> getAuthors() {
+        return songRepository.findAuthors();
+    }
+
+    @Override
     public Song getSongById(Long id) {
         return songRepository.findSongById(id);
     }
@@ -144,6 +149,12 @@ public class SongServiceImp implements SongService {
     @Async("taskExecutor")
     public CompletableFuture<List<Song>> getSongsAsync() {
         return CompletableFuture.completedFuture(getSongs());
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<List<String>> getAuthorsAsync() {
+        return CompletableFuture.completedFuture(getAuthors());
     }
 
     @Override

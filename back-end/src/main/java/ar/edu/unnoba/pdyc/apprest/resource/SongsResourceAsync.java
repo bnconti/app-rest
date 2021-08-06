@@ -35,6 +35,15 @@ public class SongsResourceAsync {
         });
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/authors")
+    public void getAuthors(@Suspended AsyncResponse response) {
+        songsService.getAuthorsAsync().thenAccept((authors) -> {
+            response.resume(Response.ok(authors).build());
+        });
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

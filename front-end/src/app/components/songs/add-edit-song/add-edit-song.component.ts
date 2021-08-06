@@ -5,6 +5,8 @@ import {SongsService} from "@services/songs.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Song} from "@app/models/Song";
 import {ActivatedRoute} from "@angular/router";
+import {Observable} from "rxjs";
+import {map, startWith} from "rxjs/operators";
 
 @Component({
   selector: 'app-add-edit-song',
@@ -18,6 +20,8 @@ export class AddEditSongComponent {
 
   songForm: FormGroup;
   genres: Genre[];
+  authors: String[] | undefined;
+  filteredAuthors: Observable<String[]> | undefined;
 
   faSave = faSave;
 
@@ -41,6 +45,8 @@ export class AddEditSongComponent {
     });
 
     this.genres = songService.getGenres();
+    this.getAuthors();
+    this.filterAuthors();
 
     if (!this.isAddMode) {
       // Cargo los valores en caso de estar en modo edición
@@ -53,6 +59,27 @@ export class AddEditSongComponent {
           this.songForm.controls['genre'].patchValue(genre!.id);
         });
     }
+  }
+
+  getAuthors() {
+    this.songService.getAuthors()
+      .subscribe((authors: String[]) => {
+        this.authors = authors;
+      });
+  }
+
+  filterAuthors() {
+    // @ts-ignore
+    this.filteredAuthors = this.songForm.controls['author'].valueChanges
+      .pipe(
+        map(value => this._filter(value)),
+        startWith(null)
+      );
+  }
+
+  private _filter(value: string): String[] {
+    const filterValue = value.toLowerCase();
+    return this.authors!.filter(author => author.toLowerCase().includes(filterValue));
   }
 
   get f() {
@@ -83,7 +110,7 @@ export class AddEditSongComponent {
             this.err = true;
             this.msg = "There is already a song with that name and author";
           } else {
-            const song: Song = {id: this.songId,name: name, author: author, genre: genre};
+            const song: Song = {id: this.songId, name: name, author: author, genre: genre};
             this.isAddMode ? this.createSong(song) : this.updateSong(song);
           }
         }

@@ -13,6 +13,7 @@ public interface SongService {
     Boolean existsByAuthorAndName(String author, String name);
 
     List<Song> getSongs();
+    List<String> getAuthors();
 
     List<Song> getSongsByAuthor(String author);
 
@@ -41,6 +42,7 @@ public interface SongService {
     CompletableFuture<Boolean> existsByAuthorAndNameAsync(String author, String name);
 
     CompletableFuture<List<Song>> getSongsAsync();
+    CompletableFuture<List<String>> getAuthorsAsync();
 
     CompletableFuture<List<Song>> getSongsByAuthorAsync(String author);
 

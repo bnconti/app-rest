@@ -39,8 +39,15 @@
             <div class="field-body">
               <div class="field">
                 <div class="control">
-                  <input formControlName="author" class="input" type="text" placeholder="The author's name"
+                  <input formControlName="author" class="input"
+                         type="text" placeholder="The author's name"
+                         [matAutocomplete]="auto" matInput
                          [ngClass]="{ 'is-danger': (f.author.touched || submitted) && f.author.errors }">
+                  <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption >
+                    <mat-option *ngFor="let author of filteredAuthors | async" [value]="author">
+                      {{author}}
+                    </mat-option>
+                  </mat-autocomplete>
                   <div *ngIf="f.author.touched || submitted" class="help is-danger">
                     <div *ngIf="f.author.hasError('required')">An author is required for the song</div>
                   </div>

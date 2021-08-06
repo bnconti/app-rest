@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpResponse} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Song} from "@app/models/Song";
 import {environment} from "@environments/environment";
@@ -18,6 +18,14 @@ export class SongsService {
 
   getSongs(): Observable<Song[]> {
     return this.http.get<Song[]>(SongsService.url)
+      .pipe(map(res => {
+        return res
+      }));
+  }
+
+  getAuthors(): Observable<String[]> {
+    const url = `${SongsService.url}/authors`;
+    return this.http.get<String[]>(url)
       .pipe(map(res => {
         return res
       }));
