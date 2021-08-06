@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>{{data.dialogTitle}}</h2>
+<mat-dialog-content class="mat-typography">
+  <p>{{data.dialogMsg}}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <div class="field is-grouped">
+    <div class="control">
+      <button mat-button class="button" mat-dialog-close>Cancel</button>
+    </div>
+    <div class="control">
+      <button mat-button class="button button-main" [mat-dialog-close]="true">{{data.confirmationMsg}}</button>
+    </div>
+  </div>
+</mat-dialog-actions>
