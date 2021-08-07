@@ -238,7 +238,5 @@ Si no se instaló Angular con la opción -g, el comando a ejecutar es
 - Implementar toda la funcionalidad del back-end en el front-end:
   - Crear, renombrar y eliminar playlists.
   - Agregar y quitar canciones de una playlist.
-- Corregir o eliminar menú hamburguesa.
 - Canciones:
   - Utilizar roles en el frontend para que los usuarios comunes no pueden hacer ABM?
-- Que el footer quede estático abajo

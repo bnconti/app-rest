@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/services/authentication.service';
 import { faDoorClosed } from "@fortawesome/free-solid-svg-icons";
@@ -8,9 +8,12 @@ import { faDoorClosed } from "@fortawesome/free-solid-svg-icons";
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.sass']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
   faDoorClosed = faDoorClosed;
+
+  @ViewChild('navBurger') navBurger!: ElementRef;
+  @ViewChild('navMenu') navMenu!: ElementRef;
 
   constructor(
     private router: Router,
@@ -22,7 +25,8 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  ngOnInit(): void {
+  toggleBurger() {
+    this.navBurger.nativeElement.classList.toggle('is-active');
+    this.navMenu.nativeElement.classList.toggle('is-active');
   }
-
 }
