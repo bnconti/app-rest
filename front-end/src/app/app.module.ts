@@ -15,13 +15,16 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { AddEditSongComponent } from './components/songs/add-edit-song/add-edit-song.component';
-import { DeleteSongComponent } from './components/songs/delete-song/delete-song.component';
 import { SongsComponent } from './components/songs/songs.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatTableModule} from "@angular/material/table";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatSortModule} from "@angular/material/sort";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
   declarations: [
@@ -33,7 +36,6 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     PlaylistsComponent,
     SignupComponent,
     AddEditSongComponent,
-    DeleteSongComponent,
     SongsComponent,
     ConfirmationDialogComponent,
   ],
@@ -48,6 +50,10 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     MatAutocompleteModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatInputModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

@@ -1,42 +1,64 @@
 <app-header></app-header>
 
-<div class="section">
+<section class="section">
   <div class="container">
     <div class="table-container box notification">
       <h1 class="title">Songs list</h1>
 
-      <table class="table is-striped is-hoverable is-fullwidth notification is-info is-light">
-        <thead>
-        <tr>
-          <th>Author</th>
-          <th>Title</th>
-          <th>Genre</th>
-          <th>Modify</th>
-          <th>Delete</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let s of songs">
-          <td>{{s.author}}</td>
-          <td>{{s.name}}</td>
-          <td>{{s.genre}}</td>
-          <td>
-            <a (click)="goToEditSong(s.id!)">
+      <div class="field">
+        <div class="control">
+          <input class="input is-medium" type="text"
+                 placeholder="Filter" (keyup)="doFilter($event)">
+        </div>
+      </div>
+
+      <mat-table [dataSource]="songsDataSource" class="mat-elevation-z2" matSort>
+
+        <ng-container matColumnDef="author">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Author</mat-header-cell>
+          <mat-cell *matCellDef="let s"> {{s.author}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+          <mat-cell *matCellDef="let s"> {{ s.name }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="genre">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Genre</mat-header-cell>
+          <mat-cell *matCellDef="let s"> {{s.genre}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="edit">
+          <mat-header-cell *matHeaderCellDef>Edit</mat-header-cell>
+          <mat-cell *matCellDef="let s">
+            <a (click)="goToEditSong(s.id)">
               <span class="icon">
                 <fa-icon [icon]="faPen"></fa-icon>
               </span>
             </a>
-          </td>
-          <td>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+          <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
+          <mat-cell *matCellDef="let s">
             <a (click)="deleteSongDialog(s)">
-              <span class="icon"><fa-icon [icon]="faTrash"></fa-icon></span>
+              <span class="icon">
+                <fa-icon [icon]="faTrash"></fa-icon>
+              </span>
             </a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+      </mat-table>
+
+      <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
 
     </div>
 
   </div>
-</div>
+</section>

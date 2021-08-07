@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<div class="section">
+<section class="section">
   <div class="container">
     <div class="columns is-centered">
 
@@ -19,7 +19,8 @@
             <div class="field-body">
               <div class="field">
                 <div class="control">
-                  <input formControlName="name" class="input" type="text" placeholder="The song's title"
+                  <input formControlName="name" class="input"
+                         type="text" placeholder="The song's title"
                          [ngClass]="{ 'is-danger': (f.name.touched || submitted) && f.name.errors }">
                   <div *ngIf="f.name.touched || submitted " class="help is-danger">
                     <div *ngIf="f.name.hasError('required')">A name is required for the song</div>
@@ -41,7 +42,7 @@
                 <div class="control">
                   <input formControlName="author" class="input"
                          type="text" placeholder="The author's name"
-                         [matAutocomplete]="auto" matInput
+                         [matAutocomplete]="auto"
                          [ngClass]="{ 'is-danger': (f.author.touched || submitted) && f.author.errors }">
                   <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption >
                     <mat-option *ngFor="let author of filteredAuthors | async" [value]="author">
@@ -100,5 +101,5 @@
   </div>
 
 
-</div>
+</section>
 

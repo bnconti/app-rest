@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {SongsService} from "@services/songs.service";
 import {Song} from "@app/models/Song";
 import {faPen, faTrash} from '@fortawesome/free-solid-svg-icons';
@@ -7,6 +7,9 @@ import {MatDialog} from "@angular/material/dialog";
 import {ConfirmationDialogComponent} from "@app/components/confirmation-dialog/confirmation-dialog.component";
 import {DialogData} from "@app/interfaces/DialogData";
 import {NotificationService} from "@services/notification.service";
+import {MatTableDataSource} from "@angular/material/table";
+import {MatSort} from "@angular/material/sort";
+import {MatPaginator} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-songs',
@@ -15,10 +18,14 @@ import {NotificationService} from "@services/notification.service";
 })
 export class SongsComponent {
 
-  songs: Song[] | undefined;
+  songsDataSource: MatTableDataSource<Song> = new MatTableDataSource;
+  displayedColumns: string[] = ['author', 'name', 'genre', 'edit', 'delete'];
 
   faPen = faPen;
   faTrash = faTrash;
+
+  @ViewChild(MatSort, {static: true}) sort!: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   constructor(
     private songService: SongsService,
@@ -32,7 +39,9 @@ export class SongsComponent {
   getPlaylists() {
     this.songService.getSongs()
       .subscribe((data: Song[]) => {
-        this.songs = data;
+        this.songsDataSource = new MatTableDataSource(data);
+        this.songsDataSource.paginator = this.paginator;
+        this.songsDataSource.sort = this.sort;
       });
   }
 
@@ -62,7 +71,11 @@ export class SongsComponent {
     this.songService.delete(song.id!).subscribe({
       next: (deleted) => {
         if (deleted) {
-          this.songs = this.songs!.filter((s: Song) => s.id != song.id)
+          // Actualizar la tabla quitando la canción borrada
+          const itemIndex = this.songsDataSource.data.findIndex(s => s === song);
+          this.songsDataSource.data.splice(itemIndex, 1);
+          this.songsDataSource.paginator = this.paginator;
+
           this.notification.success(`"${song.author} - ${song.name}" deleted successfully`);
         } else {
           this.notification.error(`Can't delete "${song.author} - ${song.name}" because it's included in one or more playlists`);
@@ -73,6 +86,12 @@ export class SongsComponent {
         this.notification.error(`Something went wrong while deleting "${song.author} - ${song.name}"`);
       }
     })
+  }
+
+  doFilter = (event: KeyboardEvent) => {
+    const element = event.currentTarget as HTMLInputElement
+    const value = element.value
+    this.songsDataSource.filter = value.trim().toLocaleLowerCase();
   }
 
 }

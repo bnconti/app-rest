@@ -2,16 +2,13 @@
 
 @import "src/app/variables"
 
-html
-  min-height: 100vh
-  display: flex
-  flex-direction: column
+html, body
+  height: 100%
+  background-color: $light-background-color
 
 body
-  min-height: 100vh
-  background-color: $light-background-color
-  display: flex
-  flex-direction: column
+  display: grid
+  grid-template-rows: 1fr auto
 
 .box
   background-color: $box-background-color

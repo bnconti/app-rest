@@ -119,7 +119,7 @@ export class AddEditSongComponent {
     this.songService.add(newSong)
       .subscribe({
         next: () => {
-          this.notification.success("New song saved succesfully!");
+          this.notification.success("New song saved successfully!");
         },
         error: () => {
           this.notification.error("Something went wrong while creating the new song.");
@@ -134,7 +134,7 @@ export class AddEditSongComponent {
     this.songService.update(updatedSong)
       .subscribe({
         next: () => {
-          this.notification.success("Song updated succesfully!");
+          this.notification.success("Song updated successfully!");
         },
         error: () => {
           this.notification.error("Something went wrong while updating the new song.");
