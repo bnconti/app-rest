@@ -5,9 +5,10 @@ import {
   Validators
 } from "@angular/forms";
 
-import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faLock, faUserPlus, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Router } from "@angular/router";
 import { SignupService } from "@services/signup.service";
+import {NotificationService} from "@services/notification.service";
 
 @Component({
   selector: 'app-signup',
@@ -18,22 +19,23 @@ export class SignupComponent {
 
   emailRegExp = new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$');
 
-  signupForm: FormGroup;
+  signUpForm: FormGroup;
 
   faEnvelope = faEnvelope;
   faLock = faLock;
+  faUserPlus = faUserPlus;
+  faArrowLeft = faArrowLeft;
 
   loading = false;
   submitted = false;
-  signupError = false;
-  signupErrorMsg = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private signupService: SignupService
+    private signupService: SignupService,
+    private notificationService: NotificationService
   ) {
-    this.signupForm = this.formBuilder.group({
+    this.signUpForm = this.formBuilder.group({
       email: [null, [Validators.required, Validators.pattern(this.emailRegExp)]],
       passwords: this.formBuilder.group({
         password: [null, [Validators.required, Validators.minLength(6)]],
@@ -46,7 +48,7 @@ export class SignupComponent {
     });
   }
 
-  get f() { return this.signupForm.controls; }
+  get f() { return this.signUpForm.controls; }
 
   get pass() {
     return this.f.passwords.get('password');
@@ -58,8 +60,10 @@ export class SignupComponent {
 
   onSubmit(): void {
     this.submitted = true;
+    console.log(this.f.email.hasError('required'));
 
-    if (this.signupForm.invalid) {
+    if (this.signUpForm.invalid) {
+      this.notificationService.error("Please, check the form fields");
       return;
     }
 
@@ -71,16 +75,23 @@ export class SignupComponent {
     this.signupService.signup(email, password)
       .subscribe({
         next: () => {
+          this.notificationService.success("New account created successfully.");
           this.router.navigate(['/login']);
         },
         error: () => {
-          this.showError("There was a problem while creating your account.");
+          this.notificationService.error("Something went wrong while creating your account.");
+          this.loading = false;
         }
       })
   }
 
   checkIfEmailIsAvailable(emailControlName: string) {
     return (formGroup: FormGroup) => {
+
+      if (formGroup.controls[emailControlName].errors) {
+        return;
+      }
+
       const email = formGroup.controls[emailControlName].value;
 
       this.signupService.emailExists(email)
@@ -112,12 +123,6 @@ export class SignupComponent {
         passConfControl.setErrors(null);
       }
     }
-  }
-
-  showError(msg: string): void {
-    this.signupError = true;
-    this.signupErrorMsg = msg;
-    this.loading = false;
   }
 
   goToLogin(): void {

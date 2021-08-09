@@ -222,10 +222,6 @@ Si no se instaló Angular con la opción -g, el comando a ejecutar es
 
 ### Cosas que faltan hacer o terminar:
 
-- Login:
-  - Remember me.
-  - Cerrar sesión cuando se cierra la ventana, o reducir el tiempo de
-    expiración del token.
 - Mejorar la lista de playlists.
   - Quizás convenga que, en lugar de mostrar todas las canciones de todas las
     listas, muestre sólo la cantidad de canciones, y permita pinchar el nombre

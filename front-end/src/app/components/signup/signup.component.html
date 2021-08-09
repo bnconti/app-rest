@@ -1,25 +1,26 @@
-<section class="hero is-primary is-fullheight is-bold">
+<section class="hero is-fullheight">
   <div class="hero-body">
     <div class="container">
       <div class="columns is-centered">
         <div class="column is-5-tablet is-4-desktop is-3-widescreen">
-          <p class="title">
-            MyMusic
-          </p>
+          <h1 class="title">
+            MyMusic - Sign up
+          </h1>
 
-          <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="box">
+          <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="box">
 
             <div class="field">
               <label class="label">Email</label>
               <div class="control has-icons-left">
-                <input formControlName="email" type="email" placeholder="e.g. usuario@gmail.com" class="input" required
+                <input formControlName="email" type="email"
+                       placeholder="e.g. user@gmail.com" class="input"
                        [ngClass]="{ 'is-danger': (f.email.touched || submitted) && f.email.errors }">
                 <span class="icon is-small is-left">
                   <fa-icon [icon]="faEnvelope"></fa-icon>
                 </span>
                 <div *ngIf="f.email.touched || submitted" class="help is-danger">
                   <div *ngIf="f.email.hasError('required')">An email is required</div>
-                  <div *ngIf="f.email.hasError('pattern')">The field doesn't contain a valid email</div>
+                  <div *ngIf="f.email.hasError('pattern')">The field doesn't contain a valid email address</div>
                   <div *ngIf="f.email.hasError('unavailable')">That email address is already in use</div>
                 </div>
               </div>
@@ -30,7 +31,8 @@
               <div class="field">
                 <label class="label">Password</label>
                 <div class="control has-icons-left">
-                  <input formControlName="password" type="password" placeholder="*******" class="input" required
+                  <input formControlName="password" type="password"
+                         placeholder="********" class="input"
                          [ngClass]="{ 'is-danger': (pass!.touched || submitted) && pass!.errors! }">
                   <span class="icon is-small is-left">
                     <fa-icon [icon]="faLock"></fa-icon>
@@ -45,7 +47,8 @@
               <div class="field">
                 <label class="label">Password confirmation</label>
                 <div class="control has-icons-left">
-                  <input formControlName="passwordConfirmation" type="password" placeholder="*******" class="input" required
+                  <input formControlName="passwordConfirmation" type="password"
+                         placeholder="********" class="input" required
                          [ngClass]="{ 'is-danger': (passConf!.touched || submitted) && passConf!.errors! }">
                   <span class="icon is-small is-left">
                     <fa-icon [icon]="faLock"></fa-icon>
@@ -62,19 +65,21 @@
             <hr>
 
             <div class="field is-grouped">
-              <div *ngIf="signupError" class="help is-danger">
-                {{ signupErrorMsg }}
-              </div>
-
               <div class="control">
-                <button [disabled]="loading" class="button is-success is-light" (click)="goToLogin()">
-                  Go back
+                <button [disabled]="loading" class="button is-outlined" (click)="goToLogin()">
+                  <span class="icon-text">
+                    <span class="icon"><fa-icon [icon]="faArrowLeft"></fa-icon></span>
+                    <span>Go back</span>
+                  </span>
                 </button>
               </div>
 
               <div class="control">
-                <button [disabled]="loading" type="submit" class="button is-success">
-                  Signup
+                <button [disabled]="loading" type="submit" class="button button-main">
+                  <span class="icon-text">
+                    <span class="icon"><fa-icon [icon]="faUserPlus"></fa-icon></span>
+                    <span>Sign up</span>
+                  </span>
                 </button>
               </div>
             </div>

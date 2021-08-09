@@ -10,7 +10,7 @@ export class HomeComponent {
   constructor() { }
 
   getEmail(): string {
-    return JSON.parse(localStorage.getItem('currentUser')!).email
+    return JSON.parse(sessionStorage.getItem('currentUser')!).email
   }
 
 }
