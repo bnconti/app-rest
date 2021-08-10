@@ -19,7 +19,7 @@ import {MatPaginator} from "@angular/material/paginator";
 export class PlaylistsComponent {
 
   playlistsDataSource: MatTableDataSource<Playlist> = new MatTableDataSource;
-  displayedColumns: string[] = ['name', 'author', 'songs', 'edit', 'delete'];
+  displayedColumns: string[] = ['name', 'user', 'songs', 'edit', 'delete'];
 
   faPen = faPen;
   faTrash = faTrash;

@@ -227,7 +227,6 @@ Si no se instaló Angular con la opción -g, el comando a ejecutar es
   - Cerrar sesión cuando se cierra la ventana, o reducir el tiempo de
     expiración del token.
 - Lista de playlists:
-  - Terminar
   - Opción (u otra página) para ver sólo las listas creadas por el usuario
     actual ?
 - Mostrar error si no se está ejecutando el back-end?
