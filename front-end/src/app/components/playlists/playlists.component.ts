@@ -19,7 +19,7 @@ import {MatPaginator} from "@angular/material/paginator";
 export class PlaylistsComponent {
 
   playlistsDataSource: MatTableDataSource<Playlist> = new MatTableDataSource;
-  displayedColumns: string[] = ['name', 'user', 'songs', 'edit', 'delete'];
+  displayedColumns: string[] = ['name', 'user.email', 'songs', 'edit', 'delete'];
 
   faPen = faPen;
   faTrash = faTrash;
@@ -36,12 +36,19 @@ export class PlaylistsComponent {
     this.getPlaylists();
   }
 
+  getProperty = (obj: any, path: string) => (
+    path.split('.').reduce((o, p) => o && o[p], obj)
+  )
+
   getPlaylists() {
     this.playlistsService.getPlaylists()
       .subscribe((data: Playlist[]) => {
         this.playlistsDataSource = new MatTableDataSource(data);
         this.playlistsDataSource.paginator = this.paginator;
         this.playlistsDataSource.sort = this.sort;
+        // Esto es para poder ordenar tipos compuestos (user.email)
+        // https://stackoverflow.com/questions/48891174/angular-material-2-datatable-sorting-with-nested-objects
+        this.playlistsDataSource.sortingDataAccessor = (obj, path) => this.getProperty(obj, path);
       });
   }
 

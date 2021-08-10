@@ -19,7 +19,7 @@
           <mat-cell *matCellDef="let p"> {{p.name}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="user">
+        <ng-container matColumnDef="user.email">
           <mat-header-cell *matHeaderCellDef mat-sort-header>User</mat-header-cell>
           <mat-cell *matCellDef="let p"> {{p.user.email}} </mat-cell>
         </ng-container>
@@ -27,7 +27,7 @@
         <ng-container matColumnDef="songs">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Songs</mat-header-cell>
           <mat-cell *matCellDef="let p"><details>
-            <summary>{{p.songs.length}}</summary>
+            <summary> {{p.songs.length}} </summary>
             <!-- Uso index para numerar las canciones -->
             <p *ngFor="let s of p.songs; let i=index" class="song">
               {{i + 1}}. {{s.name}} - {{s.author}} - {{s.genre}}
