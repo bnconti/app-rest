@@ -39,11 +39,16 @@ export class SongsComponent {
 
   getSongs() {
     this.songService.getSongs()
-      .subscribe((data: Song[]) => {
-        this.songsDataSource = new MatTableDataSource(data);
-        this.songsDataSource.paginator = this.paginator;
-        this.songsDataSource.sort = this.sort;
-      });
+      .subscribe(
+        (data: Song[]) => {
+          this.songsDataSource = new MatTableDataSource(data);
+          this.songsDataSource.paginator = this.paginator;
+          this.songsDataSource.sort = this.sort;
+        },
+        error => {
+          this.notification.error("This is embarrasing...\nSomething went wrong while retrieving the songs list.\nPerhaps the service is not running?");
+        }
+      );
   }
 
   goToEditSong(songId: string) {

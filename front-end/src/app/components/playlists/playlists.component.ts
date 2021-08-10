@@ -46,23 +46,34 @@ export class PlaylistsComponent {
 
   getUserPlaylists() {
     this.playlistsService.getUserPlaylists()
-      .subscribe((data: Playlist[]) => {
-        this.playlistsDataSource = new MatTableDataSource(data);
-        this.playlistsDataSource.paginator = this.paginator;
-        this.playlistsDataSource.sort = this.sort;
-      });
+      .subscribe(
+        (data: Playlist[]) => {
+          this.playlistsDataSource = new MatTableDataSource(data);
+          this.playlistsDataSource.paginator = this.paginator;
+          this.playlistsDataSource.sort = this.sort;
+        },
+        error => { this.showError(); }
+      );
   }
 
   getAllPlaylists() {
     this.playlistsService.getAllPlaylists()
-      .subscribe((data: Playlist[]) => {
-        this.playlistsDataSource = new MatTableDataSource(data);
-        this.playlistsDataSource.paginator = this.paginator;
-        this.playlistsDataSource.sort = this.sort;
-        // Esto es para poder ordenar tipos compuestos (user.email)
-        // https://stackoverflow.com/questions/48891174/angular-material-2-datatable-sorting-with-nested-objects
-        this.playlistsDataSource.sortingDataAccessor = (obj, path) => this.getProperty(obj, path);
-      });
+      .subscribe(
+        (data: Playlist[]) => {
+          this.playlistsDataSource = new MatTableDataSource(data);
+          this.playlistsDataSource.paginator = this.paginator;
+          this.playlistsDataSource.sort = this.sort;
+          // Esto es para poder ordenar tipos compuestos (user.email)
+          // https://stackoverflow.com/questions/48891174/angular-material-2-datatable-sorting-with-nested-objects
+          this.playlistsDataSource.sortingDataAccessor = (obj, path) => this.getProperty(obj, path);
+        },
+        error => { this.showError(); }
+      );
+  }
+
+  showError() {
+    // FIXME: Los saltos de línea son ignorados
+    this.notification.error("This is embarrasing...\nSomething went wrong while retrieving the playlists.\nPerhaps the service is not running?");
   }
 
   goToEditPlaylist(playlistId: string) {

@@ -51,21 +51,31 @@ export class AddEditSongComponent {
     if (!this.isAddMode) {
       // Cargo los valores en caso de estar en modo edición
       this.songService.getById(this.songId)
-        .subscribe(song => {
-          this.songForm.patchValue(song);
+        .subscribe(
+          song => {
+            this.songForm.patchValue(song);
 
-          // El genre hay que definirlo a mano porque trae un string en vez del ID
-          const genre = this.genres.find(genre => genre.desc == song.genre);
-          this.songForm.controls['genre'].patchValue(genre!.id);
-        });
+            // Al género hay que definirlo a mano porque traemos un string en vez del ID
+            const genre = this.genres.find(genre => genre.desc == song.genre);
+            this.songForm.controls['genre'].patchValue(genre!.id);
+          },
+          error => {
+            this.notification.error("Something went wrong while retrieving the song.\nPerhaps the service is not running?");
+          }
+        );
     }
   }
 
   getAuthors() {
     this.songService.getAuthors()
-      .subscribe((authors: String[]) => {
-        this.authors = authors;
-      });
+      .subscribe(
+        (authors: String[]) => {
+          this.authors = authors;
+        },
+        error => {
+          this.notification.error("Something went wrong while retrieving the authors.\nPerhaps the service is not running?");
+        }
+      );
   }
 
   filterAuthors() {
@@ -111,6 +121,10 @@ export class AddEditSongComponent {
             const song: Song = {id: this.songId, name: name, author: author, genre: genre};
             this.isAddMode ? this.createSong(song) : this.updateSong(song);
           }
+        },
+        error: () => {
+          this.loading = false;
+          this.notification.error("Something went wrong while creating the new song.\nPerhaps the service is not running?");
         }
       });
   }

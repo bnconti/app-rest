@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 
 import static ar.edu.unnoba.pdyc.apprest.security.SecurityConstants.*;
 
@@ -48,10 +49,15 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(HEADER_STRING);
         if (token == null) return null;
 
-        String userEmail = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
-                .build()
-                .verify(token.replace(TOKEN_PREFIX, ""))
-                .getSubject();
+        String userEmail = null;
+        try {
+            userEmail = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
+                           .build()
+                           .verify(token.replace(TOKEN_PREFIX, ""))
+                           .getSubject();
+        } catch (JWTVerificationException e) {
+            return null;
+        }
 
         if (userEmail == null) return null;
 

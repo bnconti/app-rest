@@ -220,18 +220,13 @@ el servidor y abrir la aplicación (por ahora, la URL es
 Si no se instaló Angular con la opción -g, el comando a ejecutar es
 `node_modules/.bin/ng serve -o`.
 
-### Cosas que faltan hacer o terminar:
+### Tareas pendientes:
 
-- Login:
-  - Remember me.
-  - Cerrar sesión cuando se cierra la ventana, o reducir el tiempo de
-    expiración del token.
-- Lista de playlists:
-  - Opción (u otra página) para ver sólo las listas creadas por el usuario
-    actual ?
-- Mostrar error si no se está ejecutando el back-end?
-- Implementar toda la funcionalidad del back-end en el front-end:
+- Terminar de implementar la funcionalidad del back-end en el front-end:
   - Crear, renombrar y eliminar playlists.
   - Agregar y quitar canciones de una playlist.
-- Canciones:
-  - Utilizar roles en el frontend para que los usuarios comunes no pueden hacer ABM?
+- Opcionales:
+  - En los DTO de canciones usar el ID del genero para evitar buscarlo en el frontend
+  - Utilizar roles en el frontend para que los usuarios comunes no puedan hacer
+    bajas y modificaciones.
+

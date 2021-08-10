@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/services/authentication.service';
 import { faEnvelope, faLock, faDoorOpen, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import {NotificationService} from "@services/notification.service";
+import { NotificationService } from "@services/notification.service";
 
 @Component({
   selector: 'app-login',
@@ -48,11 +48,10 @@ export class LoginComponent implements OnInit {
   get f() { return this.loginForm.controls; }
 
   onSubmit(): void {
-
     this.submitted = true;
 
     if (this.loginForm.invalid) {
-      this.notificationService.error("Please, check the form fields");
+      this.notificationService.error("Please, check the form fields.");
       return;
     }
 
@@ -62,16 +61,22 @@ export class LoginComponent implements OnInit {
     const password = this.loginForm.controls['password'].value;
 
     this.authenticationService.login(email, password)
-      .subscribe({
-        next: () => {
-          this.notificationService.success("Log in success")
+      .subscribe(
+        next => {
+          this.notificationService.success("Logged in successfully!")
           this.router.navigate(['/home']);
         },
-        error: () => {
-          this.notificationService.error("Invalid username or password, please try again.");
+        error => {
+          // Esto es un parche bastante feo...
+          // Esta es la descripción del error que da si no se puede conectar al servicio
+          if (error == "Unknown Error") {
+            this.notificationService.error("Something went wrong when trying to log you in. Perhaps the service is not running?");
+          } else {
+            this.notificationService.error("Invalid username or password. Please, try again.");
+          }
           this.loading = false;
         }
-      })
+      )
   }
 
   goToSignup() {

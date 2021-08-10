@@ -8,7 +8,7 @@ import {
 import { faEnvelope, faLock, faUserPlus, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Router } from "@angular/router";
 import { SignupService } from "@services/signup.service";
-import {NotificationService} from "@services/notification.service";
+import { NotificationService } from "@services/notification.service";
 
 @Component({
   selector: 'app-signup',
@@ -60,7 +60,7 @@ export class SignupComponent {
 
   onSubmit(): void {
     this.submitted = true;
-    console.log(this.f.email.hasError('required'));
+    //console.log(this.f.email.hasError('required'));
 
     if (this.signUpForm.invalid) {
       this.notificationService.error("Please, check the form fields");
@@ -68,43 +68,21 @@ export class SignupComponent {
     }
 
     this.loading = true;
-
     const email = this.f.email.value;
     const password = this.pass!.value;
 
     this.signupService.signup(email, password)
       .subscribe({
         next: () => {
+          this.loading = false;
           this.notificationService.success("New account created successfully.");
           this.router.navigate(['/login']);
         },
         error: () => {
-          this.notificationService.error("Something went wrong while creating your account.");
           this.loading = false;
+          this.notificationService.error("Something went wrong while creating your account.\nPerhaps the service is not running?");
         }
       })
-  }
-
-  checkIfEmailIsAvailable(emailControlName: string) {
-    return (formGroup: FormGroup) => {
-
-      if (formGroup.controls[emailControlName].errors) {
-        return;
-      }
-
-      const email = formGroup.controls[emailControlName].value;
-
-      this.signupService.emailExists(email)
-        .subscribe({
-          next: (res) => {
-            if (res) {
-              this.f.email.setErrors({ unavailable : true})
-            } else {
-              this.f.email.setErrors(null)
-            }
-          }
-        })
-    }
   }
 
   checkIfPasswordsMatch(passControlName: string, passConfControlName: string) {
@@ -122,6 +100,31 @@ export class SignupComponent {
       } else {
         passConfControl.setErrors(null);
       }
+    }
+  }
+
+  checkIfEmailIsAvailable(emailControlName: string) {
+    return (formGroup: FormGroup) => {
+
+    if (formGroup.controls[emailControlName].errors) {
+      return;
+    }
+
+    const email = formGroup.controls[emailControlName].value;
+
+    this.signupService.emailExists(email)
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.f.email.setErrors({ unavailable : true})
+          } else {
+            this.f.email.setErrors(null)
+          }
+        },
+        // Si no funciona esto se muestra un error en onSubmit()
+        error: () => {
+        }
+      })
     }
   }
 

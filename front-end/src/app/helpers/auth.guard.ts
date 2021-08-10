@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Router, CanActivate } from '@angular/router';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 
 /**
  * El auth guard previene accesos no autorizado sobre las rutas que se quiere proteger. Para esto,
@@ -11,10 +12,10 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
  * app-routing.module.ts
  */
 
- @Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
     constructor(
-        private router: Router,
+        private router: Router
     ) { }
 
     canActivate() {

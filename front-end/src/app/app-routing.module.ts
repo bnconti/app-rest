@@ -6,8 +6,8 @@ import { PlaylistsComponent } from "@app/components/playlists/playlists.componen
 import { LoginComponent } from "@app/components/login/login.component";
 import { SignupComponent } from "@app/components/signup/signup.component";
 import { AuthGuard } from "@app/helpers/auth.guard";
-import {SongsComponent} from "@app/components/songs/songs.component";
-import {AddEditSongComponent} from "@app/components/songs/add-edit-song/add-edit-song.component";
+import { SongsComponent } from "@app/components/songs/songs.component";
+import { AddEditSongComponent } from "@app/components/songs/add-edit-song/add-edit-song.component";
 
 /**
  * El enrutamiento de la aplicación se configura a partir del arreglo 'routes'. Cada ruta es mapeada
