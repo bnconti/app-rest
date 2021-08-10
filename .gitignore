@@ -29,3 +29,6 @@ build/
 .vscode/
 
 *swp
+
+### npm ###
+package-lock.json

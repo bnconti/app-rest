@@ -33,10 +33,10 @@ export class SongsComponent {
     public dialog: MatDialog,
     private notification: NotificationService
   ) {
-    this.getPlaylists();
+    this.getSongs();
   }
 
-  getPlaylists() {
+  getSongs() {
     this.songService.getSongs()
       .subscribe((data: Song[]) => {
         this.songsDataSource = new MatTableDataSource(data);

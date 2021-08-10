@@ -226,15 +226,11 @@ Si no se instaló Angular con la opción -g, el comando a ejecutar es
   - Remember me.
   - Cerrar sesión cuando se cierra la ventana, o reducir el tiempo de
     expiración del token.
-- Mejorar la lista de playlists.
-  - Quizás convenga que, en lugar de mostrar todas las canciones de todas las
-    listas, muestre sólo la cantidad de canciones, y permita pinchar el nombre
-    para ver el detalle y permitir el ABM en otra página.
-    O que se puedan ver las canciones, pero desplegando algo, no todo junto...
+- Lista de playlists:
+  - Terminar
   - Opción (u otra página) para ver sólo las listas creadas por el usuario
     actual ?
-  - Si es sencillo, opciones para filtrar, ordenar y paginar (capaz que usando
-    Angular Material UI?).
+- Mostrar error si no se está ejecutando el back-end?
 - Implementar toda la funcionalidad del back-end en el front-end:
   - Crear, renombrar y eliminar playlists.
   - Agregar y quitar canciones de una playlist.

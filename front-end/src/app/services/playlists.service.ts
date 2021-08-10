@@ -11,16 +11,37 @@ import { Playlist } from '@app/models/Playlist';
  *
  * Obtiene las playlists del servicio REST.
  */
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class PlaylistsService {
-  constructor(private http: HttpClient) {}
+
+  private static readonly url = `${environment.API_URL}/playlists`;
+
+  constructor(private http: HttpClient) {
+  }
 
   getPlaylists(): Observable<Playlist[]> {
-    const url = `${environment.API_URL}/playlists`
-
-    return this.http.get<Playlist[]>(url)
+    return this.http.get<Playlist[]>(PlaylistsService.url)
       .pipe(map(res => {
 	return res;
       }));
   }
+
+  getById(playlistId: bigint): Observable<Playlist> {
+    const url = `${PlaylistsService.url}/find/${playlistId}`;
+    return this.http.get<Playlist>(url)
+      .pipe(map(res => {
+        return res;
+      }));
+  }
+
+  delete(playlistId: bigint): Observable<Boolean> {
+    const url = `${PlaylistsService.url}/${playlistId}`;
+    return this.http.delete<Boolean>(url)
+      .pipe(map(res => {
+        return res;
+      }));
+  }
+
 }
