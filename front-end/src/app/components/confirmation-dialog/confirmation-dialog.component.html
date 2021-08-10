@@ -6,7 +6,12 @@
 <mat-dialog-actions align="end">
   <div class="field is-grouped">
     <div class="control">
-      <button mat-button class="button" mat-dialog-close>Cancel</button>
+      <button mat-button class="button" mat-dialog-close>
+        <span class="icon-text">
+          <span class="icon"><fa-icon [icon]="faTimes"></fa-icon></span>
+          <span>Cancel</span>
+        </span>
+      </button>
     </div>
     <div class="control">
       <button mat-button class="button button-main" [mat-dialog-close]="true">{{data.confirmationMsg}}</button>

@@ -22,21 +22,21 @@ export class AuthenticationService {
     login(email: string, password: string): Observable<HttpResponse<any>> {
         const url = `${environment.API_URL}/auth`;
         const credentials = { email, password };
-        
+
         return this.http.post<any>(url, credentials, { observe: 'response' })
             .pipe(map(res => {
                 if (res.headers.get("Authorization")) {
                     const user = new User(credentials.email, res.headers.get("Authorization")!);
 
-                    // guardar el usuario en el localStorage para preservar su sesión
-                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    // guardar el usuario en el sessionStorage para preservar su sesión
+                    sessionStorage.setItem('currentUser', JSON.stringify(user));
                 }
                 return res;
             }));
     }
 
     logout() {
-        // remover token del localStorage
-        localStorage.removeItem('currentUser');
+      // remover token del sessionStorage
+      sessionStorage.removeItem('currentUser');
     }
 }

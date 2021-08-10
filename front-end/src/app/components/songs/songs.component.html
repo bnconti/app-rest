@@ -6,9 +6,12 @@
       <h1 class="title">Songs list</h1>
 
       <div class="field">
-        <div class="control">
+        <div class="control has-icons-left">
           <input class="input is-medium" type="text"
                  placeholder="Filter" (keyup)="doFilter($event)">
+          <span class="icon is-small is-left">
+                  <fa-icon [icon]="faSearch"></fa-icon>
+          </span>
         </div>
       </div>
 

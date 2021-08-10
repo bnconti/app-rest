@@ -1,7 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {SongsService} from "@services/songs.service";
 import {Song} from "@app/models/Song";
-import {faPen, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {faPen, faTrash, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmationDialogComponent} from "@app/components/confirmation-dialog/confirmation-dialog.component";
@@ -23,6 +23,7 @@ export class SongsComponent {
 
   faPen = faPen;
   faTrash = faTrash;
+  faSearch = faSearch;
 
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;

@@ -6,8 +6,8 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
  * implementa la interfaz CanActivate con su método canActivate(), que retorna verdadero cuando una
  * ruta está permitida para cierto usuario si se cumple cierta condición. Caso contrario, retorna
  * falso y el acceso se bloquea.
- * 
- * El auth guard se aplica sobre las rutas deseadas (por ej. /home) en el archivo de configuración 
+ *
+ * El auth guard se aplica sobre las rutas deseadas (por ej. /home) en el archivo de configuración
  * app-routing.module.ts
  */
 
@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
     ) { }
 
     canActivate() {
-        if (localStorage.getItem("currentUser")) {
+        if (sessionStorage.getItem("currentUser")) {
             // si hay un usuario guardado es porque pudo ingresar, dejarlo pasar
             return true;
         } else {
