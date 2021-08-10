@@ -17,11 +17,19 @@ import { Playlist } from '@app/models/Playlist';
 export class PlaylistsService {
 
   private static readonly url = `${environment.API_URL}/playlists`;
+  private static readonly userUrl = `${environment.API_URL}/userplaylists`;
 
   constructor(private http: HttpClient) {
   }
 
-  getPlaylists(): Observable<Playlist[]> {
+  getUserPlaylists(): Observable<Playlist[]> {
+    return this.http.get<Playlist[]>(PlaylistsService.userUrl)
+      .pipe(map(res => {
+	return res;
+      }));
+  }
+
+  getAllPlaylists(): Observable<Playlist[]> {
     return this.http.get<Playlist[]>(PlaylistsService.url)
       .pipe(map(res => {
 	return res;

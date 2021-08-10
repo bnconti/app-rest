@@ -7,6 +7,14 @@
 
       <div class="field">
         <div class="control">
+          <mat-checkbox formControlName="showAllUsers" (change)="checkShowAllUsers($event)">
+            Show playlists of all users
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="control">
           <input class="input is-medium" type="text"
                  placeholder="Filter" (keyup)="doFilter($event)">
         </div>

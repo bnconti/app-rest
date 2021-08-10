@@ -19,12 +19,13 @@ import { SongsComponent } from './components/songs/songs.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
-import {MatDialogModule} from "@angular/material/dialog";
-import {MatSnackBarModule} from "@angular/material/snack-bar";
-import {MatTableModule} from "@angular/material/table";
-import {MatPaginatorModule} from "@angular/material/paginator";
-import {MatSortModule} from "@angular/material/sort";
-import {MatInputModule} from "@angular/material/input";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatTableModule } from "@angular/material/table";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSortModule } from "@angular/material/sort";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatInputModule } from "@angular/material/input";
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import {MatInputModule} from "@angular/material/input";
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
+    MatCheckboxModule,
     MatInputModule,
   ],
   providers: [

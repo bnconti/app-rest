@@ -1,15 +1,16 @@
-import {Component, ViewChild} from '@angular/core';
-import {PlaylistsService} from '@app/services/playlists.service';
-import {Playlist} from '@app/models/Playlist';
-import {faPen, faTrash} from '@fortawesome/free-solid-svg-icons';
-import {Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
-import {ConfirmationDialogComponent} from "@app/components/confirmation-dialog/confirmation-dialog.component";
-import {DialogData} from "@app/interfaces/DialogData";
-import {NotificationService} from "@services/notification.service";
-import {MatTableDataSource} from "@angular/material/table";
-import {MatSort} from "@angular/material/sort";
-import {MatPaginator} from "@angular/material/paginator";
+import { Component, ViewChild } from '@angular/core';
+import { PlaylistsService } from '@app/services/playlists.service';
+import { Playlist } from '@app/models/Playlist';
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Router } from "@angular/router";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmationDialogComponent } from "@app/components/confirmation-dialog/confirmation-dialog.component";
+import { DialogData } from "@app/interfaces/DialogData";
+import { NotificationService } from "@services/notification.service";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatSort } from "@angular/material/sort";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-playlists',
@@ -19,7 +20,10 @@ import {MatPaginator} from "@angular/material/paginator";
 export class PlaylistsComponent {
 
   playlistsDataSource: MatTableDataSource<Playlist> = new MatTableDataSource;
-  displayedColumns: string[] = ['name', 'user.email', 'songs', 'edit', 'delete'];
+
+  private displayedColumnsWithUser: string[] = ['name', 'user.email', 'songs', 'edit', 'delete'];
+  private displayedColumnsWithoutUser: string[] = ['name', 'songs', 'edit', 'delete'];
+  displayedColumns: string[] = this.displayedColumnsWithoutUser;
 
   faPen = faPen;
   faTrash = faTrash;
@@ -33,15 +37,24 @@ export class PlaylistsComponent {
     public dialog: MatDialog,
     private notification: NotificationService
   ) {
-    this.getPlaylists();
+    this.getUserPlaylists();
   }
 
   getProperty = (obj: any, path: string) => (
     path.split('.').reduce((o, p) => o && o[p], obj)
   )
 
-  getPlaylists() {
-    this.playlistsService.getPlaylists()
+  getUserPlaylists() {
+    this.playlistsService.getUserPlaylists()
+      .subscribe((data: Playlist[]) => {
+        this.playlistsDataSource = new MatTableDataSource(data);
+        this.playlistsDataSource.paginator = this.paginator;
+        this.playlistsDataSource.sort = this.sort;
+      });
+  }
+
+  getAllPlaylists() {
+    this.playlistsService.getAllPlaylists()
       .subscribe((data: Playlist[]) => {
         this.playlistsDataSource = new MatTableDataSource(data);
         this.playlistsDataSource.paginator = this.paginator;
@@ -100,4 +113,15 @@ export class PlaylistsComponent {
     const value = element.value
     this.playlistsDataSource.filter = value.trim().toLocaleLowerCase();
   }
+
+  checkShowAllUsers(event: MatCheckboxChange) {
+    if (event.checked) {
+      this.getAllPlaylists();
+      this.displayedColumns = this.displayedColumnsWithUser;
+    } else {
+      this.getUserPlaylists();
+      this.displayedColumns = this.displayedColumnsWithoutUser;
+    }
+  }
+
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import ar.edu.unnoba.pdyc.apprest.resource.PlaylistsResourceAsync;
 import ar.edu.unnoba.pdyc.apprest.resource.SongsResourceAsync;
 import ar.edu.unnoba.pdyc.apprest.resource.UserResourceSync;
+import ar.edu.unnoba.pdyc.apprest.resource.UserPlaylistsResourceAsync;
 
 @Component
 @ApplicationPath(AppRestApplication.APP_PATH)
@@ -17,6 +18,7 @@ public class JerseyConfig extends ResourceConfig {
         register(SongsResourceAsync.class);
         //register(PlaylistsResourceSync.class);
         register(PlaylistsResourceAsync.class);
+        register(UserPlaylistsResourceAsync.class);
         register(SongsResourceAsync.class);
         register(UserResourceSync.class);
     }
