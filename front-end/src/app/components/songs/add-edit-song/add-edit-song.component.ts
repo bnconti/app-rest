@@ -12,7 +12,7 @@ import { NotificationService } from "@services/notification.service";
 @Component({
   selector: 'app-add-edit-song',
   templateUrl: './add-edit-song.component.html',
-  styleUrls: ['./add-song.component.sass']
+  styleUrls: ['./add-edit-song.component.sass']
 })
 export class AddEditSongComponent {
 
@@ -113,6 +113,7 @@ export class AddEditSongComponent {
     this.songService.getByAuthorAndName(author, name)
       .subscribe({
         next: (existingSong: Song) => {
+          this.loading = false;
           if (existingSong && (this.isAddMode || this.songId != existingSong.id) ) {
             this.notification.error("There is already a song with that name and author.");
           } else {
@@ -121,10 +122,8 @@ export class AddEditSongComponent {
           }
         },
         error: () => {
-          this.notification.error("Something went wrong while creating the new song.\nPerhaps the service is not running?");
-        },
-        complete: () => {
           this.loading = false;
+          this.notification.error("Something went wrong while creating the new song.\nPerhaps the service is not running?");
         }
       });
   }
@@ -133,16 +132,13 @@ export class AddEditSongComponent {
     this.songService.add(newSong)
       .subscribe({
         next: () => {
+          this.loading = false;
           this.notification.success("New song saved successfully!");
           // Redirigir a la página anterior
           window.history.back();
         },
         error: () => {
-          this.loading = false;
           this.notification.error("Something went wrong while creating the new song.");
-        },
-        complete: () => {
-          this.loading = false;
         }
       })
   }
@@ -151,15 +147,13 @@ export class AddEditSongComponent {
     this.songService.update(updatedSong)
       .subscribe({
         next: () => {
+          this.loading = false;
           this.notification.success("Song updated successfully!");
           window.history.back();
         },
         error: () => {
           this.loading = false;
           this.notification.error("Something went wrong while updating the song.");
-        },
-        complete: () => {
-          this.loading = false;
         }
       })
   }

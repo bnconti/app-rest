@@ -76,7 +76,7 @@ export class PlaylistsComponent {
   }
 
   showError() {
-    // FIXME: Los saltos de línea son ignorados
+    // Pongo los saltos de línea donde irían, pero son ignorados...
     this.notification.error("This is embarrasing...\nSomething went wrong while retrieving the playlists.\nPerhaps the service is not running?");
   }
 

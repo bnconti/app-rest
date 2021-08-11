@@ -19,12 +19,13 @@ import {MatPaginator} from "@angular/material/paginator";
 @Component({
   selector: 'app-add-edit-playlist',
   templateUrl: './add-edit-playlist.component.html',
-  styleUrls: ['./add-playlist.component.sass']
+  styleUrls: ['./add-edit-playlist.component.sass']
 })
 export class AddEditPlaylistComponent {
 
   isAddMode: boolean = true;
   playlistId: string;
+  playlistName: string | undefined;
 
   playlistForm: FormGroup;
 
@@ -62,6 +63,7 @@ export class AddEditPlaylistComponent {
         .subscribe(
           (playlist: Playlist) => {
             this.playlistForm.patchValue(playlist);
+	    this.playlistName = playlist.name;
             this.songsDataSource = new MatTableDataSource(playlist.songs);
             this.songsDataSource.paginator = this.paginator;
           },
@@ -86,11 +88,11 @@ export class AddEditPlaylistComponent {
 
     this.loading = true;
 
-    const name = this.playlistForm.controls['name'].value.trim();
+    const newName = this.playlistForm.controls['name'].value.trim();
     //const userEmail = JSON.parse(sessionStorage.getItem("currentUser")!).email;
 
     if (!this.isAddMode) {
-      this.renamePlaylist(name);
+      this.renamePlaylist(newName);
     }
 
     /* TODO
@@ -118,6 +120,7 @@ export class AddEditPlaylistComponent {
     this.playlistsService.add(newPlaylist)
       .subscribe({
         next: () => {
+          this.loading = false;
           this.notification.success("New playlist saved successfully!");
           // Redirigir a la página anterior
           window.history.back();
@@ -125,26 +128,28 @@ export class AddEditPlaylistComponent {
         error: () => {
           this.loading = false;
           this.notification.error("Something went wrong while creating the new playlist.");
-        },
-        complete: () => {
-          this.loading = false;
         }
       })
   }
 
   renamePlaylist(newName: string) {
+    // Verificar si es necesario renombrar
+    if (this.playlistName == newName) {
+      this.loading = false;
+      this.notification.error("You did not change the playlist name.");
+      return;
+    }
+
     this.playlistsService.rename(this.playlistId, newName)
       .subscribe({
         next: () => {
-          this.notification.success("Playlist updated successfully!");
-          window.history.back();
+          this.loading = false;
+          this.notification.success("Playlist renamed successfully!");
+          this.playlistName = newName;
         },
         error: () => {
           this.loading = false;
           this.notification.error("Something went wrong while renaming the playlist.");
-        },
-        complete: () => {
-          this.loading = false;
         }
       })
   }
