@@ -21,9 +21,9 @@ export class PlaylistsComponent {
 
   playlistsDataSource: MatTableDataSource<Playlist> = new MatTableDataSource;
 
-  private displayedColumnsWithUser: string[] = ['name', 'user.email', 'songs', 'edit', 'delete'];
-  private displayedColumnsWithoutUser: string[] = ['name', 'songs', 'edit', 'delete'];
-  displayedColumns: string[] = this.displayedColumnsWithoutUser;
+  private allUsersDisplayedColumns: string[] = ['name', 'user.email', 'songs'];
+  private userDisplayedColumns: string[] = ['name', 'songs', 'edit', 'delete'];
+  displayedColumns: string[] = this.userDisplayedColumns;
 
   faPen = faPen;
   faTrash = faTrash;
@@ -135,10 +135,10 @@ export class PlaylistsComponent {
   checkShowAllUsers(event: MatCheckboxChange) {
     if (event.checked) {
       this.getAllPlaylists();
-      this.displayedColumns = this.displayedColumnsWithUser;
+      this.displayedColumns = this.allUsersDisplayedColumns;
     } else {
       this.getUserPlaylists();
-      this.displayedColumns = this.displayedColumnsWithoutUser;
+      this.displayedColumns = this.userDisplayedColumns;
     }
   }
 

@@ -7,6 +7,7 @@ import { PlaylistsService } from "@services/playlists.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { Observable } from "rxjs";
+import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmationDialogComponent } from "@app/components/confirmation-dialog/confirmation-dialog.component";
 import { DialogData } from "@app/interfaces/DialogData";
@@ -26,6 +27,7 @@ export class AddEditPlaylistComponent {
   isAddMode: boolean = true;
   playlistId: string;
   playlistName: string | undefined;
+  loggedUser: string;
 
   playlistForm: FormGroup;
 
@@ -47,11 +49,13 @@ export class AddEditPlaylistComponent {
     private playlistsService: PlaylistsService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
+    private router: Router,
     public dialog: MatDialog,
     private notification: NotificationService
   ) {
     this.playlistId = this.route.snapshot.params['id'];
     this.isAddMode = !this.playlistId;
+    this.loggedUser = JSON.parse(sessionStorage.getItem("currentUser")!).email;
 
     this.playlistForm = this.formBuilder.group({
       name: ['', [Validators.required]]
@@ -62,10 +66,17 @@ export class AddEditPlaylistComponent {
       this.playlistsService.getById(this.playlistId)
         .subscribe(
           (playlist: Playlist) => {
-            this.playlistForm.patchValue(playlist);
-	    this.playlistName = playlist.name;
-            this.songsDataSource = new MatTableDataSource(playlist.songs);
-            this.songsDataSource.paginator = this.paginator;
+            // Primero me fijo si coincide el usuario actual con el que creó la lista
+            if (this.loggedUser != playlist.user.email) {
+              // No coincide, probablemente ingresó la URL manualmente...
+              // Enviarlo al listado de playlists
+              this.router.navigate(["home/playlists"]); 
+            } else {
+              this.playlistForm.patchValue(playlist);
+              this.playlistName = playlist.name;
+              this.songsDataSource = new MatTableDataSource(playlist.songs);
+              this.songsDataSource.paginator = this.paginator;
+            }
           },
           error => {
             this.notification.error("Something went wrong while retrieving the playlist.\nPerhaps the service is not running?");
@@ -89,7 +100,6 @@ export class AddEditPlaylistComponent {
     this.loading = true;
 
     const newName = this.playlistForm.controls['name'].value.trim();
-    //const userEmail = JSON.parse(sessionStorage.getItem("currentUser")!).email;
 
     if (!this.isAddMode) {
       this.renamePlaylist(newName);
@@ -201,6 +211,5 @@ export class AddEditPlaylistComponent {
     const value = element.value;
     this.songsDataSource.filter = value.trim().toLocaleLowerCase();
   }
-
 
 }
