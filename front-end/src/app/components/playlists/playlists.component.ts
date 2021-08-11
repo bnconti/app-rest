@@ -51,6 +51,7 @@ export class PlaylistsComponent {
           this.playlistsDataSource = new MatTableDataSource(data);
           this.playlistsDataSource.paginator = this.paginator;
           this.playlistsDataSource.sort = this.sort;
+          this.doFilter();
         },
         error => { this.showError(); }
       );
@@ -66,6 +67,7 @@ export class PlaylistsComponent {
           // Esto es para poder ordenar tipos compuestos (user.email)
           // https://stackoverflow.com/questions/48891174/angular-material-2-datatable-sorting-with-nested-objects
           this.playlistsDataSource.sortingDataAccessor = (obj, path) => this.getProperty(obj, path);
+          this.doFilter();
         },
         error => { this.showError(); }
       );
@@ -119,10 +121,12 @@ export class PlaylistsComponent {
     })
   }
 
-  doFilter = (event: KeyboardEvent) => {
-    const element = event.currentTarget as HTMLInputElement
-    const value = element.value
-    this.playlistsDataSource.filter = value.trim().toLocaleLowerCase();
+  // Filtra por los valores provistos por el servicio.
+  // El único tipo simple "legible" en el servicio es el nombre de la playlists,
+  // pero en realidad también filtra por ID de la lista y creador
+  doFilter() {
+    const element = document.getElementById("filter") as HTMLInputElement;
+    this.playlistsDataSource.filter = element.value.trim().toLocaleLowerCase();
   }
 
   checkShowAllUsers(event: MatCheckboxChange) {

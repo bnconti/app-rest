@@ -95,8 +95,8 @@ export class SongsComponent {
   }
 
   doFilter = (event: KeyboardEvent) => {
-    const element = event.currentTarget as HTMLInputElement
-    const value = element.value
+    const element = event.currentTarget as HTMLInputElement;
+    const value = element.value;
     this.songsDataSource.filter = value.trim().toLocaleLowerCase();
   }
 
