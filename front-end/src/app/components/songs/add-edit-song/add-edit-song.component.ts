@@ -52,7 +52,7 @@ export class AddEditSongComponent {
       // Cargo los valores en caso de estar en modo edición
       this.songService.getById(this.songId)
         .subscribe(
-          song => {
+          (song: Song) => {
             this.songForm.patchValue(song);
 
             // Al género hay que definirlo a mano porque traemos un string en vez del ID
@@ -97,7 +97,6 @@ export class AddEditSongComponent {
   }
 
   onSubmit(): void {
-
     this.submitted = true;
 
     if (this.songForm.invalid) {
@@ -107,10 +106,11 @@ export class AddEditSongComponent {
 
     this.loading = true;
 
-    const name = this.songForm.controls['name'].value;
-    const author = this.songForm.controls['author'].value;
+    const name = this.songForm.controls['name'].value.trim();
+    const author = this.songForm.controls['author'].value.trim();
     const genre = this.songForm.controls['genre'].value;
 
+    // FIXME Corregir actualizaciones
     this.songService.existsByAuthorAndName(author, name)
       .subscribe({
         next: (exists) => {
@@ -134,8 +134,11 @@ export class AddEditSongComponent {
       .subscribe({
         next: () => {
           this.notification.success("New song saved successfully!");
+          // Redirigir a la página anterior
+          window.history.back();
         },
         error: () => {
+          this.loading = false;
           this.notification.error("Something went wrong while creating the new song.");
         },
         complete: () => {
@@ -149,8 +152,10 @@ export class AddEditSongComponent {
       .subscribe({
         next: () => {
           this.notification.success("Song updated successfully!");
+          window.history.back();
         },
         error: () => {
+          this.loading = false;
           this.notification.error("Something went wrong while updating the song.");
         },
         complete: () => {

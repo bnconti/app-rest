@@ -1,15 +1,15 @@
-import {Component, ViewChild} from '@angular/core';
-import {SongsService} from "@services/songs.service";
-import {Song} from "@app/models/Song";
-import {faPen, faTrash, faSearch} from '@fortawesome/free-solid-svg-icons';
-import {Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
-import {ConfirmationDialogComponent} from "@app/components/confirmation-dialog/confirmation-dialog.component";
-import {DialogData} from "@app/interfaces/DialogData";
-import {NotificationService} from "@services/notification.service";
-import {MatTableDataSource} from "@angular/material/table";
-import {MatSort} from "@angular/material/sort";
-import {MatPaginator} from "@angular/material/paginator";
+import { Component, ViewChild } from '@angular/core';
+import { SongsService } from "@services/songs.service";
+import { Song } from "@app/models/Song";
+import { faPen, faTrash, faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { Router } from "@angular/router";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmationDialogComponent } from "@app/components/confirmation-dialog/confirmation-dialog.component";
+import { DialogData } from "@app/interfaces/DialogData";
+import { NotificationService } from "@services/notification.service";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatSort } from "@angular/material/sort";
+import { MatPaginator } from "@angular/material/paginator";
 
 @Component({
   selector: 'app-songs',
@@ -24,6 +24,7 @@ export class SongsComponent {
   faPen = faPen;
   faTrash = faTrash;
   faSearch = faSearch;
+  faPlus = faPlus;
 
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
@@ -31,7 +32,7 @@ export class SongsComponent {
   constructor(
     private songService: SongsService,
     private router: Router,
-    public dialog: MatDialog,
+    private dialog: MatDialog,
     private notification: NotificationService
   ) {
     this.getSongs();
@@ -46,7 +47,7 @@ export class SongsComponent {
           this.songsDataSource.sort = this.sort;
         },
         error => {
-          this.notification.error("This is embarrasing...\nSomething went wrong while retrieving the songs list.\nPerhaps the service is not running?");
+          this.notification.error("This is embarrasing...\nSomething went wrong while retrieving the songs.\nPerhaps the service is not running?");
         }
       );
   }
@@ -58,7 +59,8 @@ export class SongsComponent {
   deleteSongDialog(song: Song) {
     const dialogData: DialogData = {
       dialogTitle: 'MyMusic - Confirmation required',
-      dialogMsg: 'Are you REALLY SURE you want to delete this song? There is no coming back',
+      dialogMsg: 'Are you REALLY SURE you want to delete the song "'
+                 + song.name + '"? There is no coming back',
       confirmationMsg: 'Yes, delete'
     }
 

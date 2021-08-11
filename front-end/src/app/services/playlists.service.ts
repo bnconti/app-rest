@@ -59,8 +59,9 @@ export class PlaylistsService {
       }));
   }
 
-  update(updatedPlaylist: Playlist): Observable<Playlist> {
-    return this.http.put<Playlist>(PlaylistsService.url, updatedPlaylist)
+  rename(playlistId: string, newName: string): Observable<Boolean> {
+    const url = `${PlaylistsService.url}/${playlistId}`;
+    return this.http.put<Boolean>(url, {"name": newName})
       .pipe(map(res => {
         return res;
       }));

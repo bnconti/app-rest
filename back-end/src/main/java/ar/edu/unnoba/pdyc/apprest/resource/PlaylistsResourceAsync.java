@@ -183,7 +183,7 @@ public class PlaylistsResourceAsync {
     @DELETE
     @Path("/{id}/songs/{song_id}")
     public void removeSong(@Suspended AsyncResponse response, @PathParam("id") Long id,
-            @PathParam("song_id") Long songId) {
+                           @PathParam("song_id") Long songId) {
         String authUserEmail = Util.getLoggedUser();
         if (authUserEmail == null) {
             response.resume(Response.status(Response.Status.FORBIDDEN).build());

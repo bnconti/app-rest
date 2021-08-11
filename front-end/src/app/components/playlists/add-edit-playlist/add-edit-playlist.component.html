@@ -7,7 +7,7 @@
       <div class="column is-10-tablet is-10-desktop is-8-widescreen box notification">
 
         <h1 *ngIf="isAddMode" class="title">Add new playlist</h1>
-        <h1 *ngIf="!isAddMode" class="title">Modify playlist</h1>
+        <h1 *ngIf="!isAddMode" class="title">Edit playlist</h1>
 
         <form [formGroup]="playlistForm" (ngSubmit)="onSubmit()">
           <div class="field is-horizontal">
@@ -23,14 +23,13 @@
                          type="text" placeholder="The playlist's name"
                          [ngClass]="{ 'is-danger': (f.name.touched || submitted) && f.name.errors }">
                   <div *ngIf="f.name.touched || submitted " class="help is-danger">
-                    <div *ngIf="f.name.hasError('required')">A name is required for the playlist</div>
+                    <div *ngIf="f.name.hasError('required')">A name is required</div>
                   </div>
                 </div>
               </div>
             </div>
 
           </div>
-
 
           <div class="field is-horizontal">
             <div class="field-label">
@@ -43,7 +42,7 @@
                     <span class="icon-text">
                       <span class="icon"><fa-icon [icon]="faSave"></fa-icon></span>
                       <span *ngIf="isAddMode">Save</span>
-                      <span *ngIf="!isAddMode">Update</span>
+                      <span *ngIf="!isAddMode">Rename</span>
                     </span>
                   </button>
                 </div>
@@ -53,11 +52,78 @@
 
         </form>
 
+        <!-- espacio -->
+        <p></p>
+
+        <div class="table-container box">
+          <h3 class="title">Songs</h3>
+
+          <div class="field">
+            <div class="control has-icons-left">
+              <input class="input is-medium" type="text"
+                     placeholder="Filter" (keyup)="doFilter($event)">
+              <span class="icon is-small is-left">
+                      <fa-icon [icon]="faSearch"></fa-icon>
+              </span>
+            </div>
+          </div>
+
+          <mat-table [dataSource]="songsDataSource" class="mat-elevation-z2" matSort>
+
+            <ng-container matColumnDef="number">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Track N.</mat-header-cell>
+              <mat-cell *matCellDef="let i = index"> {{i + 1}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="author">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Author</mat-header-cell>
+              <mat-cell *matCellDef="let s"> {{s.author}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+              <mat-cell *matCellDef="let s"> {{s.name}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="genre">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Genre</mat-header-cell>
+              <mat-cell *matCellDef="let s"> {{s.genre}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="remove">
+              <mat-header-cell *matHeaderCellDef>Remove</mat-header-cell>
+              <mat-cell *matCellDef="let s">
+                <a (click)="removeSongDialog(s)">
+                  <span class="icon">
+                    <fa-icon [icon]="faTrash"></fa-icon>
+                  </span>
+                </a>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+          </mat-table>
+
+          <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+
+          <hr class="table-sep" />
+          <div class="table-btns">
+            <button class="button button-main" type="button" routerLink="/home/songs/new">
+              <span class="icon-text">
+                <span class="icon"><fa-icon [icon]="faPlus"></fa-icon></span>
+                <span>Add new</span>
+              </span>
+            </button>
+          </div>
+
+        </div>
+
+
       </div>
     </div>
 
   </div>
-
-
 </section>
 

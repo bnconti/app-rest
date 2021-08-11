@@ -3,7 +3,7 @@
 <section class="section">
   <div class="container">
     <div class="table-container box notification">
-      <h1 class="title">Songs list</h1>
+      <h1 class="title">Songs</h1>
 
       <div class="field">
         <div class="control has-icons-left">
@@ -24,7 +24,7 @@
 
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-          <mat-cell *matCellDef="let s"> {{ s.name }} </mat-cell>
+          <mat-cell *matCellDef="let s"> {{s.name}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="genre">
@@ -60,6 +60,16 @@
       </mat-table>
 
       <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+
+      <hr class="table-sep" />
+      <div class="table-btns">
+        <button class="button button-main" type="button" routerLink="/home/songs/new">
+          <span class="icon-text">
+            <span class="icon"><fa-icon [icon]="faPlus"></fa-icon></span>
+            <span>Add new</span>
+          </span>
+        </button>
+      </div>
 
     </div>
 

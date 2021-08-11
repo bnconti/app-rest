@@ -7,16 +7,19 @@
 
       <div class="field">
         <div class="control">
-          <mat-checkbox formControlName="showAllUsers" (change)="checkShowAllUsers($event)">
+          <mat-checkbox (change)="checkShowAllUsers($event)">
             Show playlists of all users
           </mat-checkbox>
         </div>
       </div>
 
       <div class="field">
-        <div class="control">
+        <div class="control has-icons-left">
           <input class="input is-medium" id="filter" type="text"
                  placeholder="Filter by Name" (keyup)="doFilter()">
+          <span class="icon is-small is-left">
+                  <fa-icon [icon]="faSearch"></fa-icon>
+          </span>
         </div>
       </div>
 
@@ -37,8 +40,8 @@
           <mat-cell *matCellDef="let p"><details>
             <summary> {{p.songs.length}} </summary>
             <!-- Uso index para numerar las canciones -->
-            <p *ngFor="let s of p.songs; let i=index" class="song">
-              {{i + 1}}. {{s.name}} - {{s.author}} - {{s.genre}}
+            <p *ngFor="let s of p.songs; let i = index" class="song">
+              {{i + 1}}. {{s.author}} - {{s.name}} ({{s.genre}})
             </p>
           </details></mat-cell>
         </ng-container>
@@ -71,6 +74,16 @@
       </mat-table>
 
       <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+
+      <hr class="table-sep" />
+      <div class="table-btns">
+        <button class="button button-main" type="button" routerLink="/home/playlists/new">
+          <span class="icon-text">
+            <span class="icon"><fa-icon [icon]="faPlus"></fa-icon></span>
+            <span>Add new</span>
+          </span>
+        </button>
+      </div>
 
     </div>
 

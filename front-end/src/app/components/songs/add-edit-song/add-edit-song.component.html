@@ -7,7 +7,7 @@
       <div class="column is-10-tablet is-10-desktop is-8-widescreen box notification">
 
         <h1 *ngIf="isAddMode" class="title">Add new song</h1>
-        <h1 *ngIf="!isAddMode" class="title">Modify song</h1>
+        <h1 *ngIf="!isAddMode" class="title">Edit song</h1>
 
         <form [formGroup]="songForm" (ngSubmit)="onSubmit()">
           <div class="field is-horizontal">
