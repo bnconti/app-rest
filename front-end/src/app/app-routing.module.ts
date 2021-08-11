@@ -2,10 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent } from "@app/components/home/home.component";
-import { PlaylistsComponent } from "@app/components/playlists/playlists.component";
 import { LoginComponent } from "@app/components/login/login.component";
 import { SignupComponent } from "@app/components/signup/signup.component";
 import { AuthGuard } from "@app/helpers/auth.guard";
+import { PlaylistsComponent } from "@app/components/playlists/playlists.component";
+import { AddEditPlaylistComponent } from "@app/components/playlists/add-edit-playlist/add-edit-playlist.component";
 import { SongsComponent } from "@app/components/songs/songs.component";
 import { AddEditSongComponent } from "@app/components/songs/add-edit-song/add-edit-song.component";
 
@@ -24,6 +25,8 @@ import { AddEditSongComponent } from "@app/components/songs/add-edit-song/add-ed
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'home/playlists', component: PlaylistsComponent, canActivate: [AuthGuard] },
+  { path: 'home/playlists/new', component: AddEditPlaylistComponent, canActivate: [AuthGuard] },
+  { path: 'home/playlists/:id', component: AddEditPlaylistComponent, canActivate: [AuthGuard] },
   { path: 'home/songs', component: SongsComponent, canActivate: [AuthGuard] },
   { path: 'home/songs/new', component: AddEditSongComponent, canActivate: [AuthGuard] },
   { path: 'home/songs/:id', component: AddEditSongComponent, canActivate: [AuthGuard] },

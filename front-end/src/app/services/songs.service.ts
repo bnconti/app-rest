@@ -74,7 +74,7 @@ export class SongsService {
       }));
   }
 
-  delete(songId: String): Observable<Boolean> {
+  delete(songId: string): Observable<Boolean> {
     const url = `${SongsService.url}/${songId}`;
     return this.http.delete<Boolean>(url)
       .pipe(map(res => {

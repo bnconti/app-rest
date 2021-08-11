@@ -226,9 +226,8 @@ Si no se instaló Angular con la opción -g, el comando a ejecutar es
   - Crear, renombrar y eliminar playlists.
   - Agregar y quitar canciones de una playlist.
 - Opcionales:
-  - Traducir al inglés el texto de la página principal (es el único en español),
-    o sino dejar todos los textos del frontend en español.
-  - En los DTO de canciones usar el ID del genero para evitar buscarlo en el frontend
+  - Renombrar el recurso songs/find/{id} a songs/{id}, para que quede como el
+    servicio de playlists??
   - Utilizar roles en el frontend para que los usuarios comunes no puedan hacer
     bajas y modificaciones.
 

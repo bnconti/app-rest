@@ -36,15 +36,37 @@ export class PlaylistsService {
       }));
   }
 
-  getById(playlistId: bigint): Observable<Playlist> {
-    const url = `${PlaylistsService.url}/find/${playlistId}`;
+  getById(playlistId: string): Observable<Playlist> {
+    const url = `${PlaylistsService.url}/${playlistId}`;
     return this.http.get<Playlist>(url)
       .pipe(map(res => {
         return res;
       }));
   }
 
-  delete(playlistId: bigint): Observable<Boolean> {
+  existsByName(name: string): Observable<Boolean> {
+    const url = `${PlaylistsService.url}/exists?name=${name}`;
+    return this.http.get<Boolean>(url)
+      .pipe(map(res => {
+        return res;
+      }));
+  }
+
+  add(newPlaylist: Playlist): Observable<Playlist> {
+    return this.http.post<Playlist>(PlaylistsService.url, newPlaylist)
+      .pipe(map(res => {
+        return res;
+      }));
+  }
+
+  update(updatedPlaylist: Playlist): Observable<Playlist> {
+    return this.http.put<Playlist>(PlaylistsService.url, updatedPlaylist)
+      .pipe(map(res => {
+        return res;
+      }));
+  }
+
+  delete(playlistId: string): Observable<Boolean> {
     const url = `${PlaylistsService.url}/${playlistId}`;
     return this.http.delete<Boolean>(url)
       .pipe(map(res => {

@@ -5,8 +5,8 @@ import { Song } from '@app/models/Song';
  * Modelo de una lista de reproducción.
  */
 export interface Playlist {
-  id: bigint;
+  id: string;
   name: string;
   user: User;
-  songs: Song[]
+  songs: Song[];
 }

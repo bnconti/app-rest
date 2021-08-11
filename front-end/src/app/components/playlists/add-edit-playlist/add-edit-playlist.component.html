@@ -1,0 +1,63 @@
+<app-header></app-header>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+
+      <div class="column is-10-tablet is-10-desktop is-8-widescreen box notification">
+
+        <h1 *ngIf="isAddMode" class="title">Add new playlist</h1>
+        <h1 *ngIf="!isAddMode" class="title">Modify playlist</h1>
+
+        <form [formGroup]="playlistForm" (ngSubmit)="onSubmit()">
+          <div class="field is-horizontal">
+
+            <div class="field-label is-normal">
+              <label class="label">Name</label>
+            </div>
+
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <input formControlName="name" class="input"
+                         type="text" placeholder="The playlist's name"
+                         [ngClass]="{ 'is-danger': (f.name.touched || submitted) && f.name.errors }">
+                  <div *ngIf="f.name.touched || submitted " class="help is-danger">
+                    <div *ngIf="f.name.hasError('required')">A name is required for the playlist</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="field is-horizontal">
+            <div class="field-label">
+              <!-- Left empty for spacing -->
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <button class="button button-main" [disabled]="loading" type="submit">
+                    <span class="icon-text">
+                      <span class="icon"><fa-icon [icon]="faSave"></fa-icon></span>
+                      <span *ngIf="isAddMode">Save</span>
+                      <span *ngIf="!isAddMode">Update</span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+
+
+</section>
+

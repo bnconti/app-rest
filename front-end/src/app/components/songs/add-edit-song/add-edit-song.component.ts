@@ -1,13 +1,13 @@
-import {Component} from '@angular/core';
-import {faSave} from "@fortawesome/free-solid-svg-icons";
-import {Genre} from "@app/models/Genre";
-import {SongsService} from "@services/songs.service";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Song} from "@app/models/Song";
-import {ActivatedRoute} from "@angular/router";
-import {Observable} from "rxjs";
-import {map, startWith} from "rxjs/operators";
-import {NotificationService} from "@services/notification.service";
+import { Component } from '@angular/core';
+import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { Genre } from "@app/models/Genre";
+import { SongsService } from "@services/songs.service";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Song } from "@app/models/Song";
+import { ActivatedRoute } from "@angular/router";
+import { Observable } from "rxjs";
+import { map, startWith } from "rxjs/operators";
+import { NotificationService } from "@services/notification.service";
 
 @Component({
   selector: 'app-add-edit-song',
@@ -101,7 +101,7 @@ export class AddEditSongComponent {
     this.submitted = true;
 
     if (this.songForm.invalid) {
-      this.notification.error("Please verify the form errors");
+      this.notification.error("Please verify the form errors.");
       return;
     }
 
@@ -116,7 +116,7 @@ export class AddEditSongComponent {
         next: (exists) => {
           if (exists) {
             this.loading = false;
-            this.notification.error("There is already a song with that name and author");
+            this.notification.error("There is already a song with that name and author.");
           } else {
             const song: Song = {id: this.songId, name: name, author: author, genre: genre};
             this.isAddMode ? this.createSong(song) : this.updateSong(song);
@@ -151,7 +151,7 @@ export class AddEditSongComponent {
           this.notification.success("Song updated successfully!");
         },
         error: () => {
-          this.notification.error("Something went wrong while updating the new song.");
+          this.notification.error("Something went wrong while updating the song.");
         },
         complete: () => {
           this.loading = false;

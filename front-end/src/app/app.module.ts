@@ -8,14 +8,15 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
-import { PlaylistsComponent } from './components/playlists/playlists.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
-import { AddEditSongComponent } from './components/songs/add-edit-song/add-edit-song.component';
+import { PlaylistsComponent } from './components/playlists/playlists.component';
+import { AddEditPlaylistComponent } from './components/playlists/add-edit-playlist/add-edit-playlist.component';
 import { SongsComponent } from './components/songs/songs.component';
+import { AddEditSongComponent } from './components/songs/add-edit-song/add-edit-song.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
@@ -34,10 +35,11 @@ import { MatInputModule } from "@angular/material/input";
     FooterComponent,
     LoginComponent,
     HomeComponent,
-    PlaylistsComponent,
     SignupComponent,
-    AddEditSongComponent,
+    PlaylistsComponent,
+    AddEditPlaylistComponent,
     SongsComponent,
+    AddEditSongComponent,
     ConfirmationDialogComponent,
   ],
   imports: [
