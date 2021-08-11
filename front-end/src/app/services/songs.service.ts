@@ -45,7 +45,7 @@ export class SongsService {
   }
 
   getById(songId: string): Observable<Song> {
-    const url = `${SongsService.url}/find/${songId}`;
+    const url = `${SongsService.url}/${songId}`;
     return this.http.get<Song>(url)
       .pipe(map(res => {
         return res;
@@ -78,6 +78,15 @@ export class SongsService {
     const url = `${SongsService.url}/${songId}`;
     return this.http.delete<Boolean>(url)
       .pipe(map(res => {
+        return res;
+      }));
+  }
+
+  getByAuthorAndName(author: string, name: string): Observable<Song> {
+    const url = `${SongsService.url}/find?author=${author}&name=${name}`;
+    return this.http.get<Song>(url)
+      .pipe(map(res => {
+        console.log(res);
         return res;
       }));
   }

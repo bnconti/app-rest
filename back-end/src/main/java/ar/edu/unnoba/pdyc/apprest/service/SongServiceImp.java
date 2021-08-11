@@ -11,7 +11,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import ar.edu.unnoba.pdyc.apprest.model.Genre;
-import ar.edu.unnoba.pdyc.apprest.model.Playlist;
 import ar.edu.unnoba.pdyc.apprest.model.Song;
 import ar.edu.unnoba.pdyc.apprest.repository.SongRepository;
 
@@ -99,7 +98,7 @@ public class SongServiceImp implements SongService {
     }
 
     @Override
-    public List<Song> getSongsByAuthorAndName(String author, String name) {
+    public Song getSongByAuthorAndName(String author, String name) {
         return songRepository.findByAuthorAndName(author, name);
     }
 
@@ -201,8 +200,8 @@ public class SongServiceImp implements SongService {
 
     @Override
     @Async("taskExecutor")
-    public CompletableFuture<List<Song>> getSongsByAuthorAndNameAsync(String author, String name) {
-        return CompletableFuture.completedFuture(getSongsByAuthorAndName(author, name));
+    public CompletableFuture<Song> getSongByAuthorAndNameAsync(String author, String name) {
+        return CompletableFuture.completedFuture(getSongByAuthorAndName(author, name));
     }
 
     /*
