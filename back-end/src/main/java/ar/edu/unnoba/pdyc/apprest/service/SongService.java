@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import ar.edu.unnoba.pdyc.apprest.model.Genre;
-import ar.edu.unnoba.pdyc.apprest.model.Playlist;
 import ar.edu.unnoba.pdyc.apprest.model.Song;
 
 public interface SongService {
@@ -27,7 +26,7 @@ public interface SongService {
 
     List<Song> getSongsByName(String name);
 
-    List<Song> getSongsByAuthorAndName(String author, String name);
+    Song getSongByAuthorAndName(String author, String name);
 
     /*
     List<Song> getSongsByPlaylist(Playlist name);
@@ -56,7 +55,7 @@ public interface SongService {
 
     CompletableFuture<List<Song>> getSongsByNameAsync(String name);
 
-    CompletableFuture<List<Song>> getSongsByAuthorAndNameAsync(String author, String name);
+    CompletableFuture<Song> getSongByAuthorAndNameAsync(String author, String name);
 
     /*
     CompletableFuture<List<Song>> getSongsByPlaylistAsync(Playlist name);

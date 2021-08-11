@@ -110,12 +110,10 @@ export class AddEditSongComponent {
     const author = this.songForm.controls['author'].value.trim();
     const genre = this.songForm.controls['genre'].value;
 
-    // FIXME Corregir actualizaciones
-    this.songService.existsByAuthorAndName(author, name)
+    this.songService.getByAuthorAndName(author, name)
       .subscribe({
-        next: (exists) => {
-          if (exists) {
-            this.loading = false;
+        next: (existingSong: Song) => {
+          if (existingSong && (this.isAddMode || this.songId != existingSong.id) ) {
             this.notification.error("There is already a song with that name and author.");
           } else {
             const song: Song = {id: this.songId, name: name, author: author, genre: genre};
@@ -123,8 +121,10 @@ export class AddEditSongComponent {
           }
         },
         error: () => {
-          this.loading = false;
           this.notification.error("Something went wrong while creating the new song.\nPerhaps the service is not running?");
+        },
+        complete: () => {
+          this.loading = false;
         }
       });
   }

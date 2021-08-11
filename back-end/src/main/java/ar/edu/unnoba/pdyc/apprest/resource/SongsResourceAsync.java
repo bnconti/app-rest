@@ -24,6 +24,14 @@ public class SongsResourceAsync {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public void getById(@Suspended AsyncResponse response, @PathParam("id") Long id) {
+        songsService.getSongByIdAsync(id)
+                .thenAccept((song -> response.resume(Response.ok(song).build())));
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public void getSongs(@Suspended AsyncResponse response,
                          @QueryParam("author") String author, @QueryParam("genre") String genre) {
         songsService.getSongsByAuthorAndGenreAsync(author, genre).thenAccept((songs) -> {
@@ -85,9 +93,10 @@ public class SongsResourceAsync {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/find/{id}")
-    public void getById(@Suspended AsyncResponse response, @PathParam("id") Long id) {
-        songsService.getSongByIdAsync(id)
+    @Path("/find/")
+    public void getByAuthorAndName(@Suspended AsyncResponse response,
+                                   @QueryParam("author") String author, @QueryParam("name") String name) {
+        songsService.getSongByAuthorAndNameAsync(author, name)
                 .thenAccept((song -> response.resume(Response.ok(song).build())));
     }
 }

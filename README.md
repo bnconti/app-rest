@@ -228,6 +228,3 @@ Si no se instaló Angular con la opción -g, el comando a ejecutar es
 - Opcionales:
   - Renombrar el recurso songs/find/{id} a songs/{id}, para que quede como el
     servicio de playlists??
-  - Utilizar roles en el frontend para que los usuarios comunes no puedan hacer
-    bajas y modificaciones.
-
