@@ -14,6 +14,7 @@ import { NotificationService } from "@services/notification.service";
 
 // Para la tabla de canciones
 import { MatTableDataSource } from "@angular/material/table";
+import { MatSort } from "@angular/material/sort";
 import { MatPaginator } from "@angular/material/paginator";
 
 @Component({
@@ -26,7 +27,6 @@ export class AddEditPlaylistComponent {
   isAddMode: boolean = true;
   playlistId: string;
   playlistName: string | undefined;
-  songs: Song[] = [];
   loggedUser: string;
 
   playlistForm: FormGroup;
@@ -40,10 +40,22 @@ export class AddEditPlaylistComponent {
   loading = false;
   submitted = false;
 
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
-
   songsDataSource: MatTableDataSource<Song> = new MatTableDataSource;
   displayedColumns: string[] = ['number', 'author', 'name', 'genre', 'remove'];
+
+  paginator: MatPaginator | undefined;
+  sort: MatSort | undefined;
+
+  // Workaround para issue https://github.com/angular/components/issues/10205
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    this.sort = ms;
+    this.songsDataSource.sort = ms;
+  }
+
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    this.paginator = mp;
+    this.songsDataSource.paginator = mp;
+  }
 
   constructor(
     private playlistsService: PlaylistsService,
@@ -74,9 +86,9 @@ export class AddEditPlaylistComponent {
             } else {
               this.playlistForm.patchValue(playlist);
               this.playlistName = playlist.name;
-              this.songs = playlist.songs;
-              this.songsDataSource = new MatTableDataSource(this.songs);
-              this.songsDataSource.paginator = this.paginator;
+              this.songsDataSource = new MatTableDataSource(playlist.songs);
+              this.songsDataSource.paginator = this.paginator!;
+              this.songsDataSource.sort = this.sort!;
             }
           },
           error => {
@@ -203,15 +215,12 @@ export class AddEditPlaylistComponent {
   removeSong(song: Song) {
     this.playlistsService.removeSong(this.playlistId, song.id!).subscribe({
       next: () => {
-        // Quitando la canción borrada de this.songs
-        const itemIndex = this.songs.findIndex(s => s === song);
-        this.songs.splice(itemIndex, 1);
+        // Actualizar la tabla quitando la canción borrada
+        const itemIndex = this.songsDataSource.data.findIndex(s => s === song);
+        this.songsDataSource.data.splice(itemIndex, 1);
+        this.songsDataSource.paginator = this.paginator!;
+        this.songsDataSource.sort = this.sort!;
 
-        // Actualizar tabla recreando el DataSource
-        //this.songsDataSource = new MatTableDataSource(this.songs);
-
-        // Asignando el paginador también se actualiza
-        this.songsDataSource.paginator = this.paginator;
         this.notification.success(`"${song.author} - ${song.name}" removed successfully.`);
       },
       error: (err) => {
