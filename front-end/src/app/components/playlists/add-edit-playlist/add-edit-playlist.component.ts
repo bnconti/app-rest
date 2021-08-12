@@ -14,7 +14,6 @@ import { NotificationService } from "@services/notification.service";
 
 // Para la tabla de canciones
 import { MatTableDataSource } from "@angular/material/table";
-import { MatSort } from "@angular/material/sort";
 import { MatPaginator } from "@angular/material/paginator";
 
 @Component({
@@ -44,14 +43,8 @@ export class AddEditPlaylistComponent {
   displayedColumns: string[] = ['number', 'author', 'name', 'genre', 'remove'];
 
   paginator: MatPaginator | undefined;
-  sort: MatSort | undefined;
 
   // Workaround para issue https://github.com/angular/components/issues/10205
-  @ViewChild(MatSort) set matSort(ms: MatSort) {
-    this.sort = ms;
-    this.songsDataSource.sort = ms;
-  }
-
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
     this.songsDataSource.paginator = mp;
@@ -88,7 +81,6 @@ export class AddEditPlaylistComponent {
               this.playlistName = playlist.name;
               this.songsDataSource = new MatTableDataSource(playlist.songs);
               this.songsDataSource.paginator = this.paginator!;
-              this.songsDataSource.sort = this.sort!;
             }
           },
           error => {
@@ -219,7 +211,6 @@ export class AddEditPlaylistComponent {
         const itemIndex = this.songsDataSource.data.findIndex(s => s === song);
         this.songsDataSource.data.splice(itemIndex, 1);
         this.songsDataSource.paginator = this.paginator!;
-        this.songsDataSource.sort = this.sort!;
 
         this.notification.success(`"${song.author} - ${song.name}" removed successfully.`);
       },
