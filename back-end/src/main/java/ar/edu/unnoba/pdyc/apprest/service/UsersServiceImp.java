@@ -2,7 +2,7 @@ package ar.edu.unnoba.pdyc.apprest.service;
 
 import ar.edu.unnoba.pdyc.apprest.exceptions.UnavailableEmailException;
 import ar.edu.unnoba.pdyc.apprest.model.User;
-import ar.edu.unnoba.pdyc.apprest.repository.UserRepository;
+import ar.edu.unnoba.pdyc.apprest.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,31 +10,31 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImp implements UserService {
+public class UsersServiceImp implements UsersService {
     @Autowired
-    private UserRepository userRepository;
+    private UsersRepository usersRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
     public User getByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return usersRepository.findByEmail(email);
     }
 
     @Override
     public Boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
+        return usersRepository.existsByEmail(email);
     }
 
     @Override
     public User create(User user) throws UnavailableEmailException {
-        if (userRepository.existsByEmail(user.getEmail())) {
+        if (usersRepository.existsByEmail(user.getEmail())) {
             throw new UnavailableEmailException("Ya existe un usuario registrado con el correo " +
                     user.getEmail());
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        return usersRepository.save(user);
     }
 
     /* Override de UserDetailsService */

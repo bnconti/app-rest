@@ -118,7 +118,6 @@ export class PlaylistsComponent {
         }
       },
       error: (err) => {
-        console.log(err);
         this.notification.error(`Something went wrong while deleting "${playlist.name}"`);
       }
     })
@@ -126,7 +125,7 @@ export class PlaylistsComponent {
 
   // Filtra por los valores provistos por el servicio.
   // El único tipo simple "legible" en el servicio es el nombre de la playlists,
-  // pero en realidad también filtra por ID de la lista y creador
+  // pero en realidad también filtra por Id de la lista y creador
   doFilter() {
     const element = document.getElementById("filter") as HTMLInputElement;
     this.playlistsDataSource.filter = element.value.trim().toLocaleLowerCase();

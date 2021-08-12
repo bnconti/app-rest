@@ -33,7 +33,7 @@
 
           <div class="field is-horizontal">
             <div class="field-label">
-              <!-- Left empty for spacing -->
+              <!-- Espacio -->
             </div>
             <div class="field-body">
               <div class="field">
@@ -52,10 +52,11 @@
 
         </form>
 
-        <!-- espacio -->
-        <p></p>
+        <p>
+          <!-- Espacio -->
+	</p>
 
-        <div class="table-container box">
+        <div *ngIf="!isAddMode" class="table-container box">
           <h3 class="title">Songs</h3>
 
           <div class="field">
@@ -106,14 +107,12 @@
 
           </mat-table>
 
-          <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
-
           <hr class="table-sep" />
           <div class="table-btns">
-            <button class="button button-main" type="button" routerLink="/home/songs/new">
+            <button class="button button-main" type="button" (click)="addSong()">
               <span class="icon-text">
                 <span class="icon"><fa-icon [icon]="faPlus"></fa-icon></span>
-                <span>Add new</span>
+                <span>Add songs</span>
               </span>
             </button>
             <!-- Queda raro el botón Cancelar dentro de la tabla, pero creo que al lado de Renombrar queda peor... -->

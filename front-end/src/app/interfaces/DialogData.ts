@@ -1,5 +1,5 @@
 export interface DialogData {
-  dialogTitle: String
-  dialogMsg: String
-  confirmationMsg: String
+  dialogTitle: string
+  dialogMsg: string
+  confirmationMsg: string
 }

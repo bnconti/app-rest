@@ -21,8 +21,8 @@ export class AddEditSongComponent {
 
   songForm: FormGroup;
   genres: Genre[];
-  authors: String[] | undefined;
-  filteredAuthors: Observable<String[]> | undefined;
+  authors: string[] | undefined;
+  filteredAuthors: Observable<string[]> | undefined;
 
   faSave = faSave;
   faBack = faBackward;
@@ -62,7 +62,7 @@ export class AddEditSongComponent {
             this.songForm.controls['genre'].patchValue(genre!.id);
           },
           error => {
-            this.router.navigate(["home/songs"]);
+            this.goToSongsList();
           }
         );
     }
@@ -71,7 +71,7 @@ export class AddEditSongComponent {
   getAuthors() {
     this.songService.getAuthors()
       .subscribe(
-        (authors: String[]) => {
+        (authors: string[]) => {
           this.authors = authors;
         },
         error => {
@@ -89,7 +89,7 @@ export class AddEditSongComponent {
       );
   }
 
-  private _filter(value: string): String[] {
+  private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.authors!.filter(author => author.toLowerCase().includes(filterValue));
   }
@@ -112,20 +112,25 @@ export class AddEditSongComponent {
     const author = this.songForm.controls['author'].value.trim();
     const genre = this.songForm.controls['genre'].value;
 
-    this.songService.getByAuthorAndName(author, name)
+    this.songService.getIdByAuthorAndName(author, name)
       .subscribe({
-        next: (existingSong: Song) => {
+        next: (existingId: string) => {
           this.loading = false;
-          if (existingSong && (this.isAddMode || this.songId != existingSong.id) ) {
+
+          // Si existe una canción con el mismo autor y nombre y se está creando, mostrar error.
+          // Si se está actualizando, ver si la que se encontró es una distinta.
+          if ( existingId != null && (this.isAddMode || this.songId != existingId) ) {
             this.notification.error("There is already a song with that name and author.");
           } else {
+            // Si se crea una canción nueva, songId es indefinido, pero el back-end
+            // siempre crea un Id automáticamente.
             const song: Song = {id: this.songId, name: name, author: author, genre: genre};
             this.isAddMode ? this.createSong(song) : this.updateSong(song);
           }
         },
         error: () => {
           this.loading = false;
-          this.notification.error("Something went wrong while creating the new song.\nPerhaps the service is not running?");
+          this.notification.error("Something went wrong while verifying if there were any conflicts.\nPerhaps the service is not running?");
         }
       });
   }
@@ -135,12 +140,11 @@ export class AddEditSongComponent {
       .subscribe({
         next: () => {
           this.loading = false;
-          this.notification.success("New song saved successfully!");
-          // Redirigir a la página anterior
-          window.history.back();
+          this.notification.success("Song created successfully!");
+          this.goToSongsList();
         },
         error: () => {
-          this.notification.error("Something went wrong while creating the new song.");
+          this.notification.error("Something went wrong while creating the song.");
         }
       })
   }
@@ -151,13 +155,17 @@ export class AddEditSongComponent {
         next: () => {
           this.loading = false;
           this.notification.success("Song updated successfully!");
-          window.history.back();
+          this.goToSongsList();
         },
         error: () => {
           this.loading = false;
           this.notification.error("Something went wrong while updating the song.");
         }
       })
+  }
+
+  goToSongsList() {
+    this.router.navigate(["home/songs"]);
   }
 
 }

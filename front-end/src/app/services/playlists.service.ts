@@ -44,32 +44,48 @@ export class PlaylistsService {
       }));
   }
 
-  add(newPlaylist: Playlist): Observable<Playlist> {
-    return this.http.post<Playlist>(PlaylistsService.url, newPlaylist)
+  getIdByUserAndName(userEmail: string, name: string): Observable<string> {
+    const url = `${PlaylistsService.url}/getid?user=${userEmail}&name=${name}`;
+    return this.http.get<string>(url)
       .pipe(map(res => {
         return res;
       }));
   }
 
-  rename(playlistId: string, newName: string): Observable<Boolean> {
+  add(newPlaylist: Playlist): Observable<string> {
+    return this.http.post<string>(PlaylistsService.url, newPlaylist)
+      .pipe(map(res => {
+        return res;
+      }));
+  }
+
+  rename(playlistId: string, newName: string): Observable<void> {
     const url = `${PlaylistsService.url}/${playlistId}`;
-    return this.http.put<Boolean>(url, {"name": newName})
+    return this.http.put<void>(url, {name: newName})
       .pipe(map(res => {
         return res;
       }));
   }
 
-  removeSong(playlistId: string, songId: string): Observable<Boolean> {
+  addSong(playlistId: string, songId: string): Observable<Boolean> {
+    const url = `${PlaylistsService.url}/${playlistId}/songs`;
+    return this.http.put<Boolean>(url, {songId: songId})
+      .pipe(map(res => {
+        return res;
+      }));
+  }
+
+  removeSong(playlistId: string, songId: string): Observable<void> {
     const url = `${PlaylistsService.url}/${playlistId}/songs/${songId}`;
-    return this.http.delete<Boolean>(url)
+    return this.http.delete<void>(url)
       .pipe(map(res => {
         return res;
       }));
   }
 
-  delete(playlistId: string): Observable<Boolean> {
+  delete(playlistId: string): Observable<boolean> {
     const url = `${PlaylistsService.url}/${playlistId}`;
-    return this.http.delete<Boolean>(url)
+    return this.http.delete<boolean>(url)
       .pipe(map(res => {
         return res;
       }));

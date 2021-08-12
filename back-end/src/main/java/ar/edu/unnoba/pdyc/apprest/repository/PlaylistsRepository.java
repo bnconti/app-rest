@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository("playlistRepository")
-public interface PlaylistRepository extends JpaRepository<Playlist, Long> {
+@Repository("playlistsRepository")
+public interface PlaylistsRepository extends JpaRepository<Playlist, Long> {
     boolean existsById(Long id);
     boolean existsBySongs(Song song);
 

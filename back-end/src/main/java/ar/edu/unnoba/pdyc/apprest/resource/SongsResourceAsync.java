@@ -15,12 +15,12 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import ar.edu.unnoba.pdyc.apprest.dto.SongDTO;
-import ar.edu.unnoba.pdyc.apprest.service.SongService;
+import ar.edu.unnoba.pdyc.apprest.service.SongsService;
 
 @Path("/songs")
 public class SongsResourceAsync {
     @Autowired
-    private SongService songsService;
+    private SongsService songsService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -32,6 +32,17 @@ public class SongsResourceAsync {
             } else {
                 response.resume(Response.ok(song).build());
             }
+        });
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/getid")
+    public void getIdByAuthorAndName(@Suspended AsyncResponse response,
+                                     @QueryParam("author") String author,
+                                     @QueryParam("name") String name) {
+        songsService.getSongByAuthorAndNameAsync(author, name).thenAccept(s -> {
+            response.resume(Response.ok(s == null ? null : s.getId()).build());
         });
     }
 
@@ -65,7 +76,7 @@ public class SongsResourceAsync {
         Song song = modelMapper.map(dto, Song.class);
 
         songsService.createAsync(song).thenAccept(newSong ->
-                response.resume(Response.ok(modelMapper.map(newSong, SongDTO.class)).build()));
+                response.resume(Response.ok(newSong.getId()).build()));
     }
 
     @PUT
@@ -76,7 +87,7 @@ public class SongsResourceAsync {
         Song song = modelMapper.map(dto, Song.class);
 
         songsService.updateAsync(song).thenAccept(updatedSong ->
-                response.resume(Response.ok(modelMapper.map(updatedSong, SongDTO.class)).build()));
+                response.resume(Response.ok().build()));
     }
 
     @DELETE
@@ -85,23 +96,5 @@ public class SongsResourceAsync {
     public void delete(@Suspended AsyncResponse response, @PathParam("id") Long id) {
         songsService.deleteAsync(id).thenAccept(status ->
                 response.resume(Response.ok(status).build()));
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/exists")
-    public void existsByAuthorAndName(@Suspended AsyncResponse response,
-                                      @QueryParam("author") String author, @QueryParam("name") String name) {
-        songsService.existsByAuthorAndNameAsync(author, name).
-                thenAccept(exists -> response.resume(Response.ok(exists).build()));
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/find/")
-    public void getByAuthorAndName(@Suspended AsyncResponse response,
-                                   @QueryParam("author") String author, @QueryParam("name") String name) {
-        songsService.getSongByAuthorAndNameAsync(author, name)
-                .thenAccept(song -> response.resume(Response.ok(song).build()));
     }
 }

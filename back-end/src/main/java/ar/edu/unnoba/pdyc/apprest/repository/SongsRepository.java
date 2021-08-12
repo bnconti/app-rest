@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository("songRepository")
-public interface SongRepository extends JpaRepository<Song, Long> {
+@Repository("songsRepository")
+public interface SongsRepository extends JpaRepository<Song, Long> {
     List<Song> findAll();
 
     @Query("SELECT DISTINCT s.author FROM Song s")

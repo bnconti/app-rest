@@ -7,6 +7,7 @@ import { SignupComponent } from "@app/components/signup/signup.component";
 import { AuthGuard } from "@app/helpers/auth.guard";
 import { PlaylistsComponent } from "@app/components/playlists/playlists.component";
 import { AddEditPlaylistComponent } from "@app/components/playlists/add-edit-playlist/add-edit-playlist.component";
+import { AddPlaylistSongComponent } from "@app/components/playlists/add-playlist-song/add-playlist-song.component";
 import { SongsComponent } from "@app/components/songs/songs.component";
 import { AddEditSongComponent } from "@app/components/songs/add-edit-song/add-edit-song.component";
 
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: 'home/playlists', component: PlaylistsComponent, canActivate: [AuthGuard] },
   { path: 'home/playlists/new', component: AddEditPlaylistComponent, canActivate: [AuthGuard] },
   { path: 'home/playlists/:id', component: AddEditPlaylistComponent, canActivate: [AuthGuard] },
+  { path: 'home/playlists/:id/addsong', component: AddPlaylistSongComponent, canActivate: [AuthGuard] },
   { path: 'home/songs', component: SongsComponent, canActivate: [AuthGuard] },
   { path: 'home/songs/new', component: AddEditSongComponent, canActivate: [AuthGuard] },
   { path: 'home/songs/:id', component: AddEditSongComponent, canActivate: [AuthGuard] },

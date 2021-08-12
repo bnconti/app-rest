@@ -1,8 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { faSave, faBackward, faTrash, faSearch, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Playlist } from "@app/models/Playlist";
+import { User } from "@app/models/User";
 import { Song } from "@app/models/Song";
-import { Genre } from "@app/models/Genre";
 import { PlaylistsService } from "@services/playlists.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -14,7 +14,6 @@ import { NotificationService } from "@services/notification.service";
 
 // Para la tabla de canciones
 import {MatTableDataSource} from "@angular/material/table";
-import {MatPaginator} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-add-edit-playlist',
@@ -42,9 +41,6 @@ export class AddEditPlaylistComponent {
   songsDataSource: MatTableDataSource<Song> = new MatTableDataSource;
   displayedColumns: string[] = ['number', 'author', 'name', 'genre', 'remove'];
 
-
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
-
   constructor(
     private playlistsService: PlaylistsService,
     private formBuilder: FormBuilder,
@@ -70,18 +66,17 @@ export class AddEditPlaylistComponent {
             if (this.loggedUser != playlist.user.email) {
               // No coincide, probablemente el usuario ingresó la URL manualmente...
               // Enviarlo al listado de playlists
-              this.router.navigate(["home/playlists"]);
+              this.goToPlaylistsList();
             } else {
               this.playlistForm.patchValue(playlist);
               this.playlistName = playlist.name;
               this.songsDataSource = new MatTableDataSource(playlist.songs);
-              this.songsDataSource.paginator = this.paginator;
             }
           },
           error => {
             // No se pudo encontrar la lista (por ejemplo, porque se ingresó
             // una URL con un ID inexistente).
-            this.router.navigate(["home/playlists"]);
+            this.goToPlaylistsList();
           }
         );
     }
@@ -91,7 +86,7 @@ export class AddEditPlaylistComponent {
     return this.playlistForm.controls;
   }
 
-  // Botón Rename
+  // Botón Renombrar / Agregar
   onSubmit(): void {
     this.submitted = true;
 
@@ -104,43 +99,52 @@ export class AddEditPlaylistComponent {
 
     const newName = this.playlistForm.controls['name'].value.trim();
 
-    if (!this.isAddMode) {
-      this.renamePlaylist(newName);
-    }
+    if (this.isAddMode) {
 
-    /* TODO
-    this.playlistsService.getByName(name)
-      .subscribe({
-        next: (existingPlaylist: Playlist) => {
-          if (existingPlaylist && (this.isAddMode || this.playlistId != existingPlaylist.id)) {
+      // Se está creando una lista nueva.
+      // Ver si ya existe otra con ese nombre creada por este usuario.
+      this.playlistsService.getIdByUserAndName(this.loggedUser, newName)
+        .subscribe({
+          next: (existingId: string) => {
             this.loading = false;
-            this.notification.error("There is already a playlist with that name.");
-          } else {
-            const playlist: Playlist = {id: this.playlistId, name: name, user: this.user, songs: this.songs};
-            this.isAddMode ? this.createPlaylist(playlist) : this.updatePlaylist(playlist);
+
+            if ( existingId == null ) {
+              // No hay conflictos, crear la lista.
+              this.createPlaylist(newName);
+            } else {
+              this.notification.error("There is already a playlist with that name.");
+            }
+          },
+          error: () => {
+            this.loading = false;
+            this.notification.error("Something went wrong while verifying if there were any conflicts.\nPerhaps the service is not running?");
           }
-        },
-        error: () => {
-          this.loading = false;
-          this.notification.error("Something went wrong while creating the new playlist.\nPerhaps the service is not running?");
-        }
-      });
+        });
+
+    } else {
+
+      // Se está renombrando una lista
+      this.renamePlaylist(newName);
+
     }
-    */
   }
 
-  createPlaylist(newPlaylist: Playlist) {
-    this.playlistsService.add(newPlaylist)
+  createPlaylist(newName: string) {
+    // El back-end permite crear listas con canciones directamente,
+    // pero las creo vacías para no manejarlo distinto si no están las canciones persistidas
+    const user: User = {email: this.loggedUser, token: ""}
+    const playlist: Playlist = {id: "0", user: user, name: newName, songs: []};
+    this.playlistsService.add(playlist)
       .subscribe({
-        next: () => {
+        next: (newId: string) => {
           this.loading = false;
-          this.notification.success("New playlist saved successfully!");
-          // Redirigir a la página anterior
-          window.history.back();
+          this.notification.success("Playlist created successfully!");
+          // Redirigir a la página de edición para que se puedan agregar canciones
+          this.router.navigate([`home/playlists/${newId}`]);
         },
         error: () => {
           this.loading = false;
-          this.notification.error("Something went wrong while creating the new playlist.");
+          this.notification.error("Something went wrong while creating the playlist.");
         }
       })
   }
@@ -165,6 +169,10 @@ export class AddEditPlaylistComponent {
           this.notification.error("Something went wrong while renaming the playlist.");
         }
       })
+  }
+
+  addSong() {
+    this.router.navigate([`home/playlists/${this.playlistId}/addsong`]);
   }
 
   removeSongDialog(song: Song) {
@@ -192,7 +200,6 @@ export class AddEditPlaylistComponent {
         // Actualizar la tabla quitando la canción borrada
         const itemIndex = this.songsDataSource.data.findIndex(s => s === song);
         this.songsDataSource.data.splice(itemIndex, 1);
-        this.songsDataSource.paginator = this.paginator;
 
         this.notification.success(`"${song.author} - ${song.name}" removed successfully.`);
       },
@@ -209,4 +216,7 @@ export class AddEditPlaylistComponent {
     this.songsDataSource.filter = value.trim().toLocaleLowerCase();
   }
 
+  goToPlaylistsList() {
+    this.router.navigate(["home/playlists"]);
+  }
 }

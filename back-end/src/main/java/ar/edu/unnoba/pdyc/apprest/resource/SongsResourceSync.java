@@ -15,12 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import ar.edu.unnoba.pdyc.apprest.dto.SongDTO;
 import ar.edu.unnoba.pdyc.apprest.model.Song;
-import ar.edu.unnoba.pdyc.apprest.service.SongService;
+import ar.edu.unnoba.pdyc.apprest.service.SongsService;
 
 @Path("/songs")
 public class SongsResourceSync {
     @Autowired
-    private SongService songsService;
+    private SongsService songsService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

@@ -2,7 +2,7 @@ package ar.edu.unnoba.pdyc.apprest.resource;
 
 import ar.edu.unnoba.pdyc.apprest.dto.NewUserDTO;
 import ar.edu.unnoba.pdyc.apprest.model.User;
-import ar.edu.unnoba.pdyc.apprest.service.UserService;
+import ar.edu.unnoba.pdyc.apprest.service.UsersService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 @Path("/signup")
 public class UserResourceSync {
     @Autowired
-    private UserService userService;
+    private UsersService usersService;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -21,7 +21,7 @@ public class UserResourceSync {
         ModelMapper modelMapper = new ModelMapper();
         User user = modelMapper.map(dto, User.class);
         try {
-            userService.create(user);
+            usersService.create(user);
             return Response.ok().build();
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -33,7 +33,7 @@ public class UserResourceSync {
     @Produces(MediaType.APPLICATION_JSON)
     public Response existsByEmail(@QueryParam("email") String email) {
         try {
-            Boolean exists = userService.existsByEmail(email);
+            Boolean exists = usersService.existsByEmail(email);
             return Response.ok(exists).build();
         } catch (Exception exception) {
             exception.printStackTrace();

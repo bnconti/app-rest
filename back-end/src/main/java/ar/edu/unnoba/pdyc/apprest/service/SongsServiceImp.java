@@ -5,38 +5,38 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import ar.edu.unnoba.pdyc.apprest.repository.PlaylistRepository;
+import ar.edu.unnoba.pdyc.apprest.repository.PlaylistsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import ar.edu.unnoba.pdyc.apprest.model.Genre;
 import ar.edu.unnoba.pdyc.apprest.model.Song;
-import ar.edu.unnoba.pdyc.apprest.repository.SongRepository;
+import ar.edu.unnoba.pdyc.apprest.repository.SongsRepository;
 
 @Service
-public class SongServiceImp implements SongService {
+public class SongsServiceImp implements SongsService {
     @Autowired
-    private SongRepository songRepository;
+    private SongsRepository songsRepository;
 
     @Autowired
-    private PlaylistRepository playlistRepository;
+    private PlaylistsRepository playlistsRepository;
 
     /*** variantes sincrónicas ***/
 
     @Override
     public List<Song> getSongs() {
-        return songRepository.findAll();
+        return songsRepository.findAll();
     }
 
     @Override
     public List<String> getAuthors() {
-        return songRepository.findAuthors();
+        return songsRepository.findAuthors();
     }
 
     @Override
     public Song getSongById(Long id) {
-        return songRepository.findSongById(id);
+        return songsRepository.findSongById(id);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class SongServiceImp implements SongService {
         if (author == null) {
             return getSongs();
         } else {
-            return songRepository.findByAuthor(author);
+            return songsRepository.findByAuthor(author);
         }
     }
 
@@ -53,7 +53,7 @@ public class SongServiceImp implements SongService {
         if (genre == null) {
             return getSongs();
         } else {
-            return songRepository.findByGenre(genre);
+            return songsRepository.findByGenre(genre);
         }
     }
     @Override
@@ -76,7 +76,7 @@ public class SongServiceImp implements SongService {
         } else if (genre == null) {
             return getSongsByAuthor(author);
         } else {
-            return songRepository.findByAuthorAndGenre(author, genre);
+            return songsRepository.findByAuthorAndGenre(author, genre);
         }
     }
     @Override
@@ -94,52 +94,52 @@ public class SongServiceImp implements SongService {
 
     @Override
     public List<Song> getSongsByName(String name) {
-        return songRepository.findByName(name);
+        return songsRepository.findByName(name);
     }
 
     @Override
     public Song getSongByAuthorAndName(String author, String name) {
-        return songRepository.findByAuthorAndName(author, name);
+        return songsRepository.findByAuthorAndName(author, name);
     }
 
     /*
     @Override
     public List<Song> getSongsByPlaylist(Playlist name) {
-        return songRepository.findByPlaylists(name);
+        return songsRepository.findByPlaylists(name);
     }
     */
 
     @Override
     public Song create(Song newSong) {
-        return songRepository.save(newSong);
+        return songsRepository.save(newSong);
     }
 
     @Override
     public Song update(Song updatedSong) {
-        return songRepository.save(updatedSong);
+        return songsRepository.save(updatedSong);
     }
 
     @Override
     public Boolean delete(Long id) {
-        Optional<Song> song = songRepository.findById(id);
+        Optional<Song> song = songsRepository.findById(id);
 
         if (song.isEmpty()) {
             return false;
         }
 
-        boolean used = playlistRepository.existsBySongs(song.get());
+        boolean used = playlistsRepository.existsBySongs(song.get());
 
         if (used) {
             return false;
         }
 
-        songRepository.delete(song.get());
+        songsRepository.delete(song.get());
         return true;
     }
 
     @Override
     public Boolean existsByAuthorAndName(String author, String name) {
-        return songRepository.existsByAuthorAndName(author, name);
+        return songsRepository.existsByAuthorAndName(author, name);
     }
 
     /*** variantes asincrónicas - llaman a las funciones sincrónicas definidas arriba ***/

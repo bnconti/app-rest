@@ -3,14 +3,14 @@
 <section class="section">
   <div class="container">
     <div class="table-container box notification">
-      <h1 class="title">Songs</h1>
+      <h1 class="title">Add songs to playlist</h1>
 
       <div class="field">
         <div class="control has-icons-left">
           <input class="input is-medium" type="text"
                  placeholder="Filter" (keyup)="doFilter($event)">
           <span class="icon is-small is-left">
-             <fa-icon [icon]="faSearch"></fa-icon>
+                  <fa-icon [icon]="faSearch"></fa-icon>
           </span>
         </div>
       </div>
@@ -37,30 +37,22 @@
           <mat-cell *matCellDef="let s">{{s.genre}}</mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="edit">
-          <mat-header-cell *matHeaderCellDef>Edit</mat-header-cell>
+        <ng-container matColumnDef="add">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Add</mat-header-cell>
           <mat-cell *matCellDef="let s">
-            <a (click)="goToEditSong(s.id)">
+          <a (click)="addSongToPlaylist(s)">
               <span class="icon">
-                <fa-icon [icon]="faPen"></fa-icon>
+                <fa-icon [icon]="faPlus"></fa-icon>
               </span>
             </a>
           </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="delete">
-          <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
-          <mat-cell *matCellDef="let s">
-            <a (click)="deleteSongDialog(s)">
-              <span class="icon">
-                <fa-icon [icon]="faTrash"></fa-icon>
-              </span>
-            </a>
-          </mat-cell>
+          <mat-cell *matCellDef="let s">{{s.genre}}</mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+	<mat-row *matRowDef="let row; columns: displayedColumns;"
+		 [class.is-selected]="selection.isSelected(row)">
+        </mat-row>
 
       </mat-table>
 
@@ -68,11 +60,10 @@
 
       <hr class="table-sep" />
       <div class="table-btns">
-        <button class="button button-main" type="button"
-                routerLink="/home/songs/new">
+        <button class="button" (click)="goToPlaylistsList()">
           <span class="icon-text">
-            <span class="icon"><fa-icon [icon]="faPlus"></fa-icon></span>
-            <span>Add new</span>
+            <span class="icon"><fa-icon [icon]="faBack"></fa-icon></span>
+            <span>Go back</span>
           </span>
         </button>
       </div>

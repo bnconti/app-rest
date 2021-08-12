@@ -23,9 +23,9 @@ export class SongsService {
       }));
   }
 
-  getAuthors(): Observable<String[]> {
+  getAuthors(): Observable<string[]> {
     const url = `${SongsService.url}/authors`;
-    return this.http.get<String[]>(url)
+    return this.http.get<string[]>(url)
       .pipe(map(res => {
         return res
       }));
@@ -52,23 +52,23 @@ export class SongsService {
       }));
   }
 
-  existsByAuthorAndName(author: string, name: string): Observable<Boolean> {
-    const url = `${SongsService.url}/exists?author=${author}&name=${name}`;
-    return this.http.get<any>(url)
+  getIdByAuthorAndName(author: string, name: string): Observable<string> {
+    const url = `${SongsService.url}/getid?author=${author}&name=${name}`;
+    return this.http.get<string>(url)
       .pipe(map(res => {
         return res;
       }));
   }
 
-  add(newSong: Song): Observable<Song> {
-    return this.http.post<Song>(SongsService.url, newSong)
+  add(newSong: Song): Observable<string> {
+    return this.http.post<string>(SongsService.url, newSong)
       .pipe(map(res => {
         return res;
       }));
   }
 
-  update(updatedSong: Song): Observable<Song> {
-    return this.http.put<Song>(SongsService.url, updatedSong)
+  update(updatedSong: Song): Observable<void> {
+    return this.http.put<void>(SongsService.url, updatedSong)
       .pipe(map(res => {
         return res;
       }));
@@ -78,15 +78,6 @@ export class SongsService {
     const url = `${SongsService.url}/${songId}`;
     return this.http.delete<Boolean>(url)
       .pipe(map(res => {
-        return res;
-      }));
-  }
-
-  getByAuthorAndName(author: string, name: string): Observable<Song> {
-    const url = `${SongsService.url}/find?author=${author}&name=${name}`;
-    return this.http.get<Song>(url)
-      .pipe(map(res => {
-        console.log(res);
         return res;
       }));
   }

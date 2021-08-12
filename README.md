@@ -1,4 +1,10 @@
-# Repositorio para el trabajo final de PDyC
+# Trabajo final para Programación Distribuida y Concurrente
+
+Sistema de ejemplo que gestionar listas de reproducción y canciones.
+Sigue el modelo cliente-servidor.
+El servidor es un servicio web Restful. Está implementado en Java, utilizando el framework Spring.
+El cliente utiliza el framework Angular.
+
 
 ## Etapas
 
@@ -220,8 +226,3 @@ el servidor y abrir la aplicación (por ahora, la URL es
 Si no se instaló Angular con la opción -g, el comando a ejecutar es
 `node_modules/.bin/ng serve -o`.
 
-### Tareas pendientes:
-
-- Terminar de implementar la funcionalidad del back-end en el front-end:
-  - Crear playlists.
-  - Agregar canciones a una playlist.

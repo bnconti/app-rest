@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit {
           }
           this.loading = false;
         }
-      )
+      );
   }
 
   goToSignup() {

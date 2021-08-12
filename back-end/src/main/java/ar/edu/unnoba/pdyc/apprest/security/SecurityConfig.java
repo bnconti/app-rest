@@ -15,15 +15,15 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import ar.edu.unnoba.pdyc.apprest.AppRestApplication;
-import ar.edu.unnoba.pdyc.apprest.service.UserService;
+import ar.edu.unnoba.pdyc.apprest.service.UsersService;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final UserService userService;
+    private final UsersService usersService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public SecurityConfig(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userService = userService;
+    public SecurityConfig(UsersService usersService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.usersService = usersService;
         /* almacenar las contraseñas encriptadas con BCrypt */
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
@@ -56,8 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         /* crear el gestor de autenticación,
-         * gestionando usuarios con userService usando BCrypt */
-        auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
+         * gestionando usuarios con usersService usando BCrypt */
+        auth.userDetailsService(usersService).passwordEncoder(bCryptPasswordEncoder);
     }
 
 

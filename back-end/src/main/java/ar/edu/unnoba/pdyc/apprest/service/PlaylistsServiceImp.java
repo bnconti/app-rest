@@ -10,62 +10,62 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.unnoba.pdyc.apprest.model.Playlist;
 import ar.edu.unnoba.pdyc.apprest.model.User;
-import ar.edu.unnoba.pdyc.apprest.repository.PlaylistRepository;
-import ar.edu.unnoba.pdyc.apprest.repository.UserRepository;
+import ar.edu.unnoba.pdyc.apprest.repository.PlaylistsRepository;
+import ar.edu.unnoba.pdyc.apprest.repository.UsersRepository;
 
 @Service
-public class PlaylistServiceImp implements PlaylistService {
+public class PlaylistsServiceImp implements PlaylistsService {
     @Autowired
-    private PlaylistRepository playlistRepository;
+    private PlaylistsRepository playlistsRepository;
     @Autowired
-    private UserRepository userRepository;
+    private UsersRepository usersRepository;
 
     /*** variantes sincrónicas ***/
 
     @Override
     public Boolean exists(Long id) {
-        return playlistRepository.existsById(id);
+        return playlistsRepository.existsById(id);
     }
 
     @Override
     public List<Playlist> getPlaylists() {
-        return playlistRepository.findAll();
+        return playlistsRepository.findAll();
     }
 
     @Override
     public Playlist getPlaylistById(Long id) {
-        Optional<Playlist> optplaylist = playlistRepository.findById(id);
+        Optional<Playlist> optplaylist = playlistsRepository.findById(id);
         return (optplaylist.isEmpty() ? null : optplaylist.get());
     }
 
     @Override
     public List<Playlist> getPlaylistsByUser(User user) {
-        return playlistRepository.findByUser(user);
+        return playlistsRepository.findByUser(user);
     }
 
     @Override
     public Playlist getPlaylistByUserAndName(User user, String name) {
-        return playlistRepository.findByUserAndName(user, name);
+        return playlistsRepository.findByUserAndName(user, name);
     }
 
     @Override
     public Playlist create(Playlist newPlaylist, String ownerEmail) {
-        newPlaylist.setUser(userRepository.findByEmail(ownerEmail));
-        return playlistRepository.save(newPlaylist);
+        newPlaylist.setUser(usersRepository.findByEmail(ownerEmail));
+        return playlistsRepository.save(newPlaylist);
     }
 
     @Override
     public Playlist update(Playlist updatedPlaylist) {
-        return playlistRepository.save(updatedPlaylist);
+        return playlistsRepository.save(updatedPlaylist);
     }
 
     @Override
     public Boolean delete(Long id) {
-        Optional<Playlist> optplaylist = playlistRepository.findById(id);
+        Optional<Playlist> optplaylist = playlistsRepository.findById(id);
         if (optplaylist.isEmpty()) {
             return false;
         }
-        playlistRepository.delete(optplaylist.get());
+        playlistsRepository.delete(optplaylist.get());
         return true;
     }
 
@@ -100,6 +100,13 @@ public class PlaylistServiceImp implements PlaylistService {
     @Async("taskExecutor")
     public CompletableFuture<Playlist> getPlaylistByUserAndNameAsync(User user, String name) {
         return CompletableFuture.completedFuture(getPlaylistByUserAndName(user, name));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Playlist> getPlaylistByUserAndNameAsync(String userEmail, String name) {
+        User user = usersRepository.findByEmail(userEmail);
+        return getPlaylistByUserAndNameAsync(user, name);
     }
 
     @Override

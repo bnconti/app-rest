@@ -15,6 +15,7 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { PlaylistsComponent } from './components/playlists/playlists.component';
 import { AddEditPlaylistComponent } from './components/playlists/add-edit-playlist/add-edit-playlist.component';
+import { AddPlaylistSongComponent } from './components/playlists/add-playlist-song/add-playlist-song.component';
 import { SongsComponent } from './components/songs/songs.component';
 import { AddEditSongComponent } from './components/songs/add-edit-song/add-edit-song.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -38,6 +39,7 @@ import { MatInputModule } from "@angular/material/input";
     SignupComponent,
     PlaylistsComponent,
     AddEditPlaylistComponent,
+    AddPlaylistSongComponent,
     SongsComponent,
     AddEditSongComponent,
     ConfirmationDialogComponent,

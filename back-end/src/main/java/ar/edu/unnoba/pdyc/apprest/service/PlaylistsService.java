@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import ar.edu.unnoba.pdyc.apprest.model.Playlist;
 import ar.edu.unnoba.pdyc.apprest.model.User;
 
-public interface PlaylistService {
+public interface PlaylistsService {
     /* variantes sincrónicas */
 
     Boolean exists(Long id);
@@ -31,6 +31,7 @@ public interface PlaylistService {
 
     CompletableFuture<Playlist> getPlaylistByIdAsync(Long id);
     CompletableFuture<Playlist> getPlaylistByUserAndNameAsync(User user, String name);
+    CompletableFuture<Playlist> getPlaylistByUserAndNameAsync(String userEmail, String name);
 
     CompletableFuture<Playlist> createAsync(Playlist playlist, String userEmail);
     CompletableFuture<Playlist> updateAsync(Playlist updatedPlaylist);

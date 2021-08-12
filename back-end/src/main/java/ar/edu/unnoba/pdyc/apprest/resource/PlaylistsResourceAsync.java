@@ -3,14 +3,7 @@ package ar.edu.unnoba.pdyc.apprest.resource;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
@@ -21,27 +14,24 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import ar.edu.unnoba.pdyc.apprest.dto.PlaylistAddSongDTO;
-import ar.edu.unnoba.pdyc.apprest.dto.PlaylistDTO;
-import ar.edu.unnoba.pdyc.apprest.dto.PlaylistUpdateDTO;
-import ar.edu.unnoba.pdyc.apprest.dto.PlaylistWithSongsDTO;
+import ar.edu.unnoba.pdyc.apprest.dto.*;
 import ar.edu.unnoba.pdyc.apprest.model.Playlist;
 import ar.edu.unnoba.pdyc.apprest.model.Song;
-import ar.edu.unnoba.pdyc.apprest.service.PlaylistService;
-import ar.edu.unnoba.pdyc.apprest.service.SongService;
+import ar.edu.unnoba.pdyc.apprest.service.PlaylistsService;
+import ar.edu.unnoba.pdyc.apprest.service.SongsService;
 
 @Path("/playlists")
 public class PlaylistsResourceAsync {
     @Autowired
-    private PlaylistService playlistService;
+    private PlaylistsService playlistsService;
 
     @Autowired
-    private SongService songService;
+    private SongsService songsService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public void getAll(@Suspended AsyncResponse response) {
-        playlistService.getPlaylistsAsync().thenAccept(playlists -> {
+        playlistsService.getPlaylistsAsync().thenAccept(playlists -> {
             ModelMapper modelMapper = new ModelMapper();
             Type listType = new TypeToken<List<PlaylistDTO>>() {
             }.getType();
@@ -54,7 +44,7 @@ public class PlaylistsResourceAsync {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public void getById(@Suspended AsyncResponse response, @PathParam("id") Long id) {
-        playlistService.getPlaylistByIdAsync(id).thenAccept(playlist -> {
+        playlistsService.getPlaylistByIdAsync(id).thenAccept(playlist -> {
             if (playlist == null) {
                 response.resume(Response.status(Response.Status.NOT_FOUND).build());
             } else {
@@ -62,6 +52,17 @@ public class PlaylistsResourceAsync {
                 PlaylistWithSongsDTO dto = modelMapper.map(playlist, PlaylistWithSongsDTO.class);
                 response.resume(Response.ok(dto).build());
             }
+        });
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/getid")
+    public void getIdByUserAndName(@Suspended AsyncResponse response,
+                                   @QueryParam("user") String user,
+                                   @QueryParam("name") String name) {
+        playlistsService.getPlaylistByUserAndNameAsync(user, name).thenAccept(p -> {
+            response.resume(Response.ok(p == null ? null : p.getId()).build());
         });
     }
 
@@ -81,11 +82,11 @@ public class PlaylistsResourceAsync {
 
         ModelMapper modelMapper = new ModelMapper();
         Playlist playlist = modelMapper.map(dto, Playlist.class);
-        playlistService.createAsync(playlist, ownerEmail).handle((p, exception) -> {
+        playlistsService.createAsync(playlist, ownerEmail).handle((p, exception) -> {
             if (exception == null) {
-                return response.resume(Response.ok().build());
+                return response.resume(Response.ok(p.getId()).build());
             } else if (exception.getCause() instanceof DataIntegrityViolationException) {
-                // se quiso crear una lista ya existente
+                // Se quiso crear una lista ya existente
                 return response.resume(Response.status(Response.Status.CONFLICT).build());
             } else {
                 exception.printStackTrace();
@@ -109,7 +110,7 @@ public class PlaylistsResourceAsync {
             return;
         }
 
-        playlistService.getPlaylistByIdAsync(id).thenAccept(playlist -> {
+        playlistsService.getPlaylistByIdAsync(id).thenAccept(playlist -> {
             if (playlist == null) {
                 response.resume(Response.status(Response.Status.NOT_FOUND).build());
                 return;
@@ -121,7 +122,7 @@ public class PlaylistsResourceAsync {
             }
 
             playlist.setName(dto.getName());
-            playlistService.updateAsync(playlist).handle((p, exception) -> {
+            playlistsService.updateAsync(playlist).handle((p, exception) -> {
                 if (exception == null) {
                     return response.resume(Response.ok().build());
                 } else if (exception.getCause() instanceof DataIntegrityViolationException) {
@@ -135,7 +136,6 @@ public class PlaylistsResourceAsync {
         });
     }
 
-
     @PUT
     @Path("/{id}/songs")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -147,8 +147,8 @@ public class PlaylistsResourceAsync {
             return;
         }
 
-        playlistService.getPlaylistByIdAsync(id).thenCombine(
-                songService.getSongByIdAsync(dto.getSongId()), (playlist, song) -> {
+        playlistsService.getPlaylistByIdAsync(id).thenCombine(
+                songsService.getSongByIdAsync(dto.getSongId()), (playlist, song) -> {
 
             if (playlist == null || song == null) {
                 // no se encontró la playlist o la canción
@@ -168,7 +168,7 @@ public class PlaylistsResourceAsync {
             }
 
             songs.add(song);
-            return playlistService.updateAsync(playlist).handle((p, exception) -> {
+            return playlistsService.updateAsync(playlist).handle((p, exception) -> {
                 if (exception == null) {
                     return response.resume(Response.ok().build());
                 } else {
@@ -190,8 +190,8 @@ public class PlaylistsResourceAsync {
         }
 
         // buscar simultáneamente la playlist y la canción
-        playlistService.getPlaylistByIdAsync(id).thenCombine(
-                songService.getSongByIdAsync(songId), (playlist, song) -> {
+        playlistsService.getPlaylistByIdAsync(id).thenCombine(
+                songsService.getSongByIdAsync(songId), (playlist, song) -> {
 
             if (playlist == null || song == null) {
                 // no se encontró la playlist o la canción
@@ -209,7 +209,7 @@ public class PlaylistsResourceAsync {
             }
 
             songs.remove(song);
-            return playlistService.updateAsync(playlist).handle((p, exception) -> {
+            return playlistsService.updateAsync(playlist).handle((p, exception) -> {
                 if (exception == null) {
                     return response.resume(Response.ok().build());
                 } else {
@@ -229,7 +229,7 @@ public class PlaylistsResourceAsync {
             return;
         }
 
-        playlistService.getPlaylistByIdAsync(id).thenAccept(playlist -> {
+        playlistsService.getPlaylistByIdAsync(id).thenAccept(playlist -> {
             if (playlist == null) {
                 response.resume(Response.status(Response.Status.NOT_FOUND).build());
                 return;
@@ -241,7 +241,7 @@ public class PlaylistsResourceAsync {
                 return;
             }
 
-            playlistService.deleteAsync(playlist.getId()).handle((deleted, exception) -> {
+            playlistsService.deleteAsync(playlist.getId()).handle((deleted, exception) -> {
                 if (exception == null && deleted) {
                     return response.resume(Response.ok(deleted).build());
                 } else {

@@ -3,9 +3,7 @@ package ar.edu.unnoba.pdyc.apprest.resource;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
@@ -17,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import ar.edu.unnoba.pdyc.apprest.dto.PlaylistDTO;
 import ar.edu.unnoba.pdyc.apprest.model.User;
-import ar.edu.unnoba.pdyc.apprest.service.PlaylistService;
-import ar.edu.unnoba.pdyc.apprest.service.UserService;
+import ar.edu.unnoba.pdyc.apprest.service.PlaylistsService;
+import ar.edu.unnoba.pdyc.apprest.service.UsersService;
 
 /**
  * Similar a /playlists, pero solo retorna las listas del usuario logueado actualmente.
@@ -26,10 +24,10 @@ import ar.edu.unnoba.pdyc.apprest.service.UserService;
 @Path("/userplaylists")
 public class UserPlaylistsResourceAsync {
     @Autowired
-    private PlaylistService playlistService;
+    private PlaylistsService playlistsService;
 
     @Autowired
-    private UserService userService;
+    private UsersService usersService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -40,13 +38,13 @@ public class UserPlaylistsResourceAsync {
             return;
         }
 
-        User u = userService.getByEmail(loggedEmail);
+        User u = usersService.getByEmail(loggedEmail);
         if (u == null) {
             response.resume(Response.status(Response.Status.NOT_FOUND).build());
             return;
         }
 
-        playlistService.getPlaylistsByUserAsync(u).thenAccept(playlists -> {
+        playlistsService.getPlaylistsByUserAsync(u).thenAccept(playlists -> {
             ModelMapper modelMapper = new ModelMapper();
             Type listType = new TypeToken<List<PlaylistDTO>>() {
             }.getType();

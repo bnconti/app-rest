@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import ar.edu.unnoba.pdyc.apprest.model.Genre;
 import ar.edu.unnoba.pdyc.apprest.model.Song;
 
-public interface SongService {
+public interface SongsService {
     /* variantes sincrónicas */
 
     Boolean existsByAuthorAndName(String author, String name);
