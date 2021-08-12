@@ -13,7 +13,8 @@ import { DialogData } from "@app/interfaces/DialogData";
 import { NotificationService } from "@services/notification.service";
 
 // Para la tabla de canciones
-import {MatTableDataSource} from "@angular/material/table";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatPaginator } from "@angular/material/paginator";
 
 @Component({
   selector: 'app-add-edit-playlist',
@@ -25,6 +26,7 @@ export class AddEditPlaylistComponent {
   isAddMode: boolean = true;
   playlistId: string;
   playlistName: string | undefined;
+  songs: Song[] = [];
   loggedUser: string;
 
   playlistForm: FormGroup;
@@ -37,6 +39,8 @@ export class AddEditPlaylistComponent {
 
   loading = false;
   submitted = false;
+
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   songsDataSource: MatTableDataSource<Song> = new MatTableDataSource;
   displayedColumns: string[] = ['number', 'author', 'name', 'genre', 'remove'];
@@ -70,7 +74,9 @@ export class AddEditPlaylistComponent {
             } else {
               this.playlistForm.patchValue(playlist);
               this.playlistName = playlist.name;
-              this.songsDataSource = new MatTableDataSource(playlist.songs);
+              this.songs = playlist.songs;
+              this.songsDataSource = new MatTableDataSource(this.songs);
+              this.songsDataSource.paginator = this.paginator;
             }
           },
           error => {
@@ -197,10 +203,15 @@ export class AddEditPlaylistComponent {
   removeSong(song: Song) {
     this.playlistsService.removeSong(this.playlistId, song.id!).subscribe({
       next: () => {
-        // Actualizar la tabla quitando la canción borrada
-        const itemIndex = this.songsDataSource.data.findIndex(s => s === song);
-        this.songsDataSource.data.splice(itemIndex, 1);
+        // Quitando la canción borrada de this.songs
+        const itemIndex = this.songs.findIndex(s => s === song);
+        this.songs.splice(itemIndex, 1);
 
+        // Actualizar tabla recreando el DataSource
+        //this.songsDataSource = new MatTableDataSource(this.songs);
+
+        // Asignando el paginador también se actualiza
+        this.songsDataSource.paginator = this.paginator;
         this.notification.success(`"${song.author} - ${song.name}" removed successfully.`);
       },
       error: (err) => {
