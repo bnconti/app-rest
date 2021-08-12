@@ -1,13 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { faSave, faTrash, faSearch, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faSave, faBackward, faTrash, faSearch, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Playlist } from "@app/models/Playlist";
 import { Song } from "@app/models/Song";
 import { Genre } from "@app/models/Genre";
 import { PlaylistsService } from "@services/playlists.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Observable } from "rxjs";
-import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmationDialogComponent } from "@app/components/confirmation-dialog/confirmation-dialog.component";
 import { DialogData } from "@app/interfaces/DialogData";
@@ -32,6 +31,7 @@ export class AddEditPlaylistComponent {
   playlistForm: FormGroup;
 
   faSave = faSave;
+  faBack = faBackward;
   faTrash = faTrash;
   faSearch = faSearch;
   faPlus = faPlus;
@@ -50,7 +50,7 @@ export class AddEditPlaylistComponent {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    public dialog: MatDialog,
+    private dialog: MatDialog,
     private notification: NotificationService
   ) {
     this.playlistId = this.route.snapshot.params['id'];
@@ -66,11 +66,11 @@ export class AddEditPlaylistComponent {
       this.playlistsService.getById(this.playlistId)
         .subscribe(
           (playlist: Playlist) => {
-            // Primero me fijo si coincide el usuario actual con el que creó la lista
+            // Fijarse si coincide el usuario actual con el que creó la lista
             if (this.loggedUser != playlist.user.email) {
-              // No coincide, probablemente ingresó la URL manualmente...
+              // No coincide, probablemente el usuario ingresó la URL manualmente...
               // Enviarlo al listado de playlists
-              this.router.navigate(["home/playlists"]); 
+              this.router.navigate(["home/playlists"]);
             } else {
               this.playlistForm.patchValue(playlist);
               this.playlistName = playlist.name;
@@ -79,7 +79,9 @@ export class AddEditPlaylistComponent {
             }
           },
           error => {
-            this.notification.error("Something went wrong while retrieving the playlist.\nPerhaps the service is not running?");
+            // No se pudo encontrar la lista (por ejemplo, porque se ingresó
+            // una URL con un ID inexistente).
+            this.router.navigate(["home/playlists"]);
           }
         );
     }

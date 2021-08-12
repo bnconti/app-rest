@@ -26,15 +26,20 @@ public class SongsResourceAsync {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public void getById(@Suspended AsyncResponse response, @PathParam("id") Long id) {
-        songsService.getSongByIdAsync(id)
-                .thenAccept((song -> response.resume(Response.ok(song).build())));
+        songsService.getSongByIdAsync(id).thenAccept(song -> {
+            if (song == null) {
+                response.resume(Response.status(Response.Status.NOT_FOUND).build());
+            } else {
+                response.resume(Response.ok(song).build());
+            }
+        });
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public void getSongs(@Suspended AsyncResponse response,
                          @QueryParam("author") String author, @QueryParam("genre") String genre) {
-        songsService.getSongsByAuthorAndGenreAsync(author, genre).thenAccept((songs) -> {
+        songsService.getSongsByAuthorAndGenreAsync(author, genre).thenAccept(songs -> {
             ModelMapper modelMapper = new ModelMapper();
             Type listType = new TypeToken<List<SongDTO>>() {
             }.getType();
@@ -47,7 +52,7 @@ public class SongsResourceAsync {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/authors")
     public void getAuthors(@Suspended AsyncResponse response) {
-        songsService.getAuthorsAsync().thenAccept((authors) -> {
+        songsService.getAuthorsAsync().thenAccept(authors -> {
             response.resume(Response.ok(authors).build());
         });
     }
@@ -59,7 +64,7 @@ public class SongsResourceAsync {
         ModelMapper modelMapper = new ModelMapper();
         Song song = modelMapper.map(dto, Song.class);
 
-        songsService.createAsync(song).thenAccept((newSong) ->
+        songsService.createAsync(song).thenAccept(newSong ->
                 response.resume(Response.ok(modelMapper.map(newSong, SongDTO.class)).build()));
     }
 
@@ -70,7 +75,7 @@ public class SongsResourceAsync {
         ModelMapper modelMapper = new ModelMapper();
         Song song = modelMapper.map(dto, Song.class);
 
-        songsService.updateAsync(song).thenAccept((updatedSong) ->
+        songsService.updateAsync(song).thenAccept(updatedSong ->
                 response.resume(Response.ok(modelMapper.map(updatedSong, SongDTO.class)).build()));
     }
 
@@ -78,7 +83,7 @@ public class SongsResourceAsync {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public void delete(@Suspended AsyncResponse response, @PathParam("id") Long id) {
-        songsService.deleteAsync(id).thenAccept((status) ->
+        songsService.deleteAsync(id).thenAccept(status ->
                 response.resume(Response.ok(status).build()));
     }
 

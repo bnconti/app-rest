@@ -46,7 +46,7 @@ public class UserPlaylistsResourceAsync {
             return;
         }
 
-        playlistService.getPlaylistsByUserAsync(u).thenAccept((playlists) -> {
+        playlistService.getPlaylistsByUserAsync(u).thenAccept(playlists -> {
             ModelMapper modelMapper = new ModelMapper();
             Type listType = new TypeToken<List<PlaylistDTO>>() {
             }.getType();

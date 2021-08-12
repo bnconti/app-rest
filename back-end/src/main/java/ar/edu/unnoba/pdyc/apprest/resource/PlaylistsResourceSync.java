@@ -52,7 +52,7 @@ public class PlaylistsResourceSync {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPlaylist(@PathParam("id") Long id) {
+    public Response getById(@PathParam("id") Long id) {
         Playlist playlist = playlistService.getPlaylistById(id);
         if (playlist == null) {
             return Response.status(Response.Status.NOT_FOUND).build();

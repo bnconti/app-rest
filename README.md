@@ -223,8 +223,5 @@ Si no se instaló Angular con la opción -g, el comando a ejecutar es
 ### Tareas pendientes:
 
 - Terminar de implementar la funcionalidad del back-end en el front-end:
-  - Crear y eliminar playlists.
+  - Crear playlists.
   - Agregar y quitar canciones de una playlist.
-- Opcionales:
-  - Renombrar el recurso songs/find/{id} a songs/{id}, para que quede como el
-    servicio de playlists??

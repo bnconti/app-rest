@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { faSave, faBackward } from "@fortawesome/free-solid-svg-icons";
 import { Genre } from "@app/models/Genre";
 import { SongsService } from "@services/songs.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Song } from "@app/models/Song";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
 import { NotificationService } from "@services/notification.service";
@@ -25,6 +25,7 @@ export class AddEditSongComponent {
   filteredAuthors: Observable<String[]> | undefined;
 
   faSave = faSave;
+  faBack = faBackward;
 
   loading = false;
   submitted = false;
@@ -33,6 +34,7 @@ export class AddEditSongComponent {
     private songService: SongsService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
+    private router: Router,
     private notification: NotificationService
   ) {
     this.songId = this.route.snapshot.params['id'];
@@ -60,7 +62,7 @@ export class AddEditSongComponent {
             this.songForm.controls['genre'].patchValue(genre!.id);
           },
           error => {
-            this.notification.error("Something went wrong while retrieving the song.\nPerhaps the service is not running?");
+            this.router.navigate(["home/songs"]);
           }
         );
     }

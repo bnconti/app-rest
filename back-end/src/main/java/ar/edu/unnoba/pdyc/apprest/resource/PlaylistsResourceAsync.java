@@ -41,7 +41,7 @@ public class PlaylistsResourceAsync {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public void getAll(@Suspended AsyncResponse response) {
-        playlistService.getPlaylistsAsync().thenAccept((playlists) -> {
+        playlistService.getPlaylistsAsync().thenAccept(playlists -> {
             ModelMapper modelMapper = new ModelMapper();
             Type listType = new TypeToken<List<PlaylistDTO>>() {
             }.getType();
@@ -53,8 +53,8 @@ public class PlaylistsResourceAsync {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void getPlaylist(@Suspended AsyncResponse response, @PathParam("id") Long id) {
-        playlistService.getPlaylistByIdAsync(id).thenAccept((playlist) -> {
+    public void getById(@Suspended AsyncResponse response, @PathParam("id") Long id) {
+        playlistService.getPlaylistByIdAsync(id).thenAccept(playlist -> {
             if (playlist == null) {
                 response.resume(Response.status(Response.Status.NOT_FOUND).build());
             } else {
@@ -94,7 +94,6 @@ public class PlaylistsResourceAsync {
         });
     }
 
-
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -110,7 +109,7 @@ public class PlaylistsResourceAsync {
             return;
         }
 
-        playlistService.getPlaylistByIdAsync(id).thenAccept((playlist) -> {
+        playlistService.getPlaylistByIdAsync(id).thenAccept(playlist -> {
             if (playlist == null) {
                 response.resume(Response.status(Response.Status.NOT_FOUND).build());
                 return;
@@ -230,7 +229,7 @@ public class PlaylistsResourceAsync {
             return;
         }
 
-        playlistService.getPlaylistByIdAsync(id).thenAccept((playlist) -> {
+        playlistService.getPlaylistByIdAsync(id).thenAccept(playlist -> {
             if (playlist == null) {
                 response.resume(Response.status(Response.Status.NOT_FOUND).build());
                 return;
@@ -244,7 +243,7 @@ public class PlaylistsResourceAsync {
 
             playlistService.deleteAsync(playlist.getId()).handle((deleted, exception) -> {
                 if (exception == null && deleted) {
-                    return response.resume(Response.ok().build());
+                    return response.resume(Response.ok(deleted).build());
                 } else {
                     exception.printStackTrace();
                     return response.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
