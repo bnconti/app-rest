@@ -15,21 +15,26 @@
         </div>
       </div>
 
+      <!--
+      Se ordenan las canciones por Id como predeterminado.
+      Estaría bueno que sea por autor - nombre - género, pero las tablas de
+      Angular Material no soportan ordenar por múltiples campos por ahora...
+      -->
       <mat-table [dataSource]="songsDataSource" class="mat-elevation-z2" matSort>
 
         <ng-container matColumnDef="author">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Author</mat-header-cell>
-          <mat-cell *matCellDef="let s"> {{s.author}} </mat-cell>
+          <mat-cell *matCellDef="let s">{{s.author}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-          <mat-cell *matCellDef="let s"> {{s.name}} </mat-cell>
+          <mat-cell *matCellDef="let s">{{s.name}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="genre">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Genre</mat-header-cell>
-          <mat-cell *matCellDef="let s"> {{s.genre}} </mat-cell>
+          <mat-cell *matCellDef="let s">{{s.genre}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="edit">

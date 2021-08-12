@@ -44,14 +44,6 @@ export class PlaylistsService {
       }));
   }
 
-  existsByName(name: string): Observable<Boolean> {
-    const url = `${PlaylistsService.url}/exists?name=${name}`;
-    return this.http.get<Boolean>(url)
-      .pipe(map(res => {
-        return res;
-      }));
-  }
-
   add(newPlaylist: Playlist): Observable<Playlist> {
     return this.http.post<Playlist>(PlaylistsService.url, newPlaylist)
       .pipe(map(res => {
@@ -62,6 +54,14 @@ export class PlaylistsService {
   rename(playlistId: string, newName: string): Observable<Boolean> {
     const url = `${PlaylistsService.url}/${playlistId}`;
     return this.http.put<Boolean>(url, {"name": newName})
+      .pipe(map(res => {
+        return res;
+      }));
+  }
+
+  removeSong(playlistId: string, songId: string): Observable<Boolean> {
+    const url = `${PlaylistsService.url}/${playlistId}/songs/${songId}`;
+    return this.http.delete<Boolean>(url)
       .pipe(map(res => {
         return res;
       }));

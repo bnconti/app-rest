@@ -91,6 +91,7 @@ export class AddEditPlaylistComponent {
     return this.playlistForm.controls;
   }
 
+  // Botón Rename
   onSubmit(): void {
     this.submitted = true;
 
@@ -186,26 +187,20 @@ export class AddEditPlaylistComponent {
   }
 
   removeSong(song: Song) {
-    /* TODO
-    this.songService.delete(song.id!).subscribe({
-      next: (deleted) => {
-        if (deleted) {
-          // Actualizar la tabla quitando la canción borrada
-          const itemIndex = this.songsDataSource.data.findIndex(s => s === song);
-          this.songsDataSource.data.splice(itemIndex, 1);
-          this.songsDataSource.paginator = this.paginator;
+    this.playlistsService.removeSong(this.playlistId, song.id!).subscribe({
+      next: () => {
+        // Actualizar la tabla quitando la canción borrada
+        const itemIndex = this.songsDataSource.data.findIndex(s => s === song);
+        this.songsDataSource.data.splice(itemIndex, 1);
+        this.songsDataSource.paginator = this.paginator;
 
-          this.notification.success(`"${song.author} - ${song.name}" deleted successfully`);
-        } else {
-          this.notification.error(`Can't delete "${song.author} - ${song.name}" because it's included in one or more playlists`);
-        }
+        this.notification.success(`"${song.author} - ${song.name}" removed successfully.`);
       },
       error: (err) => {
         console.log(err);
-        this.notification.error(`Something went wrong while deleting "${song.author} - ${song.name}"`);
+        this.notification.error(`Something went wrong while removing "${song.author} - ${song.name}".`);
       }
     })
-    */
   }
 
   doFilter = (event: KeyboardEvent) => {

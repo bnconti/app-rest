@@ -93,7 +93,7 @@ public class SongsResourceAsync {
     public void existsByAuthorAndName(@Suspended AsyncResponse response,
                                       @QueryParam("author") String author, @QueryParam("name") String name) {
         songsService.existsByAuthorAndNameAsync(author, name).
-                thenAccept((exists) -> response.resume(Response.ok(exists).build()));
+                thenAccept(exists -> response.resume(Response.ok(exists).build()));
     }
 
     @GET
@@ -102,6 +102,6 @@ public class SongsResourceAsync {
     public void getByAuthorAndName(@Suspended AsyncResponse response,
                                    @QueryParam("author") String author, @QueryParam("name") String name) {
         songsService.getSongByAuthorAndNameAsync(author, name)
-                .thenAccept((song -> response.resume(Response.ok(song).build())));
+                .thenAccept(song -> response.resume(Response.ok(song).build()));
     }
 }

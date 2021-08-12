@@ -224,4 +224,4 @@ Si no se instaló Angular con la opción -g, el comando a ejecutar es
 
 - Terminar de implementar la funcionalidad del back-end en el front-end:
   - Crear playlists.
-  - Agregar y quitar canciones de una playlist.
+  - Agregar canciones a una playlist.
